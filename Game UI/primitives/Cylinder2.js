@@ -1,9 +1,12 @@
 /** 
- * MyTriangle
+ * MyCylinder2
  * @constructor
  * @param scene - Reference to MyScene object
- * @param x - Scale of rectangle in X
- * @param y - Scale of rectangle in Y
+ * @param base - Base radius
+ * @param top - Top radius
+ * @param height - Size in the direction of the positive Z axis
+ * @param slices - Number of divisions around the circumference
+ * @param stacks - Number of divisions along the Z direction 
  */
 class Cylinder2 extends CGFobject{
     constructor(scene, base, top, height, slices, stacks){
@@ -85,6 +88,15 @@ class Cylinder2 extends CGFobject{
         this.cylinder2_part2.display();
     }
 
-    updateTexCoords(lg_s, lg_t) {
+    /**
+	 * @method updateTexCoords
+	 * Updates the list of texture coordinates of the rectangle
+	 * @param {Array} coords - Array of texture coordinates
+	 * @param {Int} lg_s - Sacling factor length
+	 * @param {Int} lg_t - Sacling factor length
+	 * in this case the arguments do nothing
+	 */
+	updateTexCoords(lg_s, lg_t) {
+		this.updateTexCoordsGLBuffers();
 	}
 }

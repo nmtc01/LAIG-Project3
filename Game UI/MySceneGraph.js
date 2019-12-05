@@ -977,8 +977,9 @@ class MySceneGraph {
                     grandChildren[0].nodeName != 'plane' &&
                     grandChildren[0].nodeName != 'patch' &&
                     grandChildren[0].nodeName != 'cylinder2' &&
-                    grandChildren[0].nodeName != 'skybox')) {
-                return "There must be exactly 1 primitive type (rectangle, triangle, sphere, torus, plane, patch, cylinder2, skybox)";
+                    grandChildren[0].nodeName != 'skybox' &&
+                    grandChildren[0].nodeName != 'table')) {
+                return "There must be exactly 1 primitive type (rectangle, triangle, sphere, torus, plane, patch, cylinder2, skybox or table)";
             }
 
             // Specifications for the current primitive.
@@ -1008,7 +1009,7 @@ class MySceneGraph {
                     if (!(y2 != null && !isNaN(y2) && y2 > y1))
                         return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
 
-                    var rect = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);
+                    var rect = new MyRectangle(this.scene, x1, x2, y1, y2);
 
                     this.primitives[primitiveId] = rect;
 
@@ -1061,7 +1062,7 @@ class MySceneGraph {
                     if (!(z3 != null && !isNaN(z3)))
                         return "unable to parse z3 of the primitive coordinates for ID = " + primitiveId;
 
-                    var triangle = new MyTriangle(this.scene, primitiveId, x1, x2, x3, y1, y2, y3, z1, z2, z3);
+                    var triangle = new MyTriangle(this.scene, x1, x2, x3, y1, y2, y3, z1, z2, z3);
 
                     this.primitives[primitiveId] = triangle;
 
@@ -1084,7 +1085,7 @@ class MySceneGraph {
                     if (!(stacks != null && !isNaN(stacks)))
                         return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
-                    var sphere = new MySphere(this.scene, primitiveId, radius, slices, stacks);
+                    var sphere = new MySphere(this.scene, radius, slices, stacks);
 
                     this.primitives[primitiveId] = sphere;
 
@@ -1112,7 +1113,7 @@ class MySceneGraph {
                     if (!(loops != null && !isNaN(loops)))
                         return "unable to parse loops of the primitive coordinates for ID = " + primitiveId;
 
-                    var torus = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
+                    var torus = new MyTorus(this.scene, inner, outer, slices, loops);
 
                     this.primitives[primitiveId] = torus;
                     break;
@@ -1214,6 +1215,28 @@ class MySceneGraph {
                     var skybox = new MySkybox(this.scene, size);
 
                     this.primitives[primitiveId] = skybox;
+                    break;
+                }
+                case ('table'):
+                {
+                    //width
+                    var width = this.reader.getInteger(grandChildren[0], 'width');
+                    if (!(width != null && !isNaN(width)))
+                        return "unable to parse width of the primitive coordinates for ID = " + primitiveId;
+
+                    //length
+                    var length = this.reader.getInteger(grandChildren[0], 'length');
+                    if (!(length != null && !isNaN(length)))
+                        return "unable to parse length of the primitive coordinates for ID = " + primitiveId;
+
+                    //height
+                    var height = this.reader.getInteger(grandChildren[0], 'height');
+                    if (!(height != null && !isNaN(height)))
+                        return "unable to parse length of the primitive coordinates for ID = " + primitiveId;
+                    
+                    var table = new MyTable(this.scene, width, length, height);
+
+                    this.primitives[primitiveId] = table;
                     break;
                 }
             }

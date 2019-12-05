@@ -2,9 +2,9 @@
     <scene root="root" axis_length="5" />
 
     <views default="defaultcamera" >
-        <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="0" y="50" z="50" />
-            <to x="0" y="-2" z="0" />
+        <perspective id="defaultCamera" near="0.1" far="100" angle="45">
+            <from x="0" y="10" z="10" />
+            <to x="0" y="0" z="0" />
         </perspective>
     </views>
 
@@ -38,7 +38,7 @@
     </lights>
 
     <textures>
-        <texture id="text" file="scenes/images/skybox.png" />  
+        <texture id="text" file="scenes/images/wood.jpg" />  
     </textures>
 
     <materials> 
@@ -63,6 +63,9 @@
         <primitive id="mySkybox">
             <skybox size="100" />
         </primitive>  
+        <primitive id="myTable">
+            <table width="3" length="5" height="2" />
+        </primitive>
     </primitives >
  
     <components>         
@@ -74,7 +77,7 @@
             </materials>
             <texture id="text" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="mySkybox" />
+                <primitiveref id="myTable" />
             </children>
         </component>
     </components>

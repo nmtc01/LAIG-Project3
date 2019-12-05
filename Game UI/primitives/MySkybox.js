@@ -1,22 +1,24 @@
 /**
-* MyCubeMap
+* MySkybox
 * @constructor
+ * @param scene - Reference to MyScene object
+ * @param size - Skybox size
 */
 class MySkybox extends CGFobject {
 	constructor(scene, size) {
 		super(scene);
 		this.size = size;
 
-        this.initBuffers(this.size);
+        this.initBuffers();
 	}
 	initBuffers() {
 		this.vertices = [
-		//Face inferior
+		//Down face
 			-this.size, -this.size, -this.size, //0
 			this.size , -this.size, this.size , //1
 			this.size , -this.size, -this.size, //2
 			-this.size, -this.size, this.size , //3
-		//Faces laterais
+		//Side faces
 			this.size, -this.size, this.size,    //4
 			this.size, -this.size, -this.size,   //5
 			this.size, this.size, -this.size,    //6
@@ -36,7 +38,7 @@ class MySkybox extends CGFobject {
 			-this.size, -this.size, -this.size, //17
 			-this.size, this.size, -this.size,  //18
 			this.size, this.size, -this.size,   //19
-		//Face superior
+		//Up face
 			-this.size, this.size, this.size,   //20
 			this.size, this.size, this.size,    //21
 			this.size, this.size, -this.size,   //22

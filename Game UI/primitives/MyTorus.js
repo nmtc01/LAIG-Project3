@@ -6,7 +6,7 @@
  * @param y - Scale of rectangle in Y
  */
 class MyTorus extends CGFobject {
-	constructor(scene, id, inner, outer, slices, loops) {
+	constructor(scene, inner, outer, slices, loops) {
 		super(scene);
 		this.inner = inner;
 		this.outer = outer;

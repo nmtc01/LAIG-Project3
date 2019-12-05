@@ -8,7 +8,7 @@
  * @param stacks - Number of divisions between poles
  */
 class MySphere extends CGFobject {
-	constructor(scene, id, radius, slices, stacks) {
+	constructor(scene, radius, slices, stacks) {
 		super(scene);
 		this.radius = radius;
 		this.slices = slices;
@@ -89,7 +89,7 @@ class MySphere extends CGFobject {
 	 * @param {Array} coords - Array of texture coordinates
 	 * @param {Int} lg_s - Sacling factor length
 	 * @param {Int} lg_t - Sacling factor length
-	 * in this case the arguments to nothing
+	 * in this case the arguments do nothing
 	 */
 	updateTexCoords(lg_s, lg_t) {
 		this.updateTexCoordsGLBuffers();
