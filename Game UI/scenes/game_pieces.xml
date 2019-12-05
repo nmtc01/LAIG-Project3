@@ -38,7 +38,7 @@
     </lights>
 
     <textures>
-        <texture id="text" file="scenes/images/pokeball.png" />  
+        <texture id="text" file="scenes/images/skybox.png" />  
     </textures>
 
     <materials> 
@@ -57,54 +57,24 @@
     </transformations>
 
     <animations>
-        <animation id="throwPokeball" >
-            <keyframe instant="1">
-                <translate x="0" y="3" z="0" />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
-                <scale x="1" y="1" z="1" />
-            </keyframe>
-            <keyframe instant="1.5">
-                <translate x="0" y="5" z="5" />
-                <rotate angle_x="-25" angle_y="0" angle_z="0" />
-                <scale x="1" y="1" z="1" />
-            </keyframe>
-            <keyframe instant="2">
-                <translate x="0" y="5" z="5" />
-                <rotate angle_x="5" angle_y="0" angle_z="0" />
-                <scale x="2" y="2" z="2" />
-            </keyframe>
-             <keyframe instant="5">
-                <translate x="0" y="0" z="0" />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
-                <scale x="0" y="0" z="0" />
-            </keyframe>
-        </animation>
     </animations>
 
     <primitives>
-        <primitive id="myTorus">
-            <torus inner="0.5" outer="1" slices="50" loops="50" />
+        <primitive id="mySkybox">
+            <skybox size="100" />
         </primitive>  
-         <primitive id="mySphere">
-            <sphere radius="1" slices="50" stacks="50" />
-        </primitive>
     </primitives >
  
     <components>         
         <component id="root">
             <transformation>
-                <translate x="0" y="0" z="0" />
-                <rotate axis="y" angle="-90" />
-                <rotate axis="x" angle="-90" />
-                <scale x="1" y="1" z="1" />
             </transformation>
-            <animationref id="throwPokeball" />
             <materials>
                 <material id="mat" />
             </materials>
             <texture id="text" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="mySphere" />
+                <primitiveref id="mySkybox" />
             </children>
         </component>
     </components>
