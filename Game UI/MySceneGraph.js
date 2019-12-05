@@ -980,7 +980,7 @@ class MySceneGraph {
                     grandChildren[0].nodeName != 'skybox' &&
                     //TODO GAME PRIMITIVES 
                     grandChildren[0].nodeName != 'gameboard' &&
-                    grandChildren[0].nodeName != 'gameboard_tile' 
+                    grandChildren[0].nodeName != 'gameboard_tile' &&
                     grandChildren[0].nodeName != 'table')) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch, cylinder2, skybox or table)";
             }
