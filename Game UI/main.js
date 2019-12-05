@@ -11,7 +11,24 @@ function getUrlVars() {
     return vars;
 }	 
 //Include additional files here
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js','primitives/MyRectangle.js', 'primitives/MyTriangle.js','primitives/MySphere.js','primitives/MyTorus.js','Animation.js','KeyframeAnimation.js','primitives/Plane.js','primitives/Patch.js','primitives/Cylinder2.js','MySecurityCamera.js',
+serialInclude(
+    ['../lib/CGF.js', 
+    'XMLscene.js', 
+    'MySceneGraph.js', 
+    'MyInterface.js',
+    'primitives/MyRectangle.js', 
+    'primitives/MyTriangle.js',
+    'primitives/MySphere.js',
+    'primitives/MyTorus.js',
+    'Animation.js',
+    'KeyframeAnimation.js',
+    'primitives/Plane.js',
+    'primitives/Patch.js',
+    'primitives/Cylinder2.js',
+    'MySecurityCamera.js',
+    'game_objects/gameboard.js',
+    'game_objects/gameboard_tile.js',
+
 
 main=function()
 {
@@ -27,9 +44,10 @@ main=function()
 
 	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
-	
-    var filename=getUrlVars()['file'] || "game_pieces.xml";
-    //var filename=getUrlVars()['file'] || "LAIG_TP1_XML_T4_G10_v03.xml";
+    
+    //todo link with interface to change ambient and modes
+    //var filename=getUrlVars()['file'] || "game_pieces.xml";
+    var filename=getUrlVars()['file'] || "develop_test.xml";
 
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors

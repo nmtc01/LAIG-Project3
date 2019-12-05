@@ -977,7 +977,11 @@ class MySceneGraph {
                     grandChildren[0].nodeName != 'torus' &&
                     grandChildren[0].nodeName != 'plane' &&
                     grandChildren[0].nodeName != 'patch' &&
-                    grandChildren[0].nodeName != 'cylinder2')) {
+                    grandChildren[0].nodeName != 'cylinder2'&&
+                    //TODO GAME PRIMITIVES 
+                    grandChildren[0].nodeName != 'gameboard' &&
+                    grandChildren[0].nodeName != 'gameboard_tile' 
+                    )) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch or cylinder 2)";
             }
 
@@ -1235,6 +1239,73 @@ class MySceneGraph {
                     var cylinder2 = new Cylinder2(this.scene, base, top, height, slices, stacks); //Todo check for id 
 
                     this.primitives[primitiveId] = cylinder2;
+                    break;
+                
+                //TODO GAME OBJECTS  
+                
+                case ('gameboard'): 
+                    //base
+                    var x1 = this.reader.getFloat(grandChildren[0], 'x1');
+                    if (!(x1 != null && !isNaN(x1)))
+                        return "unable to parse x1 of the primitive coordinates for ID = " + primitiveId;
+
+                    var z1 = this.reader.getFloat(grandChildren[0], 'z1');
+                    if (!(z1 != null && !isNaN(z1)))
+                        return "unable to parse z1 of the primitive coordinates for ID = " + primitiveId;
+
+                    var x2 = this.reader.getFloat(grandChildren[0], 'x2');
+                    if (!(x2 != null && !isNaN(x2)))
+                        return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+
+                    var z2 = this.reader.getFloat(grandChildren[0], 'z2');
+                    if (!(z2 != null && !isNaN(z2)))
+                        return "unable to parse z2 of the primitive coordinates for ID = " + primitiveId;
+                
+                    var NPartsU = this.reader.getInteger(grandChildren[0], 'NPartsU');
+                    if (!(NPartsU != null && !isNaN(NPartsU)))
+                        return "unable to parse npartsU of the primitive coordinates for ID = " + primitiveId;
+
+                    var NPartsV = this.reader.getInteger(grandChildren[0], 'NPartsV');
+                    if (!(NPartsV != null && !isNaN(NPartsV)))
+                        return "unable to parse npartsV of the primitive coordinates for ID = " + primitiveId;
+                    
+
+                    var gameboard = new Gameboard(this.scene, x1, z1, x2, z2, NPartsU, NPartsV); //Todo check for id 
+
+                    this.primitives[primitiveId] = gameboard;
+                    
+                    break;
+
+                case ('gameboard_tile'): //TODO
+                    //base
+                    var base = this.reader.getFloat(grandChildren[0], 'base');
+                    if (!(base != null && !isNaN(base)))
+                        return "unable to parse base of the primitive coordinates for ID = " + primitiveId;
+
+                    //top    
+                    var top = this.reader.getFloat(grandChildren[0], 'top');
+                    if (!(top != null && !isNaN(top)))
+                        return "unable to parse top of the primitive coordinates for ID = " + primitiveId;
+
+                    //height
+                    var height = this.reader.getFloat(grandChildren[0], 'height');
+                    if (!(height != null && !isNaN(height)))
+                        return "unable to parse height of the primitive coordinates for ID = " + primitiveId;
+
+                    //slices
+                    var slices = this.reader.getInteger(grandChildren[0], 'slices');
+                    if (!(slices != null && !isNaN(slices)))
+                        return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
+
+                    //stacks
+                    var stacks = this.reader.getInteger(grandChildren[0], 'stacks');
+                    if (!(stacks != null && !isNaN(stacks)))
+                        return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
+
+                    var cylinder2 = new Cylinder2(this.scene, base, top, height, slices, stacks); //Todo check for id 
+
+                    this.primitives[primitiveId] = cylinder2;
+                    
                     break;
 
             }
