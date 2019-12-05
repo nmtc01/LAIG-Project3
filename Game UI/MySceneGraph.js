@@ -972,12 +972,12 @@ class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' &&
                     grandChildren[0].nodeName != 'triangle' &&
-                    grandChildren[0].nodeName != 'cylinder' &&
                     grandChildren[0].nodeName != 'sphere' &&
                     grandChildren[0].nodeName != 'torus' &&
                     grandChildren[0].nodeName != 'plane' &&
                     grandChildren[0].nodeName != 'patch' &&
                     grandChildren[0].nodeName != 'cylinder2'&&
+                    grandChildren[0].nodeName != 'skybox' &&
                     //TODO GAME PRIMITIVES 
                     grandChildren[0].nodeName != 'gameboard' &&
                     grandChildren[0].nodeName != 'gameboard_tile' 
@@ -991,7 +991,7 @@ class MySceneGraph {
             // Retrieves the primitive coordinates.
             switch (primitiveType) {
                 case ('rectangle'):
-
+                {
                     // x1
                     var x1 = this.reader.getFloat(grandChildren[0], 'x1');
                     if (!(x1 != null && !isNaN(x1)))
@@ -1017,9 +1017,9 @@ class MySceneGraph {
                     this.primitives[primitiveId] = rect;
 
                     break;
-
+                }
                 case ('triangle'):
-
+                {
                     // x1
                     var x1 = this.reader.getFloat(grandChildren[0], 'x1');
                     if (!(x1 != null && !isNaN(x1)))
@@ -1070,42 +1070,9 @@ class MySceneGraph {
                     this.primitives[primitiveId] = triangle;
 
                     break;
-
-                case ('cylinder'):
-
-                    //base
-                    var base = this.reader.getFloat(grandChildren[0], 'base');
-                    if (!(base != null && !isNaN(base)))
-                        return "unable to parse base of the primitive coordinates for ID = " + primitiveId;
-
-                    //top    
-                    var top = this.reader.getFloat(grandChildren[0], 'top');
-                    if (!(top != null && !isNaN(top)))
-                        return "unable to parse top of the primitive coordinates for ID = " + primitiveId;
-
-                    //height
-                    var height = this.reader.getFloat(grandChildren[0], 'height');
-                    if (!(height != null && !isNaN(height)))
-                        return "unable to parse height of the primitive coordinates for ID = " + primitiveId;
-
-                    //slices
-                    var slices = this.reader.getInteger(grandChildren[0], 'slices');
-                    if (!(slices != null && !isNaN(slices)))
-                        return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
-
-                    //stacks
-                    var stacks = this.reader.getInteger(grandChildren[0], 'stacks');
-                    if (!(stacks != null && !isNaN(stacks)))
-                        return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
-
-                    var cylinder = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
-
-                    this.primitives[primitiveId] = cylinder;
-
-                    break;
-
+                }
                 case ('sphere'):
-
+                {
                     //radius
                     var radius = this.reader.getFloat(grandChildren[0], 'radius');
                     if (!(radius != null && !isNaN(radius)))
@@ -1126,9 +1093,9 @@ class MySceneGraph {
                     this.primitives[primitiveId] = sphere;
 
                     break;
-
+                }
                 case ('torus'):
-
+                {
                     //innes
                     var inner = this.reader.getFloat(grandChildren[0], 'inner');
                     if (!(inner != null && !isNaN(inner)))
@@ -1153,8 +1120,9 @@ class MySceneGraph {
 
                     this.primitives[primitiveId] = torus;
                     break;
-
+                }
                 case ('plane'): // <plane npartsU=“ii” npartsV=“ii” />
+                {
                     var NPartsU = this.reader.getInteger(grandChildren[0], 'npartsU');
                     if (!(NPartsU != null && !isNaN(NPartsU)))
                         return "unable to parse npartsU of the primitive coordinates for ID = " + primitiveId;
@@ -1167,8 +1135,9 @@ class MySceneGraph {
 
                     this.primitives[primitiveId] = plane;
                     break;
+                }
                 case ('patch'):
-                  
+                {
                     var NPointsU = this.reader.getInteger(grandChildren[0], 'npointsU');
                     if (!(NPointsU != null && !isNaN(NPointsU)))
                         return "unable to parse npointsU of the primitive coordinates for ID = " + primitiveId;
@@ -1197,10 +1166,6 @@ class MySceneGraph {
                             var z= this.reader.getInteger(grandgrandChildren[i], 'zz');
 
                             coordinates.push(...[x, y, z]);
-                            /*var coordinates = this.parseCoordinates3D(grandgrandChildren[i], "Primitive patch control point nr: " + i);
-                            if (!Array.isArray(coordinates))
-                                return coordinates;
-                                */
                             controlPoints.push(coordinates);
                     }
                     if(controlPoints.length != NPointsU * NPointsV)
@@ -1210,7 +1175,9 @@ class MySceneGraph {
                     var patch = new Patch(this.scene, NPointsU, NPointsV,NPartsU,NPartsV,controlPoints);
                     this.primitives[primitiveId] = patch;
                     break;
+                }
                 case ('cylinder2'): 
+                {
                     //base
                     var base = this.reader.getFloat(grandChildren[0], 'base');
                     if (!(base != null && !isNaN(base)))
@@ -1240,10 +1207,11 @@ class MySceneGraph {
 
                     this.primitives[primitiveId] = cylinder2;
                     break;
-                
+                }
                 //TODO GAME OBJECTS  
                 
                 case ('gameboard'): 
+                {
                     //base
                     var x1 = this.reader.getFloat(grandChildren[0], 'x1');
                     if (!(x1 != null && !isNaN(x1)))
@@ -1275,8 +1243,9 @@ class MySceneGraph {
                     this.primitives[primitiveId] = gameboard;
                     
                     break;
-
+                }
                 case ('gameboard_tile'): //TODO
+                {
                     //base
                     var base = this.reader.getFloat(grandChildren[0], 'base');
                     if (!(base != null && !isNaN(base)))
@@ -1307,7 +1276,19 @@ class MySceneGraph {
                     this.primitives[primitiveId] = cylinder2;
                     
                     break;
+                }
+                case ('skybox'):
+                {
+                    //size
+                    var size = this.reader.getInteger(grandChildren[0], 'size');
+                    if (!(size != null && !isNaN(size)))
+                        return "unable to parse size of the primitive coordinates for ID = " + primitiveId;
+                    
+                    var skybox = new MySkybox(this.scene, size);
 
+                    this.primitives[primitiveId] = skybox;
+                    break;
+                }
             }
         }
         return null;

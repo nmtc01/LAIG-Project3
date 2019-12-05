@@ -26,6 +26,7 @@ serialInclude(
     'primitives/Patch.js',
     'primitives/Cylinder2.js',
     'MySecurityCamera.js',
+    'primitives/MySkybox.js',
     'game_objects/gameboard.js',
     'game_objects/gameboard_tile.js',
 
