@@ -1,0 +1,106 @@
+<lxs>
+    <scene root="root" axis_length="5" />
+
+    <views default="defaultcamera" >
+        <perspective id="defaultCamera" near="0.1" far="500" angle="45">
+            <from x="0" y="10" z="10" />
+            <to x="0" y="-1" z="0" />
+        </perspective>
+    </views>
+
+    <globals>  
+        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <background r="0.0" g="0.0" b="0.0" a="1.0" />
+    </globals>
+
+    <lights>
+        <omni id="Top" enabled="1">
+            <location x="0.0" y="10.0" z="0.0" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
+        </omni>
+
+        <omni id="Side1" enabled="1">
+            <location x="0.0" y="0.0" z="10.0" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
+        </omni>
+
+        <omni id="Side2" enabled="1">
+            <location x="10.0" y="0.0" z="0.0" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
+        </omni>
+
+        <omni id="Side3" enabled="1">
+            <location x="0.0" y="0.0" z="-10.0" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
+        </omni>
+
+        <omni id="Side4" enabled="1">
+            <location x="-10.0" y="0.0" z="0.0" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
+        </omni>
+    </lights>
+
+    <textures>
+        <texture id="board_tex1" file="scenes/images/game/board1.png" />  
+        <texture id="skybox1" file="scenes/images/skybox.png" />  
+    </textures>
+
+    <materials> 
+        <material id="white" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </material>
+    </materials>
+
+    <transformations>
+        <transformation id="translateSuperior">
+            <translate x="0" y="0.3" z="0" />
+        </transformation>
+    </transformations>
+
+    <animations>
+    </animations>
+
+    <primitives>
+        <primitive id="gameboard">
+            <gameboard x1="-2" z1="2" x2="2" z2="-2" NPartsU="30" NPartsV="30"/> 
+        </primitive>
+         <primitive id="skybox">
+            <skybox size="100" />
+        </primitive>  
+    </primitives >
+ 
+    <components>         
+        <component id="root">
+            <transformation>
+               
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+                <texture id="board_tex1" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="gameboard" />
+                <primitiveref id="skybox" />
+            </children>
+        </component>
+    </components>
+   
+</lxs>
