@@ -57,6 +57,7 @@
 
     <textures>
         <texture id="board_tex1" file="scenes/images/game/board1.png" />  
+        <texture id="skybox1" file="scenes/images/skybox.png" />  
     </textures>
 
     <materials> 
@@ -81,6 +82,9 @@
         <primitive id="gameboard">
             <gameboard x1="-2" z1="2" x2="2" z2="-2" NPartsU="30" NPartsV="30"/> 
         </primitive>
+         <primitive id="skybox">
+            <skybox size="100" />
+        </primitive>  
     </primitives >
  
     <components>         
@@ -91,9 +95,10 @@
             <materials>
                 <material id="white" />
             </materials>
-            <texture id="board_tex1" length_s="1" length_t="1" />
+                <texture id="board_tex1" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="gameboard" />
+                <primitiveref id="skybox" />
             </children>
         </component>
     </components>
