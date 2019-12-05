@@ -4,7 +4,7 @@ class MySecurityCamera extends CGFobject {
 
         this.textureRTT = textureRTT;
         this.time=0; 
-        this.rectangle = new MyRectangle(scene,1,-0.5,0.5,-0.5,0.5);
+        this.rectangle = new MyRectangle(scene,-0.5,0.5,-0.5,0.5);
     
         //shader
         this.shader = new CGFshader(scene.gl,"shaders/securitycamera.vert","shaders/securitycamera.frag"); 
