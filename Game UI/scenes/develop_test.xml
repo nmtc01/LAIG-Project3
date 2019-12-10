@@ -2,9 +2,9 @@
     <scene root="root" axis_length="5" />
 
     <views default="defaultcamera" >
-        <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="0" y="10" z="10" />
-            <to x="0" y="-1" z="0" />
+        <perspective id="defaultCamera" near="0.1" far="500" angle="60">
+            <from x="0" y="15" z="5" />
+            <to x="0" y="5" z="0" />
         </perspective>
     </views>
 
@@ -57,7 +57,8 @@
 
     <textures>
         <texture id="board_tex1" file="scenes/images/game/board1.png" />  
-        <texture id="skybox1" file="scenes/images/skybox.png" />  
+        <texture id="skybox" file="scenes/images/skybox.png" /> 
+        <texture id="wood" file="scenes/images/wood.jpg" />   
     </textures>
 
     <materials> 
@@ -79,45 +80,92 @@
     </animations>
 
     <primitives>
+
         <primitive id="gameboard">
             <gameboard x1="-2" z1="2" x2="2" z2="-2" NPartsU="30" NPartsV="30"/> 
         </primitive>
+
          <primitive id="skybox">
-            <skybox size="100" />
+            <skybox size="50" />
         </primitive> 
+
+         <primitive id="table">
+            <table width="3" length="5" height="2" />
+        </primitive>
+
         <primitive id="male">
             <obj model="male"/>  
         </primitive> 
+
     </primitives >
  
-    <components>         
+    <components>   
+
         <component id="root">
             <transformation>
-               
             </transformation>
             <materials>
                 <material id="white" />
             </materials>
-                <texture id="board_tex1" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
-                <componentref id="gameboard" />
-                <primitiveref id="skybox" />
-                <primitiveref id="male" />
+                <componentref id="ambient" />
+                <componentref id="game" />
             </children>
         </component>
 
-          <component id="gameboard">
+        <component id="ambient">
             <transformation>
-               
             </transformation>
             <materials>
-                <material id="white" />
+                <material id="inherit"/>
+            </materials>
+            <texture id="skybox" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="skybox" />
+                <componentref id="ambient_obj"/>
+            </children>
+        </component>
+
+        <component id="ambient_obj">
+            <transformation>
+                <scale x="2" y="2" z="2"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="wood" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="table" />
+            </children>
+        </component>
+
+        <component id="game">
+            <transformation>
+               <translate x="0" y="5.2" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+                <texture id="none" />
+            <children>
+                <componentref id="gameboard" />
+            </children>
+        </component>
+
+        <component id="gameboard">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
             </materials>
                 <texture id="board_tex1" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="gameboard" />
+                <!--game tiles-->
             </children>
         </component>
+
     </components>
    
 </lxs>

@@ -39,6 +39,7 @@
 
     <textures>
         <texture id="text" file="scenes/images/wood.jpg" />  
+        
     </textures>
 
     <materials> 
