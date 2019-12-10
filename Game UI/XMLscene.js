@@ -308,10 +308,23 @@ class XMLscene extends CGFscene {
         // ---- END Background, camera and axis setup
     }
 
+    display_render_mode(){
+        //todo
+    }
+
+    selectable_render_mode(){
+        //todo
+    }
+
     /**
      * Displays the scene.
      */
     display() {
+        
+        //todo
+        this.display_render_mode();
+        this.selectable_render_mode();
+
         if (this.sceneInited) {
             this.textureRTT.attachToFrameBuffer();
             this.render(this.secondaryCamera); //call RTT camera
