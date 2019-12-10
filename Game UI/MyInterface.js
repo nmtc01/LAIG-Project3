@@ -22,10 +22,7 @@ class MyInterface extends CGFinterface {
         // add a group of controls (and open/expand by defult
 
         this.initKeys();
-         
-        //added a checkbox with a switch to display axis
-        this.gui.add(this.scene, 'displayAxis').name("Display axis");
-      
+               
         return true;
     }
 

@@ -42,15 +42,12 @@ class XMLscene extends CGFscene {
         this.t=0; //current program time
 
         //interface utils
-        this.displayAxis = true; //axis state
         this.lightSwitch = [true, false, false, false, false, false, false, false]; //array containing light states
         this.selectedCamera = 0; //store index of the selected camera
         this.selectedSecondaryCamera = 0;
         this.keysPressed=false; //used to avoid infinite key pressing, always assume one tap, and reset with realease
         
-        this.reaload = false; 
-
-        //this.fileNames = ['Theme1','Theme2','Theme3'];
+        //todo put the names we want
         this.fileNames = ['Develop Test','Game Pieces'];
 
         this.files = {};
@@ -61,7 +58,7 @@ class XMLscene extends CGFscene {
         this.selectedFile = this.files['Develop Test'];
     
         this.securityCamera = new MySecurityCamera(this,this.textureRTT);
-
+    
     }
 
     initDefaultCamera() { // todo create default camera
@@ -134,10 +131,8 @@ class XMLscene extends CGFscene {
         this.selectedFile = this.files[val]; 
     }
     reload(){
-        //this.reaload = true; 
         //todo put here everything to do when i wanna reload
         this.graph.updateFilename(this.selectedFile);
-        //this.reaload=false; 
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -260,10 +255,9 @@ class XMLscene extends CGFscene {
                 this.graph.components[key].animation.update(t);
             }       
         }
-        this.securityCamera.update(t);
+ 
     }
-
-    /**
+      /**
      * Renders the scene.
      */
     render(camera) {

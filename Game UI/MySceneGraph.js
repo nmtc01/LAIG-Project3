@@ -55,7 +55,7 @@ class MySceneGraph {
 
     updateFilename(filename){
         this.filename = filename; 
-        alert(this.filename);
+        console.log('new file to load: ' + this.filename);
     }
 
     /*

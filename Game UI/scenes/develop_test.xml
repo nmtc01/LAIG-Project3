@@ -57,7 +57,7 @@
 
     <textures>
         <texture id="board_tex1" file="scenes/images/game/board1.png" />  
-        <texture id="skybox" file="scenes/images/skybox.png" /> 
+        <texture id="skybox" file="scenes/images/skybox/kitchen.png" /> 
         <texture id="wood" file="scenes/images/wood.jpg" />   
     </textures>
 
@@ -86,7 +86,7 @@
         </primitive>
 
          <primitive id="skybox">
-            <skybox size="50" />
+            <skybox size="30" />
         </primitive> 
 
          <primitive id="table">
@@ -120,10 +120,23 @@
             <materials>
                 <material id="inherit"/>
             </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="skybox" />
+                <componentref id="ambient_obj"/>
+            </children>
+        </component>
+
+        <component id="skybox">
+            <transformation>
+                <translate x="0" y="30" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
             <texture id="skybox" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="skybox" />
-                <componentref id="ambient_obj"/>
             </children>
         </component>
 
