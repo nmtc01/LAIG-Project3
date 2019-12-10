@@ -1,7 +1,7 @@
 class PiecePrimitive1 extends CGFobject{
-    constructor(scene,type){
+    constructor(scene,name){
         super(scene);
-        this.type = type; 
+        this.name = name; 
         this.init();
     }
     init(){
@@ -10,22 +10,20 @@ class PiecePrimitive1 extends CGFobject{
         this.tops = new MySphere(this.scene,1/3, 50, 50);
         
         //texture
-        switch(this.type){
+        switch(this.name){
             case 'BW': 
-                //this.topsTex = new CGFtexture(this.scene, 'images/mp_rip/rip_bk.jpg'); 
+                this.topsTex = new CGFtexture(this.scene, 'scenes/images/game/BlueWhitePiece.png'); 
             break; 
             case 'BB': 
-                //this.topsTex = new CGFtexture(this.scene, 'images/mp_rip/rip_bk.jpg'); 
+                this.topsTex = new CGFtexture(this.scene, 'scenes/images/game/BlueBlackPiece.png'); 
             break; 
             case 'RW': 
-                //this.topsTex = new CGFtexture(this.scene, 'images/mp_rip/rip_bk.jpg'); 
+                this.topsTex = new CGFtexture(this.scene, 'scenes/images/game/RedWhitePiece.png'); 
             break; 
             case 'RB':
-                //this.topsTex = new CGFtexture(this.scene, 'images/mp_rip/rip_bk.jpg'); 
+                this.topsTex = new CGFtexture(this.scene, 'scenes/images/game/RedBlackPiece.png'); 
             break; 
         }
-        this.topsTex = new CGFtexture(this.scene, 'scenes/images/game/BlueWhitePiece.png');
-
         this.midMat = new CGFappearance(this.scene);
         this.midMat.setAmbient(1, 1, 1, 1);
         this.midMat.setDiffuse(0.35, 0.35, 0.35, 1.0);

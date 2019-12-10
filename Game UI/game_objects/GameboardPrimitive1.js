@@ -9,15 +9,15 @@
  * Addapted from Plane.js
  * Board height is always set at 1/8 = 0.125 = y
  */
-class Gameboard extends CGFobject{
-    constructor(scene,x1,z1,x2,z2,NPartsU,NPartsV){
+class GameboardPrimitive1 extends CGFobject{
+    constructor(scene){
         super(scene);
-        this.x1 = x1; 
-        this.z1 = z1; 
-        this.x2 = x2; 
-        this.z2 = z2; 
-        this.NPartsU= NPartsU; 
-        this.NPartsV= NPartsV;
+        this.x1 = -2; 
+        this.z1 = 2; 
+        this.x2 = 2; 
+        this.z2 = -2; 
+        this.NPartsU = 50; 
+        this.NPartsV = 50;
 
         this.init();
     }
@@ -119,17 +119,40 @@ class Gameboard extends CGFobject{
     this.surfaceBot = new CGFnurbsSurface(1, 1, this.controlPointsBottom);
     this.bottom = new CGFnurbsObject(this.scene, this.NPartsU, this.NPartsV, this.surfaceBot);
 
+    //textures 
+    this.topTex = new CGFtexture(this.scene, 'scenes/images/game/Board1.png');
+    
+    this.topMat = new CGFappearance(this.scene);
+    this.topMat.setAmbient(1, 1, 1, 1);
+    this.topMat.setDiffuse(1.0, 1.0, 1.0, 1.0);
+    this.topMat.setSpecular(0.2, 0.2, 0.2, 1.0);
+    this.topMat.setShininess(10.0);
+    this.topMat.setTexture(this.topTex);
+    this.topMat.setTextureWrap('REPEAT','REPEAT');
+
+    this.sideMat = new CGFappearance(this.scene);
+    this.sideMat.setAmbient(1, 1, 1, 1);
+    this.sideMat.setDiffuse(1.0, 1.0, 1.0, 1.0);
+    this.sideMat.setSpecular(0.2, 0.2, 0.2, 1.0);
+    this.sideMat.setShininess(10.0);
+    //materials
+
     }
-    //todo add edges planes
     display(){
+        this.scene.pushMatrix();
+        this.topMat.apply();
         this.board.display();
+        this.scene.popMatrix();
+       
+        this.scene.pushMatrix();
+        this.sideMat.apply();
         this.side1.display();
         this.side2.display();
         this.side3.display();
         this.side4.display();
         this.bottom.display(); 
+        this.scene.popMatrix();
 
-        //todo smth with textures
     }
 
     updateTexCoords(lg_s, lg_t) {

@@ -1241,33 +1241,18 @@ class MySceneGraph {
                 
                 case ('gameboard'): 
                 {
-                    //base
-                    var x1 = this.reader.getFloat(grandChildren[0], 'x1');
-                    if (!(x1 != null && !isNaN(x1)))
-                        return "unable to parse x1 of the primitive coordinates for ID = " + primitiveId;
-
-                    var z1 = this.reader.getFloat(grandChildren[0], 'z1');
-                    if (!(z1 != null && !isNaN(z1)))
-                        return "unable to parse z1 of the primitive coordinates for ID = " + primitiveId;
-
-                    var x2 = this.reader.getFloat(grandChildren[0], 'x2');
-                    if (!(x2 != null && !isNaN(x2)))
-                        return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
-
-                    var z2 = this.reader.getFloat(grandChildren[0], 'z2');
-                    if (!(z2 != null && !isNaN(z2)))
-                        return "unable to parse z2 of the primitive coordinates for ID = " + primitiveId;
-                
-                    var NPartsU = this.reader.getInteger(grandChildren[0], 'NPartsU');
-                    if (!(NPartsU != null && !isNaN(NPartsU)))
-                        return "unable to parse npartsU of the primitive coordinates for ID = " + primitiveId;
-
-                    var NPartsV = this.reader.getInteger(grandChildren[0], 'NPartsV');
-                    if (!(NPartsV != null && !isNaN(NPartsV)))
-                        return "unable to parse npartsV of the primitive coordinates for ID = " + primitiveId;
                     
+                    var type = this.reader.getString(grandChildren[0],'type');
 
-                    var gameboard = new Gameboard(this.scene, x1, z1, x2, z2, NPartsU, NPartsV); //Todo check for id 
+                    switch(type){
+                        case 'original':
+                            var gameboard = new GameboardPrimitive1(this.scene);//Todo check for id 
+                            break;
+                        case '2':
+                            break;
+                        case '3':
+                            break;
+                    }
 
                     this.primitives[primitiveId] = gameboard;
                     
@@ -1342,16 +1327,21 @@ class MySceneGraph {
                 }
                 case ('piece'):
                 {   
-                    var type = this.reader.getString(grandChildren[0],'type'); //todo choose names
+                    var type = this.reader.getString(grandChildren[0],'type'); 
+                    var name = this.reader.getString(grandChildren[0],'name');
+                    
+                    if( name == 'RB ' || name == 'RW ' || name == 'BB ' || name == 'BW ')
+                        return "Piece name must be RB, RW, BB or BW of the primitive for ID = " + primitiveId;
+
                     switch(type){
                         case '1':
-                            var piece = new PiecePrimitive1(this.scene);
+                            var piece = new PiecePrimitive1(this.scene,name);
                         break; 
                         case '2':
-                            var piece = new PiecePrimitive1(this.scene);
+                            var piece = new PiecePrimitive1(this.scene,name);
                         break; 
                         case '3':
-                            var piece = new PiecePrimitive1(this.scene);
+                            var piece = new PiecePrimitive1(this.scene,name);
                         break; 
                     }
 

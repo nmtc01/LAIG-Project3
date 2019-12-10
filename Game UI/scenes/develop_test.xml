@@ -94,7 +94,7 @@
     <primitives>
 
         <primitive id="gameboard">
-            <gameboard x1="-2" z1="2" x2="2" z2="-2" NPartsU="30" NPartsV="30"/> 
+            <gameboard type="original"/> 
         </primitive>
 
          <primitive id="skybox">
@@ -110,7 +110,7 @@
         </primitive> 
 
          <primitive id="piece">
-            <piece type="1"/>  
+            <piece type="1" name="RB"/>  
         </primitive> 
 
     </primitives >
