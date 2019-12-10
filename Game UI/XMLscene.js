@@ -129,10 +129,17 @@ class XMLscene extends CGFscene {
     }
     updateFile(val){
         this.selectedFile = this.files[val]; 
+           this.interface.reset();
+        
+           this.graph.updateFilename(this.selectedFile);
     }
     reload(){
         //todo put here everything to do when i wanna reload
-        this.graph.updateFilename(this.selectedFile);
+
+        //this.interface.reset();
+        
+        //this.graph.updateFilename(this.selectedFile);
+
     }
     /**
      * Initializes the scene lights with the values read from the XML file.

@@ -56,6 +56,26 @@ class MySceneGraph {
     updateFilename(filename){
         this.filename = filename; 
         console.log('new file to load: ' + this.filename);
+
+        this.scene.MyInterface = null;
+        this.loadedOk = null;
+
+        // Establish bidirectional references between scene and graph
+        this.views = [];
+        this.globals = [];
+        this.lights = [];
+        this.nodes = [];
+
+        this.idRoot = null;                    // The id of the root element.
+
+        this.loadedOk = null;
+
+        this.reader = new CGFXMLreader();
+
+        this.change_material_id = 0;
+       
+        this.reader.open('scenes/' + this.filename, this);
+        //todo ind a way 
     }
 
     /*
