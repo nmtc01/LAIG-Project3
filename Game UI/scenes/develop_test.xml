@@ -100,9 +100,22 @@
             </materials>
                 <texture id="board_tex1" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="gameboard" />
+                <componentref id="gameboard" />
                 <primitiveref id="skybox" />
                 <primitiveref id="male" />
+            </children>
+        </component>
+
+          <component id="gameboard">
+            <transformation>
+               
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+                <texture id="board_tex1" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="gameboard" />
             </children>
         </component>
     </components>

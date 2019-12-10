@@ -70,5 +70,9 @@ class MyInterface extends CGFinterface {
             f0.add(this.scene.lightSwitch, i).name(key);
             i++;
         }
+        this.gui.add(this.scene,'reload')
+            .name('Start')
+            .onChange(this.scene.reload());
+        
     }
 }

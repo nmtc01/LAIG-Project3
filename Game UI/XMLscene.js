@@ -48,6 +48,8 @@ class XMLscene extends CGFscene {
         this.selectedSecondaryCamera = 0;
         this.keysPressed=false; //used to avoid infinite key pressing, always assume one tap, and reset with realease
         
+        this.reaload = false; 
+
         //this.fileNames = ['Theme1','Theme2','Theme3'];
         this.fileNames = ['Develop Test','Game Pieces'];
 
@@ -130,10 +132,12 @@ class XMLscene extends CGFscene {
     }
     updateFile(val){
         this.selectedFile = this.files[val]; 
-        this.graph.updateFilename(this.selectedFile);
     }
     reload(){
-        //todo
+        //this.reaload = true; 
+        //todo put here everything to do when i wanna reload
+        this.graph.updateFilename(this.selectedFile);
+        //this.reaload=false; 
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
