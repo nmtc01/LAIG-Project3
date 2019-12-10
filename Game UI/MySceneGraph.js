@@ -60,11 +60,12 @@ class MySceneGraph {
         this.scene.MyInterface = null;
         this.loadedOk = null;
 
-        // Establish bidirectional references between scene and graph
+        //reset everything
         this.views = [];
         this.globals = [];
         this.lights = [];
         this.nodes = [];
+        this.components = [];
 
         this.idRoot = null;                    // The id of the root element.
 

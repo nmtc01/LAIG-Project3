@@ -8,7 +8,7 @@ class XMLscene extends CGFscene {
      * @constructor
      * @param {MyInterface} myinterface 
      */
-    constructor(myinterface,reload,selectedFileXMLIndex) {
+    constructor(myinterface) {
         super();
 
         this.interface = myinterface;
@@ -55,6 +55,7 @@ class XMLscene extends CGFscene {
         this.files['Develop Test'] = 'develop_test.xml';
         this.files['Game Pieces'] = 'game_pieces.xml';
 
+        //find a way for him to received the file, or to know the current one 
         this.selectedFile = this.files['Develop Test'];
     
         this.securityCamera = new MySecurityCamera(this,this.textureRTT);
@@ -128,10 +129,9 @@ class XMLscene extends CGFscene {
         this.secondaryCamera = this.secondaryCameras[val]; //get the camera using val passed on the interface, set as main camera   
     }
     updateFile(val){
-        this.selectedFile = this.files[val]; 
-           this.interface.reset();
-        
-           this.graph.updateFilename(this.selectedFile);
+        this.interface.reset();
+        this.selectedFile = this.files[val];         
+        this.graph.updateFilename(this.selectedFile);
     }
     reload(){
         //todo put here everything to do when i wanna reload
