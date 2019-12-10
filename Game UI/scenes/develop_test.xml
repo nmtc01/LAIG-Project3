@@ -84,7 +84,10 @@
         </primitive>
          <primitive id="skybox">
             <skybox size="100" />
-        </primitive>  
+        </primitive> 
+        <primitive id="male">
+            <obj model="male"/>  
+        </primitive> 
     </primitives >
  
     <components>         
@@ -99,6 +102,7 @@
             <children>
                 <primitiveref id="gameboard" />
                 <primitiveref id="skybox" />
+                <primitiveref id="male" />
             </children>
         </component>
     </components>

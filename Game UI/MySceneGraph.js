@@ -981,8 +981,9 @@ class MySceneGraph {
                     //TODO GAME PRIMITIVES 
                     grandChildren[0].nodeName != 'gameboard' &&
                     grandChildren[0].nodeName != 'gameboard_tile' &&
-                    grandChildren[0].nodeName != 'table')) {
-                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch, cylinder2, skybox or table)";
+                    grandChildren[0].nodeName != 'table') &&
+                    grandChildren[0].nodeName != 'obj') {
+                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch, cylinder2, skybox, table or obj)";
             }
 
             // Specifications for the current primitive.
@@ -1309,6 +1310,14 @@ class MySceneGraph {
                     var table = new MyTable(this.scene, width, length, height);
 
                     this.primitives[primitiveId] = table;
+                    break;
+                }
+                case ('obj'):
+                {   
+                    var model = this.reader.getString(grandChildren[0],'model');
+                    var obj = new CGFOBJModel(this.scene, 'game_objects/obj/'+model+'.obj');
+
+                    this.primitives[primitiveId] = obj;
                     break;
                 }
             }
@@ -1715,8 +1724,9 @@ class MySceneGraph {
             let lg_s = this.components[child].texture.length_s;
             let lg_t = this.components[child].texture.length_t;
 
-            //always texture coord respecting lenghth scale factors
-            this.components[child].children.primitiverefIDs[i].updateTexCoords(lg_s, lg_t);
+            //always update texture coord respecting lenghth scale factors
+            if( this.components[child].children.primitiverefIDs[i].url == null) //only obj has url
+                this.components[child].children.primitiverefIDs[i].updateTexCoords(lg_s, lg_t);
 
             //display primitive
             this.components[child].children.primitiverefIDs[i].display();
