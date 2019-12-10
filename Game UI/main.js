@@ -31,6 +31,7 @@ serialInclude(
     'primitives/MySkybox.js',
     'game_objects/gameboard.js',
     'game_objects/gameboard_tile.js',
+    'game_objects/PiecePrimitive1.js',
     'primitives/MyTable.js',
     'primitives/RectPrism.js',
 

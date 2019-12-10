@@ -1008,9 +1008,10 @@ class MySceneGraph {
                     //TODO GAME PRIMITIVES 
                     grandChildren[0].nodeName != 'gameboard' &&
                     grandChildren[0].nodeName != 'gameboard_tile' &&
-                    grandChildren[0].nodeName != 'table') &&
-                    grandChildren[0].nodeName != 'obj') {
-                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch, cylinder2, skybox, table or obj)";
+                    grandChildren[0].nodeName != 'table' &&
+                    grandChildren[0].nodeName != 'piece' &&
+                    grandChildren[0].nodeName != 'obj')) {
+                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch, cylinder2, skybox, table, piece or obj)";
             }
 
             // Specifications for the current primitive.
@@ -1339,6 +1340,24 @@ class MySceneGraph {
                     this.primitives[primitiveId] = table;
                     break;
                 }
+                case ('piece'):
+                {   
+                    var type = this.reader.getString(grandChildren[0],'type'); //todo choose names
+                    switch(type){
+                        case '1':
+                            var piece = new PiecePrimitive1(this.scene);
+                        break; 
+                        case '2':
+                            var piece = new PiecePrimitive1(this.scene);
+                        break; 
+                        case '3':
+                            var piece = new PiecePrimitive1(this.scene);
+                        break; 
+                    }
+
+                    this.primitives[primitiveId] = piece;
+                    break;
+                }          
                 case ('obj'):
                 {   
                     var model = this.reader.getString(grandChildren[0],'model');
