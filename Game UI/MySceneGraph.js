@@ -26,6 +26,8 @@ class MySceneGraph {
         this.scene = scene;
         scene.graph = this;
 
+        this.filename  = filename; 
+
         this.nodes = [];
 
         this.idRoot = null;                    // The id of the root element.
@@ -48,7 +50,12 @@ class MySceneGraph {
          * After the file is read, the reader calls onXMLReady on this object.
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
-        this.reader.open('scenes/' + filename, this);
+        this.reader.open('scenes/' + this.filename, this);
+    }
+
+    updateFilename(filename){
+        this.filename = filename; 
+    
     }
 
     /*

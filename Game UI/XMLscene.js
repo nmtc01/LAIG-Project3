@@ -8,7 +8,7 @@ class XMLscene extends CGFscene {
      * @constructor
      * @param {MyInterface} myinterface 
      */
-    constructor(myinterface) {
+    constructor(myinterface,reload,selectedFileXMLIndex) {
         super();
 
         this.interface = myinterface;
@@ -48,6 +48,16 @@ class XMLscene extends CGFscene {
         this.selectedSecondaryCamera = 0;
         this.keysPressed=false; //used to avoid infinite key pressing, always assume one tap, and reset with realease
         
+        //this.fileNames = ['Theme1','Theme2','Theme3'];
+        this.fileNames = ['Develop Test','Game Pieces'];
+
+        this.files = {};
+
+        this.files['Develop Test'] = 'develop_test.xml';
+        this.files['Game Pieces'] = 'game_pieces.xml';
+
+        this.selectedFile = this.files['Develop Test'];
+    
         this.securityCamera = new MySecurityCamera(this,this.textureRTT);
 
     }
@@ -56,6 +66,7 @@ class XMLscene extends CGFscene {
         //default camera 
         this.camera = new CGFcamera(Math.PI/3, 0.1, 500, vec3.fromValues(50, 5, 70), vec3.fromValues(0, -10, 0)); 
         this.secondaryCamera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0)); 
+             
     }
     /**
      * Initializes the scene cameras.
@@ -116,6 +127,13 @@ class XMLscene extends CGFscene {
     }
     updateSecondaryCameras(val) {
         this.secondaryCamera = this.secondaryCameras[val]; //get the camera using val passed on the interface, set as main camera   
+    }
+    updateFile(val){
+        this.selectedFile = this.files[val]; 
+        this.graph.updateFilename(this.selectedFile);
+    }
+    reload(){
+        //todo
     }
     /**
      * Initializes the scene lights with the values read from the XML file.

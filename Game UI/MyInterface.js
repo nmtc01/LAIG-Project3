@@ -25,6 +25,7 @@ class MyInterface extends CGFinterface {
          
         //added a checkbox with a switch to display axis
         this.gui.add(this.scene, 'displayAxis').name("Display axis");
+      
         return true;
     }
 
@@ -52,6 +53,10 @@ class MyInterface extends CGFinterface {
 
     updateInterface() {
         //create dropdown with cameras/view
+        this.gui.add(this.scene,'selectedFile',this.scene.fileNames)
+            .name('Scene Ambient: ')
+            .onChange(val => this.scene.updateFile(val)); 
+
         this.gui.add(this.scene, 'selectedCamera', this.scene.primaryCameraIDs)
             .name('Scene Camera:')
             .onChange(val => this.scene.updateSceneCameras(val));
