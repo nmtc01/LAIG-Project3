@@ -302,6 +302,7 @@ class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
+            //todo maybe here???
         }
  
         this.popMatrix();
