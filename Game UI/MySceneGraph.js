@@ -1009,10 +1009,10 @@ class MySceneGraph {
                     //TODO GAME PRIMITIVES 
                     grandChildren[0].nodeName != 'gameboard' &&
                     grandChildren[0].nodeName != 'gameboard_tile' &&
-                    grandChildren[0].nodeName != 'table' &&
+                    grandChildren[0].nodeName != 'rect_prism' &&
                     grandChildren[0].nodeName != 'piece' &&
                     grandChildren[0].nodeName != 'obj')) {
-                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch, cylinder2, skybox, table, piece or obj)";
+                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch, cylinder2, skybox, rect_prism, piece or obj)";
             }
 
             // Specifications for the current primitive.
@@ -1304,26 +1304,26 @@ class MySceneGraph {
                     this.primitives[primitiveId] = skybox;
                     break;
                 }
-                case ('table'):
+                case ('rect_prism'):
                 {
                     //width
-                    var width = this.reader.getInteger(grandChildren[0], 'width');
+                    var width = this.reader.getFloat(grandChildren[0], 'width');
                     if (!(width != null && !isNaN(width)))
                         return "unable to parse width of the primitive coordinates for ID = " + primitiveId;
 
                     //length
-                    var length = this.reader.getInteger(grandChildren[0], 'length');
+                    var length = this.reader.getFloat(grandChildren[0], 'length');
                     if (!(length != null && !isNaN(length)))
                         return "unable to parse length of the primitive coordinates for ID = " + primitiveId;
 
                     //height
-                    var height = this.reader.getInteger(grandChildren[0], 'height');
+                    var height = this.reader.getFloat(grandChildren[0], 'height');
                     if (!(height != null && !isNaN(height)))
                         return "unable to parse length of the primitive coordinates for ID = " + primitiveId;
                     
-                    var table = new MyTable(this.scene, width, length, height);
+                    var prism = new RectPrism(this.scene, width, length, height);
 
-                    this.primitives[primitiveId] = table;
+                    this.primitives[primitiveId] = prism;
                     break;
                 }
                 case ('piece'):

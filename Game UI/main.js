@@ -32,7 +32,6 @@ serialInclude(
     'game_objects/GameboardPrimitive1.js',
     'game_objects/gameboard_tile.js',
     'game_objects/PiecePrimitive1.js',
-    'primitives/MyTable.js',
     'primitives/RectPrism.js',
 
 main=function()
