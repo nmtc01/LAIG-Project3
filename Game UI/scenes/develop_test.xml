@@ -101,9 +101,9 @@
             <skybox size="30" />
         </primitive> 
 
-       <!--<primitive id="male">
+       <primitive id="male">
             <obj model="male"/>  
-        </primitive>--> 
+        </primitive> 
 
          <primitive id="piece">
             <piece type="1" name="RB"/>  
