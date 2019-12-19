@@ -1406,6 +1406,8 @@ class MySceneGraph {
             var animationIndex = nodeNames.indexOf('animationref');
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
+            var pickableIndex = nodeNames.indexOf("pickable");
+            var visibleIndex = nodeNames.indexOf("visible");
             var childrenIndex = nodeNames.indexOf("children");
 
             // Transformations -- Bloco pode ficar sem conteudo
@@ -1519,8 +1521,24 @@ class MySceneGraph {
             }
             else return "texture module not declared"
 
+            //Pickable -- Obrigatorio
+            if ((pickableIndex == 4 && animationIndex == 1) || (pickableIndex == 3 && animationIndex == -1)) {
+                var pickable = this.reader.getString(grandChildren[pickableIndex], 'flag');
+                if (pickable == null)
+                    return "Pickable flag has not been declared"; 
+            }
+            else return "pickable block out of order";
+
+            //Visible -- Obrigatorio
+            if ((visibleIndex == 5 && animationIndex == 1) || (visibleIndex == 4 && animationIndex == -1)) {
+                var visible = this.reader.getString(grandChildren[visibleIndex], 'flag');
+                if (visible == null)
+                    return "Visible flag has not been declared"; 
+            }
+            else return "visible block out of order";
+
             // Children
-            if ((childrenIndex == 4 && animationIndex == 1) || (childrenIndex == 3 && animationIndex == -1)) {
+            if ((childrenIndex == 6 && animationIndex == 1) || (childrenIndex == 5 && animationIndex == -1)) {
 
                 grandgrandChildren = grandChildren[childrenIndex].children;
                 if (grandgrandChildren.length == 0)
@@ -1562,6 +1580,8 @@ class MySceneGraph {
                     length_s,
                     length_t
                 },
+                pickable,
+                visible,
                 children: {
                     componentrefIDs,
                     primitiverefIDs

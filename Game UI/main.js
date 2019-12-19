@@ -51,7 +51,7 @@ main=function()
     
     //todo link with interface to change ambient and modes
     //var filename=getUrlVars()['file'] || "game_pieces.xml";
-    var filename=getUrlVars()['file'] || "develop_test.xml";
+    var filename=getUrlVars()['file'] || "vis_pick_test.xml";
 
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors
