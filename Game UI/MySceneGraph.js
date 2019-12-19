@@ -1737,7 +1737,7 @@ class MySceneGraph {
 
         //Materials
         if (this.components[child].component_materials == 'inherit') { //if inherit does nothing, keeps the current material, from the parent 
-            if (parent_material == null)
+            if (parent_material == null || child == 'root')
                 return 'Error - cannot display inhreited material if there is no material declared before';
         }
         else {
@@ -1749,7 +1749,7 @@ class MySceneGraph {
         //Textures
         if (this.components[child].texture.textureref == 'inherit') {
             //controll erros if there is no texture, program stop
-            if (parent_texture == null)
+            if (parent_texture == null || child == 'root')
                 return 'Error - cannot display inhreited texture if there is no texture declared before';
             //use parent texture
             parent_material.setTexture(parent_texture);
@@ -1776,12 +1776,15 @@ class MySceneGraph {
         //Pickable
         let pickable_flag;
         if (this.components[child].pickable == 'inherit') {
-            if (parent_pickable == null)
+            if (parent_pickable == null || child == 'root')
                 return 'Error - cannot display inhreited pickable object if there is no pickable flag declared before';
             //use parent pickable flag
             pickable_flag = parent_pickable;
         }
-        else pickable_flag = this.components[child].pickable;
+        else {
+            pickable_flag = this.components[child].pickable;
+            parent_pickable = this.components[child].pickable;
+        }
 
         //Process end node/primitives
         for (let i = 0; i < this.components[child].children.primitiverefIDs.length; i++) {
@@ -1806,7 +1809,7 @@ class MySceneGraph {
 
         //Process child components
         for (let i = 0; i < this.components[child].children.componentrefIDs.length; i++) {
-            this.processChild(this.components[child].children.componentrefIDs[i], parent_material, parent_texture, parent_length_s, parent_length_t);
+            this.processChild(this.components[child].children.componentrefIDs[i], parent_material, parent_texture, parent_length_s, parent_length_t, parent_pickable);
         }
 
         this.scene.popMatrix();

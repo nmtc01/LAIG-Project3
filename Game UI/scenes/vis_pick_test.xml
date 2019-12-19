@@ -120,7 +120,7 @@
                 <material id="white" />
             </materials>
             <texture id="none" />
-            <pickable flag="true" />
+            <pickable flag="false" />
             <visible flag="true" />
             <children>
                 <componentref id="ambient_obj" />
@@ -150,7 +150,7 @@
                 <material id="inherit"/>
             </materials>
             <texture id="inherit" />
-            <pickable flag="true" />
+            <pickable flag="inherit" />
             <visible flag="true" />
             <children>
                 <componentref id="top" />
