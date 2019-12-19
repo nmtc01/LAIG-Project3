@@ -154,6 +154,7 @@
             <visible flag="true" />
             <children>
                 <componentref id="top" />
+                <componentref id="leg" />
             </children>
         </component>
 
@@ -165,10 +166,25 @@
                 <material id="inherit"/>
             </materials>
             <texture id="inherit" />
-            <pickable flag="true" />
+            <pickable flag="inherit" />
             <visible flag="true" />
             <children>
                 <primitiveref id="tableTop" />
+            </children>
+        </component>
+
+        <component id="leg">
+            <transformation>
+                <translate x="-2.05" y="1" z="1.15" />
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="inherit" />
+            <pickable flag="false" />
+            <visible flag="true" />
+            <children>
+                <primitiveref id="tableLeg" />
             </children>
         </component>
 

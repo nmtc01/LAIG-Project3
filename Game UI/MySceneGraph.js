@@ -1531,7 +1531,7 @@ class MySceneGraph {
 
             //Visible -- Obrigatorio
             if ((visibleIndex == 5 && animationIndex == 1) || (visibleIndex == 4 && animationIndex == -1)) {
-                var visible = this.reader.getString(grandChildren[visibleIndex], 'flag');
+                var visible = this.reader.getBoolean(grandChildren[visibleIndex], 'flag');
                 if (visible == null)
                     return "Visible flag has not been declared"; 
             }
@@ -1717,7 +1717,7 @@ class MySceneGraph {
      * @param {component textureref length_s} parent_length_s - save previous scale factor
      * @param {component textureref length_s} parent_length_t - save previous scale factor
      */
-    processChild(child, parent_material, parent_texture, parent_length_s, parent_length_t) {
+    processChild(child, parent_material, parent_texture, parent_length_s, parent_length_t, parent_pickable) {
 
         if (this.components[child].visited)
             return "Component has already been visited";
@@ -1773,6 +1773,16 @@ class MySceneGraph {
         //Apply
         parent_material.apply();
 
+        //Pickable
+        let pickable_flag;
+        if (this.components[child].pickable == 'inherit') {
+            if (parent_pickable == null)
+                return 'Error - cannot display inhreited pickable object if there is no pickable flag declared before';
+            //use parent pickable flag
+            pickable_flag = parent_pickable;
+        }
+        else pickable_flag = this.components[child].pickable;
+
         //Process end node/primitives
         for (let i = 0; i < this.components[child].children.primitiverefIDs.length; i++) {
             this.scene.pushMatrix();
@@ -1786,7 +1796,11 @@ class MySceneGraph {
                 this.components[child].children.primitiverefIDs[i].updateTexCoords(lg_s, lg_t);
 
             //display primitive
-            this.components[child].children.primitiverefIDs[i].display();
+            let primitive = this.components[child].children.primitiverefIDs[i];
+            if (pickable_flag == 'true')
+                this.scene.registerForPick(i + 1, primitive);
+            primitive.display();
+            this.scene.clearPickRegistration();
             this.scene.popMatrix();
         }
 
@@ -1804,6 +1818,7 @@ class MySceneGraph {
 
     //display the scene processing every node
     displayScene() {
-        this.processChild(this.components["root"].componentID, this.components["root"].component_materials, this.components["root"].texture.textureref, this.components["root"].texture.length_s, this.components["root"].texture.length_t);
+        let root = this.components["root"];
+        this.processChild(root.componentID, root.component_materials, root.texture.textureref, root.texture.length_s, root.texture.length_t, root.pickable);
     }
 }
