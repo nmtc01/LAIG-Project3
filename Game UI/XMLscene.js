@@ -21,9 +21,10 @@ class XMLscene extends CGFscene {
     init(application) {
         super.init(application);
 
-        this.textureRTT = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
-
         this.sceneInited = false;
+        
+        //* INIT 
+        //this.gameOrchestrator();
 
         //initiliaze a camare build buy the program ignoring the xml
         this.initDefaultCamera();
@@ -46,20 +47,6 @@ class XMLscene extends CGFscene {
         this.selectedCamera = 0; //store index of the selected camera
         this.selectedSecondaryCamera = 0;
         this.keysPressed=false; //used to avoid infinite key pressing, always assume one tap, and reset with realease
-        
-        //todo put the names we want
-        this.fileNames = ['Develop Test','Game Pieces'];
-
-        this.files = {};
-
-        this.files['Develop Test'] = 'develop_test.xml';
-        this.files['Game Pieces'] = 'game_pieces.xml';
-
-        //find a way for him to received the file, or to know the current one 
-        this.selectedFile = this.files['Develop Test'];
-    
-        this.securityCamera = new MySecurityCamera(this,this.textureRTT);
-    
     }
 
     initDefaultCamera() { // todo create default camera
@@ -127,11 +114,6 @@ class XMLscene extends CGFscene {
     }
     updateSecondaryCameras(val) {
         this.secondaryCamera = this.secondaryCameras[val]; //get the camera using val passed on the interface, set as main camera   
-    }
-    updateFile(val){
-        this.interface.reset();
-        this.selectedFile = this.files[val];         
-        this.graph.updateFilename(this.selectedFile);
     }
     reload(){
         //todo put here everything to do when i wanna reload
@@ -257,22 +239,29 @@ class XMLscene extends CGFscene {
         
     }
     update(t){
+        //todo remover isto 
         for(var key in this.graph.components){
             if (this.graph.components[key].animation != null){
                 this.graph.components[key].animation.update(t);
             }       
         }
- 
+        //todo
+        //this.gameOrchestrator.update(t);
     }
-      /**
+    /**
      * Renders the scene.
      */
     render(camera) {
+        //todo
+        //this.gameOrchestrator.orchestrate()
+
         // ---- BEGIN Background, camera and axis setup
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
+        //this.gameOrchestrator.display();
+        
         this.camera = camera;
 
         // Initialize Model-View matrix as identity (no transformation
@@ -302,6 +291,9 @@ class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
+
+            //todo display orchestrator
+
             //todo maybe here???
         }
  

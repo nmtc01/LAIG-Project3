@@ -27,13 +27,19 @@ serialInclude(
     'primitives/Plane.js',
     'primitives/Patch.js',
     'primitives/Cylinder2.js',
-    'MySecurityCamera.js',
     'primitives/MySkybox.js',
-    'game_objects/GameboardPrimitive1.js',
-    'game_objects/gameboard_tile.js',
-    'game_objects/PiecePrimitive1.js',
     'primitives/MyTable.js',
     'primitives/RectPrism.js',
+    'game_objects/MyGameOrchestrator.js',
+    'game_objects/MyAnimator.js',
+    'game_objects/MyGameboard.js',
+    'game_objects/MyGameMove.js',
+    'game_objects/MyGameSequence.js',
+    'game_objects/MyPiece.js',
+    'game_objects/MyTile.js',
+    'game_prolog/Chameleon.js',
+    'game_prolog/Client.js',
+
 
 main=function()
 {
@@ -52,7 +58,8 @@ main=function()
     
     //todo link with interface to change ambient and modes
     //var filename=getUrlVars()['file'] || "game_pieces.xml";
-    var filename=getUrlVars()['file'] || "develop_test.xml";
+    //var filename=getUrlVars()['file'] || "develop_test.xml";
+    var filename=getUrlVars()['file'] || "game_ambient1.xml";
 
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors

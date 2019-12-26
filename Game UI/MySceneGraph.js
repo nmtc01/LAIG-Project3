@@ -1007,12 +1007,9 @@ class MySceneGraph {
                     grandChildren[0].nodeName != 'cylinder2'&&
                     grandChildren[0].nodeName != 'skybox' &&
                     //TODO GAME PRIMITIVES 
-                    grandChildren[0].nodeName != 'gameboard' &&
-                    grandChildren[0].nodeName != 'gameboard_tile' &&
                     grandChildren[0].nodeName != 'table' &&
-                    grandChildren[0].nodeName != 'piece' &&
                     grandChildren[0].nodeName != 'obj')) {
-                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch, cylinder2, skybox, table, piece or obj)";
+                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch, cylinder2, skybox, table or obj)";
             }
 
             // Specifications for the current primitive.
@@ -1239,59 +1236,6 @@ class MySceneGraph {
                     break;
                 }
                 //TODO GAME OBJECTS  
-                
-                case ('gameboard'): 
-                {
-                    
-                    var type = this.reader.getString(grandChildren[0],'type');
-
-                    switch(type){
-                        case 'original':
-                            var gameboard = new GameboardPrimitive1(this.scene);//Todo check for id 
-                            break;
-                        case '2':
-                            break;
-                        case '3':
-                            break;
-                    }
-
-                    this.primitives[primitiveId] = gameboard;
-                    
-                    break;
-                }
-                case ('gameboard_tile'): //TODO
-                {
-                    //base
-                    var base = this.reader.getFloat(grandChildren[0], 'base');
-                    if (!(base != null && !isNaN(base)))
-                        return "unable to parse base of the primitive coordinates for ID = " + primitiveId;
-
-                    //top    
-                    var top = this.reader.getFloat(grandChildren[0], 'top');
-                    if (!(top != null && !isNaN(top)))
-                        return "unable to parse top of the primitive coordinates for ID = " + primitiveId;
-
-                    //height
-                    var height = this.reader.getFloat(grandChildren[0], 'height');
-                    if (!(height != null && !isNaN(height)))
-                        return "unable to parse height of the primitive coordinates for ID = " + primitiveId;
-
-                    //slices
-                    var slices = this.reader.getInteger(grandChildren[0], 'slices');
-                    if (!(slices != null && !isNaN(slices)))
-                        return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
-
-                    //stacks
-                    var stacks = this.reader.getInteger(grandChildren[0], 'stacks');
-                    if (!(stacks != null && !isNaN(stacks)))
-                        return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
-
-                    var cylinder2 = new Cylinder2(this.scene, base, top, height, slices, stacks); //Todo check for id 
-
-                    this.primitives[primitiveId] = cylinder2;
-                    
-                    break;
-                }
                 case ('skybox'):
                 {
                     //size
@@ -1325,30 +1269,7 @@ class MySceneGraph {
 
                     this.primitives[primitiveId] = table;
                     break;
-                }
-                case ('piece'):
-                {   
-                    var type = this.reader.getString(grandChildren[0],'type'); 
-                    var name = this.reader.getString(grandChildren[0],'name');
-                    
-                    if( name == 'RB ' || name == 'RW ' || name == 'BB ' || name == 'BW ')
-                        return "Piece name must be RB, RW, BB or BW of the primitive for ID = " + primitiveId;
-
-                    switch(type){
-                        case '1':
-                            var piece = new PiecePrimitive1(this.scene,name);
-                        break; 
-                        case '2':
-                            var piece = new PiecePrimitive1(this.scene,name);
-                        break; 
-                        case '3':
-                            var piece = new PiecePrimitive1(this.scene,name);
-                        break; 
-                    }
-
-                    this.primitives[primitiveId] = piece;
-                    break;
-                }          
+                }         
                 case ('obj'):
                 {   
                     var model = this.reader.getString(grandChildren[0],'model');
