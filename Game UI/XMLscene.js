@@ -23,9 +23,6 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
         
-        //* INIT 
-        //this.gameOrchestrator();
-
         //initiliaze a camare build buy the program ignoring the xml
         this.initDefaultCamera();
 
@@ -38,6 +35,8 @@ class XMLscene extends CGFscene {
 
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(60);
+        //todo
+        this.setPickEnabled(true); // false to disable pick feature. // Some game states do not require pick.
 
         //animation stuff 
         this.t=0; //current program time
@@ -47,6 +46,9 @@ class XMLscene extends CGFscene {
         this.selectedCamera = 0; //store index of the selected camera
         this.selectedSecondaryCamera = 0;
         this.keysPressed=false; //used to avoid infinite key pressing, always assume one tap, and reset with realease
+    
+        //* INIT 
+        this.gameOrchestrator = new MyGameOrchestrator(this);
     }
 
     initDefaultCamera() { // todo create default camera
@@ -219,8 +221,7 @@ class XMLscene extends CGFscene {
         this.initTextures();
 
         //update UI usuing data structures passed 
-        this.interface.updateInterface();
-
+       // this.interface.updateInterface();
         this.sceneInited = true;
     }
 
@@ -254,6 +255,8 @@ class XMLscene extends CGFscene {
     render(camera) {
         //todo
         //this.gameOrchestrator.orchestrate()
+        //this.gameOrchestrator.managePick(this.pickMode, this.pickResults); 
+        //this.clearPickRegistration();
 
         // ---- BEGIN Background, camera and axis setup
         // Clear image and depth buffer everytime we update the scene

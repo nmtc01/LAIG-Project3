@@ -1609,7 +1609,6 @@ class MySceneGraph {
     updateMaterials() {
         this.change_material_id++;
     }
-
     /**
      * Displays the scene, processing each node, starting in the root node.
      * @param {component componentID} child -  current node that teh graph is porcessing

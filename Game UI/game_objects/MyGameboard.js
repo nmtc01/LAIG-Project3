@@ -1,9 +1,12 @@
-class MyGameBoard{
-    constructor(type,pieces,tiles){
+class MyGameboard extends CGFobject{
+    constructor(scene,templates){
+        super(scene);
+        //console.log(this.scene.graph.components)
+        console.log('ola')
         //Stores the set of tiles that composes the entire game board
-        this.type = type;
-        this.pieces = pieces; 
-        this.tiles = tiles;
+       // this.type = type;
+       // this.pieces = pieces; 
+       // this.tiles = tiles;
     }
     /**
      * Create a gameboard instance
