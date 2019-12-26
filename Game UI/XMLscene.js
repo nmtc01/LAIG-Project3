@@ -220,6 +220,9 @@ class XMLscene extends CGFscene {
 
         this.initTextures();
 
+        //create game board using elem templates
+
+        this.gameOrchestrator.gameboard.createGameBoard(this.graph.templates);
         //update UI usuing data structures passed 
        // this.interface.updateInterface();
         this.sceneInited = true;
@@ -327,7 +330,7 @@ class XMLscene extends CGFscene {
             //his.textureRTT.detachFromFrameBuffer();
             this.render(this.primaryCamera); //call scene camera
             this.interface.setActiveCamera(this.primaryCamera);
-
+            this.gameOrchestrator.display();
             //this.gl.disable(this.gl.DEPTH_TEST);
             //this.securityCamera.display();
             //this.gl.enable(this.gl.DEPTH_TEST);

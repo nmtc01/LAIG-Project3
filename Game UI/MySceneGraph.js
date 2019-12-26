@@ -1609,6 +1609,19 @@ class MySceneGraph {
     updateMaterials() {
         this.change_material_id++;
     }
+    processTemplates(){
+        //process BluePieceWhite 
+
+        //process BluePieceBlack
+
+        //process RedPieceWhite 
+
+        //process RedPieceBlack
+
+        //process white tile 
+
+        //process black tile
+    }
     /**
      * Displays the scene, processing each node, starting in the root node.
      * @param {component componentID} child -  current node that teh graph is porcessing

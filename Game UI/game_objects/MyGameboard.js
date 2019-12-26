@@ -1,18 +1,23 @@
 class MyGameboard extends CGFobject{
-    constructor(scene,templates){
+    constructor(scene){
         super(scene);
         //console.log(this.scene.graph.components)
-        console.log('ola')
         //Stores the set of tiles that composes the entire game board
-       // this.type = type;
-       // this.pieces = pieces; 
-       // this.tiles = tiles;
+        
+        //board 
+        //visible tiles 
+        this.visibleTiles //25 tiles
+        //todo invisible tiles 
+
     }
     /**
      * Create a gameboard instance
+     * @param {templates} model templates
      */
-    createGameBoard(){
+    createGameBoard(templates){
         //todo
+        console.log(templates)
+        //generate 25 tiles 
     }
     /**
      * add piece to a given tile
