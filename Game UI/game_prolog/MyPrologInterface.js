@@ -1,5 +1,14 @@
 class MyPrologInterface{
-    constructor(){
+    constructor(scene){
+        super(scene);
+
+        this.port = 8081;
+
+    }
+    /**
+     * initilizes prolog localhost server
+     */
+    serverInit(){
 
     }
     /**
@@ -9,13 +18,25 @@ class MyPrologInterface{
      
         Request send example:
         
-        let requestString = 'playFieldsOfAction('+list+')’; let request = new MyXMLHttpRequest(this);
-        request.addEventListener("load", this.parseStartPrologReply); request.addEventListener("error",this.startPrologGameError);
-        request.open('GET', 'http://localhost:'+PORT+'/'+requestString, true); request.setRequestHeader("Content-type", "application/x-www-form-
-        urlencoded; charset=UTF-8"); request.send();
+        let requestString = 'playFieldsOfAction('+list+')’; 
+        let request = new MyXMLHttpRequest(this);
+        request.addEventListener("load", this.parseStartPrologReply); 
+        request.addEventListener("error",this.startPrologGameError);
+        request.open('GET', 'http://localhost:'+PORT+'/'+requestString, true); 
+        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8"); 
+        request.send();
      
      
         */
+    getPrologRequest(requestString){
+        //let requestString = 'playFieldsOfAction('+list+')'; //todo
+        let request = new MyXMLHttpRequest(this);
+        request.addEventListener("load", this.parseStartPrologReply); 
+        request.addEventListener("error",this.startPrologGameError);
+        request.open('GET', 'http://localhost:'+this.port+'/'+requestString, true); 
+        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8"); 
+        request.send();
+    }
     parseStartPrologReply() {
         if (this.status === 400) { 
             console.log("ERROR"); 

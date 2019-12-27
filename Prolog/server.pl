@@ -115,8 +115,9 @@ parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(quit, goodbye).
 
 %TODO add game commands here
-
+parse_input(play, start):- play.
 
 test(_,[],N) :- N =< 0.
 test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
 	
+%compile('/Users/gustavonrm/Desktop/LAIG/LAIG-Project3/Prolog/server.pl').
