@@ -136,8 +136,8 @@
                 <material id="inherit"/>
             </materials>
             <texture id="wood" length_s="1" length_t="1" />
-            <pickable flag="false" />
-            <visible flag="true" />
+            <pickable flag="inherit" />
+            <visible flag="inherit" />
             <children>
                 <componentref id="table" />
             </children>
@@ -151,7 +151,7 @@
             </materials>
             <texture id="inherit" />
             <pickable flag="inherit" />
-            <visible flag="true" />
+            <visible flag="inherit" />
             <children>
                 <componentref id="top" />
                 <componentref id="leg" />
@@ -166,8 +166,8 @@
                 <material id="inherit"/>
             </materials>
             <texture id="inherit" />
-            <pickable flag="inherit" />
-            <visible flag="true" />
+            <pickable flag="true" />
+            <visible flag="false" />
             <children>
                 <primitiveref id="tableTop" />
             </children>
@@ -182,7 +182,7 @@
             </materials>
             <texture id="inherit" />
             <pickable flag="inherit" />
-            <visible flag="true" />
+            <visible flag="inherit" />
             <children>
                 <primitiveref id="tableLeg" />
             </children>
