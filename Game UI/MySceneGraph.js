@@ -1531,11 +1531,15 @@ class MySceneGraph {
 
             //Visible -- Obrigatorio
             if ((visibleIndex == 5 && animationIndex == 1) || (visibleIndex == 4 && animationIndex == -1)) {
-                var visible = this.reader.getBoolean(grandChildren[visibleIndex], 'flag');
+                var visible = this.reader.getString(grandChildren[visibleIndex], 'flag');
                 if (visible == null)
                     return "Visible flag has not been declared"; 
             }
             else return "visible block out of order";
+
+            //Object can't be invisible and not pickable simultaneously
+            if (visible == 'false' && pickable == 'false')
+                return "Object can't be invisible and not pickable simultaneously";
 
             // Children
             if ((childrenIndex == 6 && animationIndex == 1) || (childrenIndex == 5 && animationIndex == -1)) {
