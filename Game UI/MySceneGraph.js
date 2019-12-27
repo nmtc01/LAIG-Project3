@@ -1158,7 +1158,7 @@ class MySceneGraph {
                     if (!(NPartsV != null && !isNaN(NPartsV)))
                         return "unable to parse npartsV of the primitive coordinates for ID = " + primitiveId;
 
-                    var plane = new Plane(this.scene, NPointsU, NPointsV);
+                    var plane = new Plane(this.scene, NPartsU, NPartsV);
 
                     this.primitives[primitiveId] = plane;
                     break;
@@ -1609,99 +1609,6 @@ class MySceneGraph {
     updateMaterials() {
         this.change_material_id++;
     }
-    processTemplates(){
-        //process BluePieceWhite 
-
-        //process BluePieceBlack
-
-        //process RedPieceWhite 
-
-        //process RedPieceBlack
-        this.processTemplate("tileWhite",this.components["tileWhite"].componentID, this.components["tileWhite"].component_materials, this.components["tileWhite"].texture.textureref, this.components["tileWhite"].texture.length_s, this.components["tileWhite"].texture.length_t);
-        this.processTemplate("tileBlack",this.components["tileBlack"].componentID, this.components["tileBlack"].component_materials, this.components["tileBlack"].texture.textureref, this.components["tileBlack"].texture.length_s, this.components["tileBlack"].texture.length_t);
-    }
-    processTemplate(type,component,material,texture,legth_s,length_t){
-        
-        if (this.components[component].visited)
-            return "Component has already been visited";
-
-        //set component as visited to avoid processing repetitions 
-        this.components[component].visited = true; //set as visited
-
-        //Transformations
-        this.scene.pushMatrix();
-        this.scene.multMatrix(this.components[component].transformation);//apply tranformations 
-        //Animations 
-        if (this.components[component].animation != null) {
-            this.components[component].animation.process_animation();
-            this.components[component].animation.apply();
-        }
-      
-        //Materials
-        if (this.components[component].component_materials == 'inherit') { //if inherit does nothing, keeps the current material, from the parent 
-            if (parent_material == null)
-                return 'Error - cannot display inhreited material if there is no material declared before';
-        }
-        else {
-            //iterate to current material state to choose
-            let i = this.change_material_id % this.components[component].component_materials.length;
-            parent_material = this.components[componen].component_materials[i]; //update parent material - current material
-        }
-
-        //Textures
-        if (this.components[componen].texture.textureref == 'inherit') {
-            //controll erros if there is no texture, program stop
-            if (parent_texture == null)
-                return 'Error - cannot display inhreited texture if there is no texture declared before';
-            //use parent texture
-            parent_material.setTexture(parent_texture);
-            parent_material.setTextureWrap('REPEAT', 'REPEAT');
-        }
-        if (this.components[componen].texture.textureref == 'none') {
-            //if null set nothing
-            parent_material.setTexture(null);
-            this.components[componen].texture.length_s = 1;
-            this.components[componen].texture.length_t = 1;
-        }
-        if (this.components[componen].texture.textureref != 'none' && this.components[componen].texture.textureref != 'inherit') {
-            //if new texture reset parent variables
-            parent_texture = this.components[componen].texture.textureref;
-            parent_material.setTexture(parent_texture);
-            parent_length_s = this.components[componen].texture.length_s;
-            parent_length_t = this.components[componen].texture.length_t;
-            parent_material.setTextureWrap('REPEAT', 'REPEAT');
-        }
-
-        //Apply
-        parent_material.apply();
-
-        //Process end node/primitives
-        for (let i = 0; i < this.components[component].children.primitiverefIDs.length; i++) {
-            this.scene.pushMatrix();
-
-            //get scale factors 
-            let lg_s = this.components[component].texture.length_s;
-            let lg_t = this.components[component].texture.length_t;
-
-            //always update texture coord respecting lenghth scale factors
-            if( this.components[component].children.primitiverefIDs[i].url == null) //only obj has url
-                this.components[component].children.primitiverefIDs[i].updateTexCoords(lg_s, lg_t);
-
-            //display primitive
-            this.components[component].children.primitiverefIDs[i].display();
-            this.scene.popMatrix();
-        }
-
-        //Process child components
-        for (let i = 0; i < this.components[component].children.componentrefIDs.length; i++) {
-            this.processChild(this.components[component].children.componentrefIDs[i], parent_material, parent_texture, parent_length_s, parent_length_t);
-        }
-
-        this.scene.popMatrix();
-
-        //set as unvisited so that displayScene can be caled multiple times
-        this.components[component].visited = false;
-    }
     /**
      * Displays the scene, processing each node, starting in the root node.
      * @param {component componentID} child -  current node that teh graph is porcessing
@@ -1722,11 +1629,13 @@ class MySceneGraph {
         this.scene.pushMatrix();
         this.scene.multMatrix(this.components[child].transformation);//apply tranformations 
         //Animations 
+        //todo chec if can be removed
+        /*
         if (this.components[child].animation != null) {
             this.components[child].animation.process_animation();
             this.components[child].animation.apply();
         }
-      
+        */
 
         //Materials
         if (this.components[child].component_materials == 'inherit') { //if inherit does nothing, keeps the current material, from the parent 
@@ -1735,6 +1644,7 @@ class MySceneGraph {
         }
         else {
             //iterate to current material state to choose
+            //todo check if material changes should be removed  
             let i = this.change_material_id % this.components[child].component_materials.length;
             parent_material = this.components[child].component_materials[i]; //update parent material - current material
         }
@@ -1798,5 +1708,9 @@ class MySceneGraph {
     //display the scene processing every node
     displayScene() {
         this.processChild(this.components["root"].componentID, this.components["root"].component_materials, this.components["root"].texture.textureref, this.components["root"].texture.length_s, this.components["root"].texture.length_t);
+    }
+    displayTemplate(component_name){
+        //name on xml has to be piece_blue_black - piece_blue_white -  piece_red_black - piece_red_white - tile_white - tile_black
+        this.processChild(component_name,this.components[component_name].componentID, this.components[component_name].component_materials, this.components[component_name].texture.textureref, this.components[component_name].texture.length_s, this.components[component_name].texture.length_t);
     }
 }

@@ -224,7 +224,7 @@ class XMLscene extends CGFscene {
 
         this.gameOrchestrator.gameboard.createGameBoard(this.graph.templates);
         //update UI usuing data structures passed 
-       // this.interface.updateInterface();
+        this.interface.updateInterface();
         this.sceneInited = true;
     }
 
@@ -250,7 +250,7 @@ class XMLscene extends CGFscene {
             }       
         }
         //todo
-        //this.gameOrchestrator.update(t);
+        this.gameOrchestrator.update(t);
     }
     /**
      * Renders the scene.
@@ -299,7 +299,7 @@ class XMLscene extends CGFscene {
             this.graph.displayScene();
 
             //todo display orchestrator
-
+            this.gameOrchestrator.display();
             //todo maybe here???
         }
  
@@ -330,7 +330,6 @@ class XMLscene extends CGFscene {
             //his.textureRTT.detachFromFrameBuffer();
             this.render(this.primaryCamera); //call scene camera
             this.interface.setActiveCamera(this.primaryCamera);
-            this.gameOrchestrator.display();
             //this.gl.disable(this.gl.DEPTH_TEST);
             //this.securityCamera.display();
             //this.gl.enable(this.gl.DEPTH_TEST);

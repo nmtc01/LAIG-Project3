@@ -146,7 +146,6 @@
             <texture id="none" />
             <children>
                 <componentref id="ambient" />
-               <!-- orchestrator-->
             </children>
         </component>
 
@@ -190,64 +189,74 @@
         </component>
 
         <!-- TEMPLATES -->
-        <component id="pieceBlueWhite">
+        <component id="piece_blue_white">
             <transformation>
+                <translate x="0" y="5.6" z="0"/>
+                <scale x="0.4" y="0.4" z="0.4" />
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="white" />
             </materials>
                 <texture id="BW" length_s="1" length_t="1"/>
             <children>
-                <componentref id="pieceTop" />
-                <componentref id="pieceMid" />
-                <componentref id="pieceBot" />
+                <componentref id="piece_top" />
+                <componentref id="piece_mid" />
+                <componentref id="piece_bot" />
             </children>
         </component>
 
-        <component id="pieceBlueBlack">
+        <component id="piece_blue_black">
             <transformation>
+                <translate x="0" y="5.6" z="0"/>
+                <scale x="0.4" y="0.4" z="0.4" />
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="white" />
             </materials>
                 <texture id="BB" length_s="1" length_t="1"/>
             <children>
-                <componentref id="pieceTop" />
-                <componentref id="pieceMid" />
-                <componentref id="pieceBot" />
+               <componentref id="piece_top" />
+                <componentref id="piece_mid" />
+                <componentref id="piece_bot" />
             </children>
         </component>
 
-        <component id="pieceRedWhite">
+        <component id="piece_red_white">
             <transformation>
+                <translate x="0" y="5.6" z="0"/>
+                <scale x="0.4" y="0.4" z="0.4" />
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="white" />
             </materials>
-                <texture id="RW"  length_s="1" length_t="1"/>
+                <texture id="RW" length_s="1" length_t="1"/>
             <children>
-                <componentref id="pieceTop" />
-                <componentref id="pieceMid" />
-                <componentref id="pieceBot" />
+               <componentref id="piece_top" />
+                <componentref id="piece_mid" />
+                <componentref id="piece_bot" />
             </children>
         </component>
 
-        <component id="pieceRedBlack">
+        <component id="piece_red_black">
             <transformation>
+                <translate x="0" y="5.6" z="0"/>
+                <scale x="0.4" y="0.4" z="0.4" />
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="white" />
             </materials>
                 <texture id="RB" length_s="1" length_t="1"/>
             <children>
-                <componentref id="pieceTop" />
-                <componentref id="pieceMid" />
-                <componentref id="pieceBot" />
+                <componentref id="piece_top" />
+                <componentref id="piece_mid" />
+                <componentref id="piece_bot" />
             </children>
         </component>
 
-        <component id="pieceTop" >
+        <component id="piece_top" >
             <transformation>
+                <scale x="0.99" y="0.4" z="0.99" />
+             <rotate axis="z" angle="90"/>
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -258,8 +267,10 @@
             </children>
         </component>
 
-        <component id="pieceMid">
+        <component id="piece_mid">
             <transformation>
+                <scale x="1" y="0.5" z="1" />
+                <rotate axis="x" angle="90"/>
             </transformation>
             <materials>
                 <material id="metal" />
@@ -270,8 +281,11 @@
             </children>
         </component>
 
-        <component id="pieceBot">
+        <component id="piece_bot">
             <transformation>
+                <translate x="0" y="-0.5" z="0"/>
+                <scale x="0.99" y="0.4" z="0.99" />
+                <rotate axis="z" angle="90"/>
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -282,21 +296,9 @@
             </children>
         </component>
 
-        <component id="tiles">
+        <component id="tile_black">
             <transformation>
-            </transformation>
-            <materials>
-                <material id="white" />
-            </materials>
-                <texture id="none" />
-            <children>
-                <componentref id="tileBlack" />
-                <componentref id="tileWhite" />
-            </children>
-        </component>
-
-        <component id="tileBlack">
-            <transformation>
+                <translate x="0" y="5.25" z="0"/>
             </transformation>
             <materials>
                 <material id="black" />
@@ -306,9 +308,11 @@
                 <primitiveref id="tile" />
             </children>
         </component>
+        
 
-         <component id="tileWhite">
+         <component id="tile_white">
             <transformation>
+                <translate x="0" y="5.25" z="0"/>
             </transformation>
             <materials>
                 <material id="white" />

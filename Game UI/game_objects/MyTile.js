@@ -14,6 +14,7 @@ class MyTile extends CGFobject{
         this.type=type; 
 
         //display util
+        this.displayCoords = [coords[1] - 3, 0,coords[0] - 3] //transalate x,y,z
         
     }
     /**
@@ -29,15 +30,31 @@ class MyTile extends CGFobject{
      */
     setPieceOnTile(piece){
         this.piece = piece;
+        this.piece.setTile(this);
     }
 
     unsetPieceOnTile(){
         this.piece = null;
     }
     /**
+     * return coords
+     */
+    getCoords(){
+        return this.coords; 
+    }
+    /**
      * render tile
      */
     display(){
+        //make tranformation for where the object should go 
+        this.scene.pushMatrix();
+        //display specific template
+        this.scene.translate(this.displayCoords[0],this.displayCoords[1],this.displayCoords[2]);
+        this.scene.graph.displayTemplate(this.type);
+        //if has piece display it
+        if( this.piece != null)
+            this.piece.display();
 
+        this.scene.popMatrix(); 
     }
 }
