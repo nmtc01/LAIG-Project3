@@ -171,8 +171,7 @@
             </materials>
             <texture id="none" />
             <pickable flag="inherit" />
-            <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+            <visible flag="inherit" />
             <children>
                 <componentref id="skybox" />
                 <componentref id="ambient_obj"/>
@@ -188,8 +187,7 @@
             </materials>
             <texture id="skybox" length_s="1" length_t="1" />
              <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+             <visible flag="inherit" />
             <children>
                 <primitiveref id="skybox" />
             </children>
@@ -204,8 +202,7 @@
             </materials>
             <texture id="wood" length_s="1" length_t="1" />
             <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+             <visible flag="inherit" />
             <children>
                 <componentref id="table" />
             </children>
@@ -219,8 +216,7 @@
             </materials>
             <texture id="inherit" />
             <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+             <visible flag="inherit" />
             <children>
                 <componentref id="legs" />
                 <componentref id="base" />
@@ -236,8 +232,7 @@
             </materials>
             <texture id="inherit" />
             <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+             <visible flag="inherit" />
             <children>
                 <componentref id="leg1" />
                 <componentref id="leg2" />
@@ -255,8 +250,7 @@
             </materials>
             <texture id="inherit" />
             <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+             <visible flag="inherit" />
             <children>
                 <primitiveref id="tableLeg" />
             </children>
@@ -271,8 +265,7 @@
             </materials>
             <texture id="inherit" />
             <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+             <visible flag="inherit" />
             <children>
                 <primitiveref id="tableLeg" />
             </children>
@@ -287,8 +280,7 @@
             </materials>
             <texture id="inherit" />
             <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+             <visible flag="inherit" />
             <children>
                 <primitiveref id="tableLeg" />
             </children>
@@ -303,8 +295,7 @@
             </materials>
             <texture id="inherit" />
             <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+             <visible flag="inherit" />
             <children>
                 <primitiveref id="tableLeg" />
             </children>
@@ -319,8 +310,7 @@
             </materials>
             <texture id="inherit" />
             <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+             <visible flag="inherit" />
             <children>
                 <primitiveref id="tableBase" />
             </children>
@@ -335,8 +325,7 @@
             </materials>
             <texture id="inherit" />
             <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+             <visible flag="inherit" />
             <children>
                 <primitiveref id="tableTop" />
             </children>
@@ -352,7 +341,7 @@
                 <material id="white" />
             </materials>
             <texture id="BW" length_s="1" length_t="1"/>
-            <pickable flag="false" />
+            <pickable flag="true" />
             <visible flag="true" />
             <children>
                 <componentref id="piece_top" />
@@ -370,7 +359,7 @@
                 <material id="white" />
             </materials>
             <texture id="BB" length_s="1" length_t="1"/>
-            <pickable flag="false" />
+            <pickable flag="true" />
             <visible flag="true" />
             <children>
                <componentref id="piece_top" />
@@ -388,7 +377,7 @@
                 <material id="white" />
             </materials>
             <texture id="RW" length_s="1" length_t="1"/>
-            <pickable flag="false" />
+            <pickable flag="true" />
             <visible flag="true" />
             <children>
                <componentref id="piece_top" />
@@ -406,7 +395,7 @@
                 <material id="white" />
             </materials>
             <texture id="RB" length_s="1" length_t="1"/>
-            <pickable flag="false" />
+            <pickable flag="true" />
             <visible flag="true" />
             <children>
                 <componentref id="piece_top" />
@@ -425,8 +414,7 @@
             </materials>
             <texture id="inherit" />
             <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+             <visible flag="inherit" />
             <children>
                 <primitiveref id="piece_top" />
             </children>
@@ -442,8 +430,7 @@
             </materials>
             <texture id="none" />
             <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+            <visible flag="inherit" />
             <children>
                 <primitiveref id="piece_mid" />
             </children>
@@ -460,8 +447,7 @@
             </materials>
             <texture id="inherit" />
             <pickable flag="inherit" />
-             <!--<visible flag="inherit" />-->
-            <visible flag="true" />
+            <visible flag="inherit" />
             <children>
                 <primitiveref id="piece_bot" />
             </children>
@@ -475,7 +461,7 @@
                 <material id="black" />
             </materials>
             <texture id="none" />
-            <pickable flag="false" />
+            <pickable flag="true" />
             <visible flag="true" />
             <children>
                 <primitiveref id="tile" />
@@ -491,7 +477,7 @@
                 <material id="white" />
             </materials>
             <texture id="none" />
-            <pickable flag="false" />
+            <pickable flag="true" />
             <visible flag="true" />
             <children>
                 <primitiveref id="tile" />

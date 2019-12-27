@@ -11,6 +11,7 @@ var TRANSFORMATIONS_INDEX = 6;
 var ANIMATIONS_INDEX = 7
 var PRIMITIVES_INDEX = 8;
 var COMPONENTS_INDEX = 9;
+var pick_obj_index = 1;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -1448,7 +1449,7 @@ class MySceneGraph {
                 if (pickable == null)
                     return "Pickable flag has not been declared"; 
             }
-            //else return "pickable block out of order";
+            else return "pickable block out of order";
 
             //Visible -- Obrigatorio
             if ((visibleIndex == 5 && animationIndex == 1) || (visibleIndex == 4 && animationIndex == -1)) {
@@ -1456,7 +1457,7 @@ class MySceneGraph {
                 if (visible == null)
                     return "Visible flag has not been declared"; 
             }
-            //else return "visible block out of order";
+            else return "visible block out of order";
 
             //Object can't be invisible and not pickable simultaneously
             if (visible == 'false' && pickable == 'false')
@@ -1506,6 +1507,7 @@ class MySceneGraph {
                     length_t
                 },
                 pickable,
+                pick_obj_index,
                 visible,
                 children: {
                     componentrefIDs,
@@ -1513,6 +1515,7 @@ class MySceneGraph {
                 }
             }
             this.components[component.componentID] = component;
+            pick_obj_index++;
         }
     }
 
@@ -1645,8 +1648,8 @@ class MySceneGraph {
 
     /**
      * Displays the scene, processing each node, starting in the root node.
-     * @param {component componentID} child -  current node that teh graph is porcessing
-     * @param {component component_materials} parent_material - - save previous material factor
+     * @param {component componentID} child -  current node that the graph is porcessing
+     * @param {component component_materials} parent_material - save previous material factor
      * @param {component textureref} parent_texture - save previous texture 
      * @param {component textureref length_s} parent_length_s - save previous scale factor
      * @param {component textureref length_t} parent_length_t - save previous scale factor
@@ -1665,7 +1668,7 @@ class MySceneGraph {
         this.scene.pushMatrix();
         this.scene.multMatrix(this.components[child].transformation);//apply tranformations 
         //Animations 
-        //todo chec if can be removed
+        //todo check if can be removed
         /*
         if (this.components[child].animation != null) {
             this.components[child].animation.process_animation();
@@ -1752,8 +1755,8 @@ class MySceneGraph {
 
             //display primitive
             let primitive = this.components[child].children.primitiverefIDs[i];
-            if (pickable_flag == 'true')
-                this.scene.registerForPick(i + 1, primitive);
+            if (pickable_flag == 'true') 
+                this.scene.registerForPick(this.components[child].pick_obj_index, primitive);
             this.processPrimitiveDisplay(primitive, visible_flag);
             this.scene.clearPickRegistration();
             this.scene.popMatrix();
@@ -1778,6 +1781,7 @@ class MySceneGraph {
     }
     displayTemplate(component_name){
         //name on xml has to be piece_blue_black - piece_blue_white -  piece_red_black - piece_red_white - tile_white - tile_black
-        this.processChild(component_name,this.components[component_name].componentID, this.components[component_name].component_materials, this.components[component_name].texture.textureref, this.components[component_name].texture.length_s, this.components[component_name].texture.length_t);
+        let template = this.components[component_name];
+        this.processChild(component_name, template.component_materials, template.texture.textureref, template.texture.length_s, template.texture.length_t, template.pickable, template.visible);
     }
 }
