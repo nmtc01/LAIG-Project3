@@ -23,7 +23,6 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
         this.isLoading = false;
-        this.customLights = [...this.lights];
         //initiliaze a camare build buy the program ignoring the xml
         this.initDefaultCamera();
 
@@ -136,6 +135,7 @@ class XMLscene extends CGFscene {
         this.selectedFile = this.files[val];  
 
         //remove all ligths and cameras 
+        
         this.graph.updateFilename(this.selectedFile);
     }
     start(){ 
@@ -145,11 +145,18 @@ class XMLscene extends CGFscene {
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
-        //reset lights 
-        this.lights = [...this.customLights];
-        console.log(this.customLights == this.lights);
+        //disable all lights lights 
         var i = 0;
         // Lights index.
+
+        for (i = 0; i < this.lights.length; i++) {
+            //this.lights[i].setVisible(false);
+            this.lights[i].disable();
+            this.lightSwitch[i] = false;
+            this.lights[i].update();
+        }
+        console.log(this.lights)
+        i = 0;
         // Reads the lights from the scene graph.
         for (var key in this.graph.lights) {
             if (i >= 8)
@@ -190,8 +197,7 @@ class XMLscene extends CGFscene {
                 i++; //count cameras defined
             }
         }
-            console.log(this.customLights == this.lights);
-
+        console.log(this.lights)
     }
 
     //Update Lights upon change on interface
@@ -306,7 +312,7 @@ class XMLscene extends CGFscene {
         this.checkKeys();        
 
         this.updateLights(); //always update light state
-
+        
         for (var i = 0; i < this.lights.length; i++) {
             this.lights[i].setVisible(true);
             this.lights[i].enable();
