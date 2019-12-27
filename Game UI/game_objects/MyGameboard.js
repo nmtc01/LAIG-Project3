@@ -7,6 +7,7 @@ class MyGameboard extends CGFobject{
         //board 
         //visible tiles 
         this.visibleTiles //25 tiles
+        this.tiles = {}
         //todo invisible tiles 
 
     }
@@ -16,7 +17,16 @@ class MyGameboard extends CGFobject{
      */
     createGameBoard(templates){
         //todo
+        let type = "black";
         console.log(templates)
+        //visible tiles
+        for(let column = 1; column<=5; column++){
+            for(let line = 1; line <=5; line++){
+                let coords = [line,column]; //todo confirm if is line column
+                let tile = new MyTile(this.scene,this,type,coords,true,true);
+                this.tiles[coords] = tile; //todo check if it is the best way 
+            }
+        }
         //generate 25 tiles 
     }
     /**
@@ -71,5 +81,7 @@ class MyGameboard extends CGFobject{
      */
     display(){
          //todo
+         for(let key in this.tiles)
+            this.tiles[key].display();
     }
 }

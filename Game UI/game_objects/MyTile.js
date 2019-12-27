@@ -3,13 +3,18 @@
  */
 class MyTile extends CGFobject{
 
-    constructor(scene,gameboard,coords){
+    constructor(scene,gameboard,type,coords,visible,selectable){
         super(scene)
         // Has pointer to gameboard and pointer to piece (if a piece occupies tile)
         this.gameboard = gameboard;
         this.coords = coords;
         this.piece = null; 
-        this.type=0; 
+        this.visible = visible; 
+        this.selectable = selectable
+        this.type=type; 
+
+        //display util
+        
     }
     /**
      * get piece on thta tile
