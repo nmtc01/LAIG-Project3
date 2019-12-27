@@ -1452,11 +1452,15 @@ class MySceneGraph {
 
             //Visible -- Obrigatorio
             if ((visibleIndex == 5 && animationIndex == 1) || (visibleIndex == 4 && animationIndex == -1)) {
-                var visible = this.reader.getBoolean(grandChildren[visibleIndex], 'flag');
+                var visible = this.reader.getString(grandChildren[visibleIndex], 'flag');
                 if (visible == null)
                     return "Visible flag has not been declared"; 
             }
             //else return "visible block out of order";
+
+            //Object can't be invisible and not pickable simultaneously
+            if (visible == 'false' && pickable == 'false')
+                return "Object can't be invisible and not pickable simultaneously";
 
             // Children
             if ((childrenIndex == 6 && animationIndex == 1) || (childrenIndex == 5 && animationIndex == -1)) {
@@ -1624,20 +1628,32 @@ class MySceneGraph {
         console.log("   " + message);
     }
     /**
-     * increse index to change materials on the scene
+     * Increse index to change materials on the scene
      */
     updateMaterials() {
         this.change_material_id++;
     }
     /**
      * Displays the scene, processing each node, starting in the root node.
+     * @param {component primitiverefIDs} primitive - current primitive to be displayed
+     * @param {component visible} visible_flag - visibility factor
+     */
+    processPrimitiveDisplay(primitive, visible_flag) {
+        if (visible_flag == 'true')
+            primitive.display();
+    }
+
+    /**
+     * Displays the scene, processing each node, starting in the root node.
      * @param {component componentID} child -  current node that teh graph is porcessing
      * @param {component component_materials} parent_material - - save previous material factor
      * @param {component textureref} parent_texture - save previous texture 
      * @param {component textureref length_s} parent_length_s - save previous scale factor
-     * @param {component textureref length_s} parent_length_t - save previous scale factor
+     * @param {component textureref length_t} parent_length_t - save previous scale factor
+     * @param {component pickable} parent_pickable - save previous pickable factor
+     * @param {component visible} parent_visible - save previous visible factor
      */
-    processChild(child, parent_material, parent_texture, parent_length_s, parent_length_t, parent_pickable) {
+    processChild(child, parent_material, parent_texture, parent_length_s, parent_length_t, parent_pickable, parent_visible) {
 
         if (this.components[child].visited)
             return "Component has already been visited";
@@ -1709,6 +1725,19 @@ class MySceneGraph {
             parent_pickable = this.components[child].pickable;
         }
 
+        //Visible
+        let visible_flag;
+        if (this.components[child].visible == 'inherit') {
+            if (parent_visible == null || child == 'root')
+                return 'Error - cannot display inhreited visible object if there is no visible flag declared before';
+            //use parent visible flag
+            visible_flag = parent_visible;
+        }
+        else {
+            visible_flag = this.components[child].visible;
+            parent_visible = this.components[child].visible;
+        }
+
         //Process end node/primitives
         for (let i = 0; i < this.components[child].children.primitiverefIDs.length; i++) {
             this.scene.pushMatrix();
@@ -1725,14 +1754,14 @@ class MySceneGraph {
             let primitive = this.components[child].children.primitiverefIDs[i];
             if (pickable_flag == 'true')
                 this.scene.registerForPick(i + 1, primitive);
-            primitive.display();
+            this.processPrimitiveDisplay(primitive, visible_flag);
             this.scene.clearPickRegistration();
             this.scene.popMatrix();
         }
 
         //Process child components
         for (let i = 0; i < this.components[child].children.componentrefIDs.length; i++) {
-            this.processChild(this.components[child].children.componentrefIDs[i], parent_material, parent_texture, parent_length_s, parent_length_t, parent_pickable);
+            this.processChild(this.components[child].children.componentrefIDs[i], parent_material, parent_texture, parent_length_s, parent_length_t, parent_pickable, parent_visible);
         }
 
         this.scene.popMatrix();
@@ -1745,7 +1774,7 @@ class MySceneGraph {
     //display the scene processing every node
     displayScene() {
         let root = this.components["root"];
-        this.processChild(root.componentID, root.component_materials, root.texture.textureref, root.texture.length_s, root.texture.length_t, root.pickable);
+        this.processChild(root.componentID, root.component_materials, root.texture.textureref, root.texture.length_s, root.texture.length_t, root.pickable, root.visible);
     }
     displayTemplate(component_name){
         //name on xml has to be piece_blue_black - piece_blue_white -  piece_red_black - piece_red_white - tile_white - tile_black
