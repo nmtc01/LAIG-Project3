@@ -22,7 +22,8 @@ class XMLscene extends CGFscene {
         super.init(application);
 
         this.sceneInited = false;
-        
+        this.isLoading = false;
+        this.customLights = [...this.lights];
         //initiliaze a camare build buy the program ignoring the xml
         this.initDefaultCamera();
 
@@ -46,7 +47,18 @@ class XMLscene extends CGFscene {
         this.selectedCamera = 0; //store index of the selected camera
         this.selectedSecondaryCamera = 0;
         this.keysPressed=false; //used to avoid infinite key pressing, always assume one tap, and reset with realease
-    
+        
+        //todo put the names we want
+        this.fileNames = ['Ambient 1','Ambient 2'];
+
+        this.files = {};
+ 
+        this.files['Ambient 1'] = 'game_ambient1.xml';
+        this.files['Ambient 2'] = 'game_ambient2.xml';
+ 
+        //find a way for him to received the file, or to know the current one 
+        this.selectedFile = this.files['Ambient 1'];
+
         //* INIT 
         this.gameOrchestrator = new MyGameOrchestrator(this);
     }
@@ -114,21 +126,28 @@ class XMLscene extends CGFscene {
     updateSceneCameras(val) {
         this.primaryCamera = this.primaryCameras[val]; //get the camera using val passed on the interface, set as main camera
     }
+    /*
     updateSecondaryCameras(val) {
         this.secondaryCamera = this.secondaryCameras[val]; //get the camera using val passed on the interface, set as main camera   
+    }*/
+    updateFile(val){
+        this.sceneInited = false;
+        this.interface.reset();
+        this.selectedFile = this.files[val];  
+
+        //remove all ligths and cameras 
+        this.graph.updateFilename(this.selectedFile);
     }
-    reload(){
-        //todo put here everything to do when i wanna reload
-
-        //this.interface.reset();
-        
-        //this.graph.updateFilename(this.selectedFile);
-
+    start(){ 
+        //todo start playing game 
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
+        //reset lights 
+        this.lights = [...this.customLights];
+        console.log(this.customLights == this.lights);
         var i = 0;
         // Lights index.
         // Reads the lights from the scene graph.
@@ -171,6 +190,8 @@ class XMLscene extends CGFscene {
                 i++; //count cameras defined
             }
         }
+            console.log(this.customLights == this.lights);
+
     }
 
     //Update Lights upon change on interface
@@ -208,6 +229,7 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
+        this.isLoading = true;
         this.axis = new CGFaxis(this, this.graph.referenceLength);
         
         this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
@@ -226,6 +248,7 @@ class XMLscene extends CGFscene {
         //update UI usuing data structures passed 
         this.interface.updateInterface();
         this.sceneInited = true;
+        this.isLoading = false;
     }
 
     checkKeys() {
@@ -265,8 +288,6 @@ class XMLscene extends CGFscene {
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
-        //this.gameOrchestrator.display();
         
         this.camera = camera;
 
@@ -324,7 +345,7 @@ class XMLscene extends CGFscene {
         this.display_render_mode();
         this.selectable_render_mode();
 
-        if (this.sceneInited) {
+        if (this.sceneInited) { //no need to use is loaded bc if scene is not inited it wont display 
             //this.textureRTT.attachToFrameBuffer();
             //this.render(this.secondaryCamera); //call RTT camera
             //his.textureRTT.detachFromFrameBuffer();

@@ -103,7 +103,9 @@ class MyGameboard extends CGFobject{
      */
     display(){
          //todo
-         for(let key in this.tiles)
-            this.tiles[key].display();
+         //se tiveres quebra de fps aqui, tem de se fazer o display so com mudanças, mas mesmo assim
+         //eu testei fazer display disto so uma vez e deu merda tbm, por isso n sei 
+            for(let key in this.tiles)
+                this.tiles[key].display();
     }
 }

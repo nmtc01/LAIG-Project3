@@ -49,13 +49,13 @@ class MyInterface extends CGFinterface {
     }
 
     updateInterface() {
-        //todo create dropdown with cameras/view
+        //create dropdown with cameras/view
+        this.gui.add(this.scene,'selectedFile',this.scene.fileNames)
+           .name('Scene Ambient: ')
+           .onChange(val => this.scene.updateFile(val));          
         this.gui.add(this.scene, 'selectedCamera', this.scene.primaryCameraIDs)
             .name('Scene Camera:')
             .onChange(val => this.scene.updateSceneCameras(val));
-        this.gui.add(this.scene, 'selectedSecondaryCamera', this.scene.secondaryCameraIDs)
-            .name('Security Camera:')
-            .onChange(val => this.scene.updateSecondaryCameras(val));
         //create folder with lights
         var f0 = this.gui.addFolder('Lights');
         var i = 0; //to iterate camera state 
@@ -63,9 +63,9 @@ class MyInterface extends CGFinterface {
             f0.add(this.scene.lightSwitch, i).name(key);
             i++;
         }
-        this.gui.add(this.scene,'reload')
+        this.gui.add(this.scene,'start')
             .name('Start')
-            .onChange(this.scene.reload());
+            .onChange(this.scene.start());
         
     }
 
