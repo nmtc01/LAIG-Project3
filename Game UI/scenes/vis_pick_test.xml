@@ -93,24 +93,20 @@
 
     <primitives>
 
-        <primitive id="gameboard">
-            <gameboard type="original"/> 
-        </primitive>
-
-         <primitive id="skybox">
-            <skybox size="30" />
+         <primitive id="MyPrism">
+            <rect_prism width="3" length="5" height="2" />
         </primitive> 
 
-         <primitive id="table">
-            <table width="3" length="5" height="2" />
+        <primitive id="tableTop">
+            <rect_prism width="3" length="5" height="0.2" />
         </primitive>
 
-        <primitive id="male">
-            <obj model="male"/>  
-        </primitive> 
+        <primitive id="tableBase">
+            <rect_prism width="2.7" length="4.5" height="0.5" />
+        </primitive>
 
-         <primitive id="piece">
-            <piece type="1" name="RB"/>  
+        <primitive id="tableLeg">
+            <rect_prism width="0.4" length="0.4" height="2" />
         </primitive> 
 
     </primitives >
@@ -124,37 +120,13 @@
                 <material id="white" />
             </materials>
             <texture id="none" />
+            <pickable flag="false" />
+            <visible flag="true" />
             <children>
-                <componentref id="ambient" />
-                <componentref id="game" />
+                <componentref id="ambient_obj" />
             </children>
         </component>
-
-        <component id="ambient">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="inherit"/>
-            </materials>
-            <texture id="none" />
-            <children>
-                <componentref id="skybox" />
-                <componentref id="ambient_obj"/>
-            </children>
-        </component>
-
-        <component id="skybox">
-            <transformation>
-                <translate x="0" y="30" z="0"/>
-            </transformation>
-            <materials>
-                <material id="inherit"/>
-            </materials>
-            <texture id="skybox" length_s="1" length_t="1" />
-            <children>
-                <primitiveref id="skybox" />
-            </children>
-        </component>
+            
 
         <component id="ambient_obj">
             <transformation>
@@ -164,35 +136,55 @@
                 <material id="inherit"/>
             </materials>
             <texture id="wood" length_s="1" length_t="1" />
+            <pickable flag="true" />
+            <visible flag="true" />
             <children>
-                <primitiveref id="table" />
+                <componentref id="table" />
             </children>
         </component>
 
-        <component id="game">
+        <component id="table">
             <transformation>
-               <translate x="0" y="5.2" z="0"/>
             </transformation>
             <materials>
-                <material id="blue" />
+                <material id="inherit"/>
             </materials>
-                <texture id="none" />
+            <texture id="inherit" />
+            <pickable flag="inherit" />
+            <visible flag="true" />
             <children>
-                <componentref id="gameboard" />
-                <primitiveref id="piece" />
+                <componentref id="top" />
+                <componentref id="leg" />
             </children>
         </component>
 
-        <component id="gameboard">
+        <component id="top">
             <transformation>
+                <translate x="0" y="2.5" z="0" />
             </transformation>
             <materials>
-                <material id="white" />
+                <material id="inherit"/>
             </materials>
-                <texture id="board_tex1" length_s="1" length_t="1" />
+            <texture id="inherit" />
+            <pickable flag="inherit" />
+            <visible flag="true" />
             <children>
-                <primitiveref id="gameboard" />
-                <!--game tiles-->
+                <primitiveref id="tableTop" />
+            </children>
+        </component>
+
+        <component id="leg">
+            <transformation>
+                <translate x="-2.05" y="1" z="1.15" />
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="inherit" />
+            <pickable flag="false" />
+            <visible flag="true" />
+            <children>
+                <primitiveref id="tableLeg" />
             </children>
         </component>
 

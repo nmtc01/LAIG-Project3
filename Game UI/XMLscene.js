@@ -60,6 +60,8 @@ class XMLscene extends CGFscene {
 
         //* INIT 
         this.gameOrchestrator = new MyGameOrchestrator(this);
+        //todo should be here?
+        this.setPickEnabled(true);
     }
 
     initDefaultCamera() { // todo create default camera
@@ -281,7 +283,26 @@ class XMLscene extends CGFscene {
         //todo
         this.gameOrchestrator.update(t);
     }
-    /**
+    
+    //todo 
+    //checka isto nuno 
+
+    logPicking() {
+		if (this.pickMode == false) {
+			if (this.pickResults != null && this.pickResults.length > 0) {
+				for (var i = 0; i < this.pickResults.length; i++) {
+					var obj = this.pickResults[i][0];
+					if (obj) {
+						var customId = this.pickResults[i][1];
+						console.log("Picked object: " + obj + ", with pick id " + customId);						
+					}
+				}
+				this.pickResults.splice(0, this.pickResults.length);
+			}
+		}
+	}
+
+      /**
      * Renders the scene.
      */
     render(camera) {
@@ -346,7 +367,7 @@ class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
-        
+        this.logPicking();
         //todo
         this.display_render_mode();
         this.selectable_render_mode();

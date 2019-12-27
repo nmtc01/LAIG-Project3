@@ -28,7 +28,6 @@ serialInclude(
     'primitives/Patch.js',
     'primitives/Cylinder2.js',
     'primitives/MySkybox.js',
-    'primitives/MyTable.js',
     'primitives/RectPrism.js',
     'game_objects/MyGameOrchestrator.js',
     'game_objects/MyAnimator.js',
@@ -57,8 +56,8 @@ main=function()
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
     
     //todo link with interface to change ambient and modes
-    //var filename=getUrlVars()['file'] || "game_pieces.xml";
-    //var filename=getUrlVars()['file'] || "develop_test.xml";
+    //var filename=getUrlVars()['file'] || "table_test.xml";
+    //var filename=getUrlVars()['file'] || "vis_pick_test.xml";
     var filename=getUrlVars()['file'] || "game_ambient1.xml";
 
 	// create and load graph, and associate it to scene. 

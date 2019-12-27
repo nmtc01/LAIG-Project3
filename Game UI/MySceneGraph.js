@@ -1007,7 +1007,7 @@ class MySceneGraph {
                     grandChildren[0].nodeName != 'cylinder2'&&
                     grandChildren[0].nodeName != 'skybox' &&
                     //TODO GAME PRIMITIVES 
-                    grandChildren[0].nodeName != 'table' &&
+                    grandChildren[0].nodeName != 'rect_prism' &&
                     grandChildren[0].nodeName != 'obj')) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch, cylinder2, skybox, table or obj)";
             }
@@ -1248,26 +1248,26 @@ class MySceneGraph {
                     this.primitives[primitiveId] = skybox;
                     break;
                 }
-                case ('table'):
+                case ('rect_prism'):
                 {
                     //width
-                    var width = this.reader.getInteger(grandChildren[0], 'width');
+                    var width = this.reader.getFloat(grandChildren[0], 'width');
                     if (!(width != null && !isNaN(width)))
                         return "unable to parse width of the primitive coordinates for ID = " + primitiveId;
 
                     //length
-                    var length = this.reader.getInteger(grandChildren[0], 'length');
+                    var length = this.reader.getFloat(grandChildren[0], 'length');
                     if (!(length != null && !isNaN(length)))
                         return "unable to parse length of the primitive coordinates for ID = " + primitiveId;
 
                     //height
-                    var height = this.reader.getInteger(grandChildren[0], 'height');
+                    var height = this.reader.getFloat(grandChildren[0], 'height');
                     if (!(height != null && !isNaN(height)))
                         return "unable to parse length of the primitive coordinates for ID = " + primitiveId;
                     
-                    var table = new MyTable(this.scene, width, length, height);
+                    var prism = new RectPrism(this.scene, width, length, height);
 
-                    this.primitives[primitiveId] = table;
+                    this.primitives[primitiveId] = prism;
                     break;
                 }         
                 case ('obj'):
@@ -1327,6 +1327,8 @@ class MySceneGraph {
             var animationIndex = nodeNames.indexOf('animationref');
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
+            var pickableIndex = nodeNames.indexOf("pickable");
+            var visibleIndex = nodeNames.indexOf("visible");
             var childrenIndex = nodeNames.indexOf("children");
 
             // Transformations -- Bloco pode ficar sem conteudo
@@ -1440,8 +1442,24 @@ class MySceneGraph {
             }
             else return "texture module not declared"
 
+            //Pickable -- Obrigatorio
+            if ((pickableIndex == 4 && animationIndex == 1) || (pickableIndex == 3 && animationIndex == -1)) {
+                var pickable = this.reader.getString(grandChildren[pickableIndex], 'flag');
+                if (pickable == null)
+                    return "Pickable flag has not been declared"; 
+            }
+            //else return "pickable block out of order";
+
+            //Visible -- Obrigatorio
+            if ((visibleIndex == 5 && animationIndex == 1) || (visibleIndex == 4 && animationIndex == -1)) {
+                var visible = this.reader.getBoolean(grandChildren[visibleIndex], 'flag');
+                if (visible == null)
+                    return "Visible flag has not been declared"; 
+            }
+            //else return "visible block out of order";
+
             // Children
-            if ((childrenIndex == 4 && animationIndex == 1) || (childrenIndex == 3 && animationIndex == -1)) {
+            if ((childrenIndex == 6 && animationIndex == 1) || (childrenIndex == 5 && animationIndex == -1)) {
 
                 grandgrandChildren = grandChildren[childrenIndex].children;
                 if (grandgrandChildren.length == 0)
@@ -1483,6 +1501,8 @@ class MySceneGraph {
                     length_s,
                     length_t
                 },
+                pickable,
+                visible,
                 children: {
                     componentrefIDs,
                     primitiverefIDs
@@ -1617,7 +1637,7 @@ class MySceneGraph {
      * @param {component textureref length_s} parent_length_s - save previous scale factor
      * @param {component textureref length_s} parent_length_t - save previous scale factor
      */
-    processChild(child, parent_material, parent_texture, parent_length_s, parent_length_t) {
+    processChild(child, parent_material, parent_texture, parent_length_s, parent_length_t, parent_pickable) {
 
         if (this.components[child].visited)
             return "Component has already been visited";
@@ -1639,7 +1659,7 @@ class MySceneGraph {
 
         //Materials
         if (this.components[child].component_materials == 'inherit') { //if inherit does nothing, keeps the current material, from the parent 
-            if (parent_material == null)
+            if (parent_material == null || child == 'root')
                 return 'Error - cannot display inhreited material if there is no material declared before';
         }
         else {
@@ -1652,7 +1672,7 @@ class MySceneGraph {
         //Textures
         if (this.components[child].texture.textureref == 'inherit') {
             //controll erros if there is no texture, program stop
-            if (parent_texture == null)
+            if (parent_texture == null || child == 'root')
                 return 'Error - cannot display inhreited texture if there is no texture declared before';
             //use parent texture
             parent_material.setTexture(parent_texture);
@@ -1676,6 +1696,19 @@ class MySceneGraph {
         //Apply
         parent_material.apply();
 
+        //Pickable
+        let pickable_flag;
+        if (this.components[child].pickable == 'inherit') {
+            if (parent_pickable == null || child == 'root')
+                return 'Error - cannot display inhreited pickable object if there is no pickable flag declared before';
+            //use parent pickable flag
+            pickable_flag = parent_pickable;
+        }
+        else {
+            pickable_flag = this.components[child].pickable;
+            parent_pickable = this.components[child].pickable;
+        }
+
         //Process end node/primitives
         for (let i = 0; i < this.components[child].children.primitiverefIDs.length; i++) {
             this.scene.pushMatrix();
@@ -1689,13 +1722,17 @@ class MySceneGraph {
                 this.components[child].children.primitiverefIDs[i].updateTexCoords(lg_s, lg_t);
 
             //display primitive
-            this.components[child].children.primitiverefIDs[i].display();
+            let primitive = this.components[child].children.primitiverefIDs[i];
+            if (pickable_flag == 'true')
+                this.scene.registerForPick(i + 1, primitive);
+            primitive.display();
+            this.scene.clearPickRegistration();
             this.scene.popMatrix();
         }
 
         //Process child components
         for (let i = 0; i < this.components[child].children.componentrefIDs.length; i++) {
-            this.processChild(this.components[child].children.componentrefIDs[i], parent_material, parent_texture, parent_length_s, parent_length_t);
+            this.processChild(this.components[child].children.componentrefIDs[i], parent_material, parent_texture, parent_length_s, parent_length_t, parent_pickable);
         }
 
         this.scene.popMatrix();
@@ -1707,7 +1744,8 @@ class MySceneGraph {
 
     //display the scene processing every node
     displayScene() {
-        this.processChild(this.components["root"].componentID, this.components["root"].component_materials, this.components["root"].texture.textureref, this.components["root"].texture.length_s, this.components["root"].texture.length_t);
+        let root = this.components["root"];
+        this.processChild(root.componentID, root.component_materials, root.texture.textureref, root.texture.length_s, root.texture.length_t, root.pickable);
     }
     displayTemplate(component_name){
         //name on xml has to be piece_blue_black - piece_blue_white -  piece_red_black - piece_red_white - tile_white - tile_black
