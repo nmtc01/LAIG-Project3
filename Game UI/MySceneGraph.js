@@ -1669,6 +1669,9 @@ class MySceneGraph {
 
         if (visible_flag == 'true')
             primitive.display();
+        else {
+            let shader = new CGFshader(scene.gl,"shaders/scale.vert","shaders/invisible.frag"); 
+        }
     }
 
     /**
