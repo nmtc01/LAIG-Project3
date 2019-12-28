@@ -43,9 +43,6 @@ class MySceneGraph {
         // File reading 
         this.reader = new CGFXMLreader();
 
-        //Shaders
-        this.invisibleShader = new CGFshader(this.scene.gl,"shaders/scale.vert","shaders/invisible.frag");
-
         this.change_material_id = 0;
 
         /*
@@ -1674,7 +1671,7 @@ class MySceneGraph {
             primitive.display();
         else {
             this.scene.pushMatrix();
-            this.scene.setActiveShader(this.invisibleShader);
+            this.scene.setActiveShader(this.scene.invisibleShader);
             primitive.display();
             this.scene.setActiveShader(this.scene.defaultShader);
             this.scene.popMatrix();

@@ -53,9 +53,13 @@ class MyTile extends CGFobject{
         this.scene.pushMatrix();
         if (this.selectable) 
             this.orchestrator.getScene().registerForPick(this.uniqueId, this);
+        if (!this.visible)
+            this.scene.setActiveShader(this.scene.invisibleShader);
         //display specific template
         this.scene.translate(this.displayCoords[0],this.displayCoords[1],this.displayCoords[2]);
         this.scene.graph.displayTemplate(this.type);
+        if (!this.visible)
+            this.scene.setActiveShader(this.scene.defaultShader);
         //if has piece display it
         if( this.piece != null)
             this.piece.display();
