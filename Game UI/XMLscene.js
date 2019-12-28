@@ -59,6 +59,7 @@ class XMLscene extends CGFscene {
         this.selectedFile = this.files['Ambient 1'];
 
         //* INIT 
+        //Game orchestrator 
         this.gameOrchestrator = new MyGameOrchestrator(this);
         //todo should be here?
         this.setPickEnabled(true);
