@@ -11,8 +11,18 @@ class MyPrologInterface{
     /**
      * initilizes prolog localhost server
      */
-    initGame(){
+    initGame(type,level){
         this.getPrologRequest("play");
+        this.getPrologRequest(type);
+        if(level != null){
+            this.getPrologRequest(level);
+        }
+    }
+    /**
+    * 
+    */
+    getBoard(){
+
     }
     /**
      * 
@@ -24,12 +34,6 @@ class MyPrologInterface{
      * 
      */
     move(){
-
-    }
-    /**
-     * 
-     */
-    getBoard(){
 
     }
     /**

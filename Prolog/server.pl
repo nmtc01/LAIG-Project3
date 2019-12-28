@@ -112,16 +112,18 @@ print_header_line(_).
 :-consult('game.pl').
 
 %testing comands
-parse_input(handshake, handshake).
-parse_input(test(C,N), Res) :- test(C,Res,N).
+%parse_input(handshake, handshake).
 
-test(_,[],N) :- N =< 0.
-test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
+%parse_input(test(C,N), Res) :- test(C,Res,N).
+
+%test(_,[],N) :- N =< 0.
+%test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
 %quit comand
 parse_input(quit, goodbye).
 
 %TODO add game commands here
-parse_input(play, start):- play.
+parse_input(play, start) :- play.
+parse_input(1,pvp).
 %comands to choose game type 
 
 	

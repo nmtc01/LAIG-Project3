@@ -23,6 +23,7 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
         this.isLoading = false;
+        this.gameRunning = false;
         //initiliaze a camare build buy the program ignoring the xml
         this.initDefaultCamera();
 
@@ -46,7 +47,7 @@ class XMLscene extends CGFscene {
         this.selectedCamera = 0; //store index of the selected camera
         this.selectedSecondaryCamera = 0;
         this.keysPressed=false; //used to avoid infinite key pressing, always assume one tap, and reset with realease
-        
+
         //todo put the names we want
         this.fileNames = ['Ambient 1','Ambient 2'];
 
@@ -57,6 +58,23 @@ class XMLscene extends CGFscene {
  
         //find a way for him to received the file, or to know the current one 
         this.selectedFile = this.files['Ambient 1'];
+
+        //game type selection
+        this.gameTypeName = ['PvP','PvC', 'CvC'];
+        this.gameType = {}; 
+        this.gameType['PvP'] = '1.'; //prolog string to pass
+        this.gameType['PvC'] = '2.'; //prolog string to pass
+        this.gameType['CvC'] = '3.'; //prolog string to pass
+        this.selectedGameType = this.gameType['PvP'];
+
+        //level selection
+        this.gameLevelName = ['Level 1','Level 2'];
+        this.gameLevel = {}; 
+        this.gameLevel['No Level'] = null;
+        this.gameLevel['Level 1'] = '1.'; //prolog string to pass
+        this.gameLevel['Level 2'] = '2.'; //prolog string to pass
+        this.selectedGameLevel = this.gameLevel['No Level'];
+
 
         //* INIT 
         this.gameOrchestrator = new MyGameOrchestrator(this);
@@ -140,9 +158,24 @@ class XMLscene extends CGFscene {
         
         this.graph.updateFilename(this.selectedFile);
     }
+    updateGameType(val){
+        if(!this.gameRunning){
+            this.selectedGameType = this.gameType[val];
+        }
+    }
+    updateGameLevel(val){
+        if(this.selectedGameType == this.gameType['PvP']){
+            this.selectedGameLevel = this.gameLevel['No Level'];
+            return;
+        }
+        if(!this.gameRunning && this.selectedGameType){
+            this.selectedGameLevel = this.gameLevel[val];
+        }
+    }
     start(){ 
         //todo start playing game 
-        this.gameOrchestrator.startGame();
+        this.gameRunning = true; 
+        this.gameOrchestrator.startGame(this.selectedGameType,this.selectedGameLevel);
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -285,9 +318,6 @@ class XMLscene extends CGFscene {
         this.gameOrchestrator.update(t);
     }
     
-    //todo 
-    //checka isto nuno 
-
     logPicking() {
 		if (this.pickMode == false) {
 			if (this.pickResults != null && this.pickResults.length > 0) {

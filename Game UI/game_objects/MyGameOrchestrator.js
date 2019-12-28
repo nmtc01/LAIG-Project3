@@ -18,9 +18,9 @@ class MyGameOrchestrator extends CGFobject{
         this.prolog = new MyPrologInterface(this.scene);
     }
     //todo check best way to do this 
-    startGame(){
+    startGame(type,level){
         console.log('start game');
-        this.prolog.initGame();
+        this.prolog.initGame(type,level);
     }
     orchestrate(){
         //todo
