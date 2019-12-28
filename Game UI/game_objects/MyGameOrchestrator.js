@@ -3,7 +3,8 @@
  */
 
 // • Load of new scenes
-// • Manage gameplay (game states) • Manages undo
+// • Manage gameplay (game states) 
+// • Manages undo
 // • Manages movie play
 // • Manage object selection
 
@@ -15,6 +16,11 @@ class MyGameOrchestrator extends CGFobject{
         this.animator = new MyAnimator(this.scene); 
         this.gameboard = new MyGameboard(this.scene); 
         this.prolog = new MyPrologInterface(this.scene);
+    }
+    //todo check best way to do this 
+    startGame(){
+        console.log('start game');
+        this.prolog.initGame();
     }
     orchestrate(){
         //todo

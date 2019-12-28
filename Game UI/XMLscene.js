@@ -142,6 +142,7 @@ class XMLscene extends CGFscene {
     }
     start(){ 
         //todo start playing game 
+        this.gameOrchestrator.startGame();
     }
     /**
      * Initializes the scene lights with the values read from the XML file.

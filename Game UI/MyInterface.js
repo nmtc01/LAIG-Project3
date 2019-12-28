@@ -65,7 +65,6 @@ class MyInterface extends CGFinterface {
         }
         this.gui.add(this.scene,'start')
             .name('Start')
-            .onChange(this.scene.start());
         
     }
 
