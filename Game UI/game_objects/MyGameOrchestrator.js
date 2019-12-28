@@ -8,14 +8,23 @@
 // • Manage object selection
 
 class MyGameOrchestrator extends CGFobject{
-    constructor(scene){
+    constructor(scene, obj_pick_index){
         super(scene);
-
+        this.uniqueId = obj_pick_index;
         this.gameSequence = new MyGameSequence(this.scene); 
         this.animator = new MyAnimator(this.scene); 
-        this.gameboard = new MyGameboard(this.scene); 
+        this.gameboard = new MyGameboard(this.scene, this); 
         //this.theme = new MyScenegraph(/*todo*/); 
         //this.prolog = new MyPrologInterface(/*todo*/);
+    }
+    getScene() {
+        return this.scene;
+    }
+    getUniqueId() {
+        return this.uniqueId;
+    }
+    increaseUniqueId() {
+        this.uniqueId++;
     }
     orchestrate(){
         //todo
@@ -24,18 +33,19 @@ class MyGameOrchestrator extends CGFobject{
         this.animator.update(time);
     }
 
-    managePick(mode, results) {
+    managePick(mode, pickResults) {
         if (mode == false /* && some other game conditions */){
-            if(results != null && results.length > 0) { // any results? 
-                for (var i=0; i< results.length; i++) {
+            if(pickResults != null && pickResults.length > 0) { // any pickResults? 
+                for (var i=0; i< pickResults.length; i++) {
                     var obj = pickResults[i][0]; // get object from result 
                     if (obj) { // exists?
                         var uniqueId = pickResults[i][1] // get id
-                        this.OnObjectSelected(obj, uniqueId); 
+                        //TODO: use onObjectSelected do something
+                        console.log("Picked object: " + obj + ", with pick id " + uniqueId); 
                     }
                 }
-            // clear results
-            pickResults.splice(0, pickResults.length); 
+                // clear results
+                pickResults.splice(0, pickResults.length); 
             }
         } 
     }

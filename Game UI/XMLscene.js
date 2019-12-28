@@ -1,4 +1,5 @@
 var DEGREE_TO_RAD = Math.PI / 180;
+var pick_obj_index = 1;
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -59,7 +60,7 @@ class XMLscene extends CGFscene {
         this.selectedFile = this.files['Ambient 1'];
 
         //* INIT 
-        this.gameOrchestrator = new MyGameOrchestrator(this);
+        this.gameOrchestrator = new MyGameOrchestrator(this, pick_obj_index);
         //todo should be here?
         this.setPickEnabled(true);
     }
@@ -283,24 +284,6 @@ class XMLscene extends CGFscene {
         //todo
         this.gameOrchestrator.update(t);
     }
-    
-    //todo 
-    //checka isto nuno 
-
-    logPicking() {
-		if (this.pickMode == false) {
-			if (this.pickResults != null && this.pickResults.length > 0) {
-				for (var i = 0; i < this.pickResults.length; i++) {
-					var obj = this.pickResults[i][0];
-					if (obj) {
-						var customId = this.pickResults[i][1];
-						console.log("Picked object: " + obj + ", with pick id " + customId);						
-					}
-				}
-				this.pickResults.splice(0, this.pickResults.length);
-			}
-		}
-	}
 
       /**
      * Renders the scene.
@@ -308,8 +291,8 @@ class XMLscene extends CGFscene {
     render(camera) {
         //todo
         //this.gameOrchestrator.orchestrate()
-        //this.gameOrchestrator.managePick(this.pickMode, this.pickResults); 
-        //this.clearPickRegistration();
+        this.gameOrchestrator.managePick(this.pickMode, this.pickResults); 
+        this.clearPickRegistration();
 
         // ---- BEGIN Background, camera and axis setup
         // Clear image and depth buffer everytime we update the scene
@@ -367,7 +350,6 @@ class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
-        this.logPicking();
         //todo
         this.display_render_mode();
         this.selectable_render_mode();

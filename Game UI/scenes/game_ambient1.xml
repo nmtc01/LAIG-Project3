@@ -332,7 +332,7 @@
         </component>
 
         <!-- TEMPLATES -->
-        <component id="piece_blue_white">
+        <component id="piece_blue_white" template="true">
             <transformation>
                 <translate x="0" y="5.6" z="0"/>
                 <scale x="0.4" y="0.4" z="0.4" />
@@ -341,8 +341,6 @@
                 <material id="white" />
             </materials>
             <texture id="BW" length_s="1" length_t="1"/>
-            <pickable flag="true" />
-            <visible flag="true" />
             <children>
                 <componentref id="piece_top" />
                 <componentref id="piece_mid" />
@@ -350,7 +348,7 @@
             </children>
         </component>
 
-        <component id="piece_blue_black">
+        <component id="piece_blue_black" template="true">
             <transformation>
                 <translate x="0" y="5.6" z="0"/>
                 <scale x="0.4" y="0.4" z="0.4" />
@@ -359,8 +357,6 @@
                 <material id="white" />
             </materials>
             <texture id="BB" length_s="1" length_t="1"/>
-            <pickable flag="true" />
-            <visible flag="true" />
             <children>
                <componentref id="piece_top" />
                 <componentref id="piece_mid" />
@@ -368,7 +364,7 @@
             </children>
         </component>
 
-        <component id="piece_red_white">
+        <component id="piece_red_white" template="true">
             <transformation>
                 <translate x="0" y="5.6" z="0"/>
                 <scale x="0.4" y="0.4" z="0.4" />
@@ -377,8 +373,6 @@
                 <material id="white" />
             </materials>
             <texture id="RW" length_s="1" length_t="1"/>
-            <pickable flag="true" />
-            <visible flag="true" />
             <children>
                <componentref id="piece_top" />
                 <componentref id="piece_mid" />
@@ -386,7 +380,7 @@
             </children>
         </component>
 
-        <component id="piece_red_black">
+        <component id="piece_red_black" template="true">
             <transformation>
                 <translate x="0" y="5.6" z="0"/>
                 <scale x="0.4" y="0.4" z="0.4" />
@@ -395,8 +389,6 @@
                 <material id="white" />
             </materials>
             <texture id="RB" length_s="1" length_t="1"/>
-            <pickable flag="true" />
-            <visible flag="true" />
             <children>
                 <componentref id="piece_top" />
                 <componentref id="piece_mid" />
@@ -404,7 +396,7 @@
             </children>
         </component>
 
-        <component id="piece_top" >
+        <component id="piece_top" template="false">
             <transformation>
                 <scale x="0.99" y="0.4" z="0.99" />
              <rotate axis="z" angle="90"/>
@@ -413,14 +405,12 @@
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
-            <pickable flag="inherit" />
-             <visible flag="inherit" />
             <children>
                 <primitiveref id="piece_top" />
             </children>
         </component>
 
-        <component id="piece_mid">
+        <component id="piece_mid" template="false">
             <transformation>
                 <scale x="1" y="0.5" z="1" />
                 <rotate axis="x" angle="90"/>
@@ -429,14 +419,12 @@
                 <material id="metal" />
             </materials>
             <texture id="none" />
-            <pickable flag="inherit" />
-            <visible flag="inherit" />
             <children>
                 <primitiveref id="piece_mid" />
             </children>
         </component>
 
-        <component id="piece_bot">
+        <component id="piece_bot" template="false">
             <transformation>
                 <translate x="0" y="-0.5" z="0"/>
                 <scale x="0.99" y="0.4" z="0.99" />
@@ -446,14 +434,12 @@
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
-            <pickable flag="inherit" />
-            <visible flag="inherit" />
             <children>
                 <primitiveref id="piece_bot" />
             </children>
         </component>
 
-        <component id="tile_black">
+        <component id="tile_black" template="true">
             <transformation>
                 <translate x="0" y="5.25" z="0"/>
             </transformation>
@@ -461,15 +447,13 @@
                 <material id="black" />
             </materials>
             <texture id="none" />
-            <pickable flag="true" />
-            <visible flag="true" />
             <children>
                 <primitiveref id="tile" />
             </children>
         </component>
         
 
-         <component id="tile_white">
+         <component id="tile_white" template="true">
             <transformation>
                 <translate x="0" y="5.25" z="0"/>
             </transformation>
@@ -477,8 +461,6 @@
                 <material id="white" />
             </materials>
             <texture id="none" />
-            <pickable flag="true" />
-            <visible flag="true" />
             <children>
                 <primitiveref id="tile" />
             </children>

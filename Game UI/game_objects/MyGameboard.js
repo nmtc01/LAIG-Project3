@@ -1,5 +1,5 @@
 class MyGameboard extends CGFobject{
-    constructor(scene){
+    constructor(scene, gameOrchestrator){
         super(scene);
         //console.log(this.scene.graph.components)
         //Stores the set of tiles that composes the entire game board      
@@ -7,6 +7,7 @@ class MyGameboard extends CGFobject{
         //visible tiles 
         this.auxTiles = {}; //25 tiles
         this.tiles = {};
+        this.orchestrator = gameOrchestrator;
         //todo invisible tiles 
 
     }
@@ -22,7 +23,7 @@ class MyGameboard extends CGFobject{
         for(let column = 1; column<=5; column++){
             for(let line = 1; line <=5; line++){
                 let coords = [line,column]; //todo confirm if is line column
-                let tile = new MyTile(this.scene,this,type,coords,true,false);
+                let tile = new MyTile(this.scene,this,type,coords,true,true,this.orchestrator);
                 this.tiles[coords] = tile; //todo check if it is the best way 
                 //change tile type 
                 if(type == "tile_black")
@@ -31,17 +32,17 @@ class MyGameboard extends CGFobject{
             }
         }
         //place 10 pieces
-        this.tiles[[1,1]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true));
-        this.tiles[[1,2]].setPieceOnTile(new MyPiece(this.scene,"piece_red_black",true,true));
-        this.tiles[[1,3]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true));
-        this.tiles[[1,4]].setPieceOnTile(new MyPiece(this.scene,"piece_red_black",true,true));
-        this.tiles[[1,5]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true));
+        this.tiles[[1,1]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true,this.orchestrator));
+        this.tiles[[1,2]].setPieceOnTile(new MyPiece(this.scene,"piece_red_black",true,true,this.orchestrator));
+        this.tiles[[1,3]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true,this.orchestrator));
+        this.tiles[[1,4]].setPieceOnTile(new MyPiece(this.scene,"piece_red_black",true,true,this.orchestrator));
+        this.tiles[[1,5]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true,this.orchestrator));
 
-        this.tiles[[5,1]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true));
-        this.tiles[[5,2]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_black",true,true));
-        this.tiles[[5,3]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true));
-        this.tiles[[5,4]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_black",true,true));
-        this.tiles[[5,5]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true));
+        this.tiles[[5,1]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true,this.orchestrator));
+        this.tiles[[5,2]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_black",true,true,this.orchestrator));
+        this.tiles[[5,3]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true,this.orchestrator));
+        this.tiles[[5,4]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_black",true,true,this.orchestrator));
+        this.tiles[[5,5]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true,this.orchestrator));
       
     }
     /**

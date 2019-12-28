@@ -1297,6 +1297,8 @@ class MySceneGraph {
         var grandgrandChildren = [];
         var nodeNames = [];
 
+        let is_template = false;
+
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
 
@@ -1313,6 +1315,11 @@ class MySceneGraph {
             // Checks for repeated IDs.
             if (this.components[componentID] != null)
                 return "ID must be unique for each component (conflict: ID = " + componentID + ")";
+
+            //Check if is template.
+            if (children[i].hasAttribute('template')) {
+                is_template = true;
+            }
 
             grandChildren = children[i].children;
 
@@ -1443,28 +1450,38 @@ class MySceneGraph {
             }
             else return "texture module not declared"
 
-            //Pickable -- Obrigatorio
-            if ((pickableIndex == 4 && animationIndex == 1) || (pickableIndex == 3 && animationIndex == -1)) {
-                var pickable = this.reader.getString(grandChildren[pickableIndex], 'flag');
-                if (pickable == null)
-                    return "Pickable flag has not been declared"; 
-            }
-            else return "pickable block out of order";
+            if (!is_template) {
+                //Pickable -- Obrigatorio
+                if ((pickableIndex == 4 && animationIndex == 1) || (pickableIndex == 3 && animationIndex == -1)) {
+                    var pickable = this.reader.getString(grandChildren[pickableIndex], 'flag');
+                    if (pickable == null)
+                        return "Pickable flag has not been declared"; 
+                }
+                else return "pickable block out of order";
 
-            //Visible -- Obrigatorio
-            if ((visibleIndex == 5 && animationIndex == 1) || (visibleIndex == 4 && animationIndex == -1)) {
-                var visible = this.reader.getString(grandChildren[visibleIndex], 'flag');
-                if (visible == null)
-                    return "Visible flag has not been declared"; 
-            }
-            else return "visible block out of order";
+                //Visible -- Obrigatorio
+                if ((visibleIndex == 5 && animationIndex == 1) || (visibleIndex == 4 && animationIndex == -1)) {
+                    var visible = this.reader.getString(grandChildren[visibleIndex], 'flag');
+                    if (visible == null)
+                        return "Visible flag has not been declared"; 
+                }
+                else return "visible block out of order";
+           
 
-            //Object can't be invisible and not pickable simultaneously
-            if (visible == 'false' && pickable == 'false')
-                return "Object can't be invisible and not pickable simultaneously";
+                //Object can't be invisible and not pickable simultaneously
+                if (visible == 'false' && pickable == 'false')
+                    return "Object can't be invisible and not pickable simultaneously";
+            }
+            else {
+                visible = 'true';
+                pickable = 'true';
+            }
 
             // Children
-            if ((childrenIndex == 6 && animationIndex == 1) || (childrenIndex == 5 && animationIndex == -1)) {
+            if ((childrenIndex == 6 && animationIndex == 1 && visibleIndex != -1 && pickableIndex != -1) || 
+                (childrenIndex == 5 && animationIndex == -1 && visibleIndex != -1 && pickableIndex != -1) ||
+                (childrenIndex == 4 && animationIndex == 1 && visibleIndex == -1 && pickableIndex == -1) ||
+                (childrenIndex == 3 && animationIndex == -1 && visibleIndex == -1 && pickableIndex == -1)) {
 
                 grandgrandChildren = grandChildren[childrenIndex].children;
                 if (grandgrandChildren.length == 0)
@@ -1637,11 +1654,19 @@ class MySceneGraph {
         this.change_material_id++;
     }
     /**
-     * Displays the scene, processing each node, starting in the root node.
+     * Handles scene visibility and selection
      * @param {component primitiverefIDs} primitive - current primitive to be displayed
      * @param {component visible} visible_flag - visibility factor
      */
-    processPrimitiveDisplay(primitive, visible_flag) {
+    processPrimitiveDisplay(component, primitive, pickable_flag, visible_flag, is_template) {
+        //Pickable objets that aren't templates
+        if (pickable_flag == 'true') {
+            if (!is_template)
+                this.scene.registerForPick(component.pick_obj_index, primitive);
+            //Template objets handle picking internally
+        }
+        //For not pickable objets display normally
+
         if (visible_flag == 'true')
             primitive.display();
     }
@@ -1755,14 +1780,7 @@ class MySceneGraph {
 
             //display primitive
             let primitive = this.components[child].children.primitiverefIDs[i];
-            if (pickable_flag == 'true') {
-                let pick_index = this.components[child].pick_obj_index;
-                if (is_template)
-                    this.scene.registerForPick(template_pick_index, primitive);
-                else this.scene.registerForPick(this.components[child].pick_obj_index, primitive);
-            }
-            this.processPrimitiveDisplay(primitive, visible_flag);
-            this.scene.clearPickRegistration();
+            this.processPrimitiveDisplay(this.components[child], primitive, pickable_flag, visible_flag, is_template);
             this.scene.popMatrix();
         }
 
