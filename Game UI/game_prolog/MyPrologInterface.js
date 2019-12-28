@@ -1,7 +1,10 @@
+//global 
+
+var response;
+
 class MyPrologInterface{
     constructor(/*scene*/){
         //super(scene);
-
         this.port = 8081;
     }
     /**
@@ -13,8 +16,8 @@ class MyPrologInterface{
      */
     initGame(){  
         this.getPrologRequest('init');
-        console.log(this.responseArray);
-        return this.responseArray;
+        console.log(response);
+        return response;
     }
     /**
     * 
@@ -58,9 +61,9 @@ class MyPrologInterface{
      */
     getPrologRequest(requestString){
         let request = new XMLHttpRequest(this);
-        request.addEventListener("load", this.parseStartPrologReply); 
+        request.addEventListener("load",this.parseStartPrologReply); 
         request.addEventListener("error",this.startPrologGameError);
-        request.open('GET', 'http://localhost:'+this.port+'/'+requestString,true); 
+        request.open('GET', 'http://localhost:'+this.port+'/'+requestString,false);  //todo check if this flag doesnt cereate problems
         request.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8"); 
         request.send();
     }
@@ -74,12 +77,12 @@ class MyPrologInterface{
         }
         // the answer here is: [Board,CurrentPlayer,WhiteScore,BlackScore]
         let responseArray = textStringToArray(this.responseText,true);
-        
-        console.log(responseArray);
+
         // do something with responseArray[0]; 
         // do something with responseArray[1]; 
         // do something with responseArray[2]; 
         // do something with responseArray[3];
+        response = responseArray;
     }
     /**
      * 

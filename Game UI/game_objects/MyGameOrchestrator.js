@@ -33,11 +33,9 @@ class MyGameOrchestrator extends CGFobject{
         this.gameType = type; 
         this.gameLevel=level;
         console.log('start game');
-        this.prologInterface.initGame(type,level);
-        /*
+        let ret = this.prologInterface.initGame(type,level);
         this.currentBoard = ret[0]; 
         this.currentPlayer = ret[1];
-        */
         console.log(this.currentBoard);
         console.log(this.currentPlayer);
     }
