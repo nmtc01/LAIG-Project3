@@ -10,7 +10,6 @@
 class MyGameOrchestrator extends CGFobject{
     constructor(scene){
         super(scene);
-        this.uniqueId = this.scene.getPickIndex();
         this.gameSequence = new MyGameSequence(this.scene); 
         this.animator = new MyAnimator(this.scene); 
         this.gameboard = new MyGameboard(this.scene, this); 
@@ -21,10 +20,10 @@ class MyGameOrchestrator extends CGFobject{
         return this.scene;
     }
     getUniqueId() {
-        return this.uniqueId;
+        return this.scene.getPickIndex();
     }
     increaseUniqueId() {
-        this.uniqueId++;
+        this.scene.increasePickIndex();
     }
     orchestrate(){
         //todo
