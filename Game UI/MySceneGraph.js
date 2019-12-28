@@ -1669,6 +1669,13 @@ class MySceneGraph {
 
         if (visible_flag == 'true')
             primitive.display();
+        else {
+            this.scene.pushMatrix();
+            this.scene.setActiveShader(this.scene.invisibleShader);
+            primitive.display();
+            this.scene.setActiveShader(this.scene.defaultShader);
+            this.scene.popMatrix();
+        }
     }
 
     /**

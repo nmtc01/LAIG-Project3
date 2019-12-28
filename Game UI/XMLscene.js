@@ -59,6 +59,9 @@ class XMLscene extends CGFscene {
         this.selectedFile = this.files['Ambient 1'];
 
         //* INIT 
+        //Shaders
+        this.invisibleShader = new CGFshader(this.gl,"shaders/scale.vert","shaders/invisible.frag");
+        //Game orchestrator 
         this.gameOrchestrator = new MyGameOrchestrator(this);
         //todo should be here?
         this.setPickEnabled(true);

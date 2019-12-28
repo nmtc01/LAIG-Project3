@@ -44,7 +44,11 @@ class MyPiece extends CGFobject{
           if (this.selectable) 
                this.orchestrator.getScene().registerForPick(this.uniqueId, this);
           //display specific template
+          if (!this.visible)
+               this.scene.setActiveShader(this.scene.invisibleShader);
           this.scene.graph.displayTemplate(this.type);
+          if (!this.visible)
+               this.scene.setActiveShader(this.scene.defaultShader);
           if (this.selectable) 
                this.orchestrator.getScene().clearPickRegistration();
           this.scene.popMatrix(); 
