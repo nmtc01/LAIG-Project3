@@ -62,17 +62,17 @@ class XMLscene extends CGFscene {
         //game type selection
         this.gameTypeName = ['PvP','PvC', 'CvC'];
         this.gameType = {}; 
-        this.gameType['PvP'] = '1.'; //prolog string to pass
-        this.gameType['PvC'] = '2.'; //prolog string to pass
-        this.gameType['CvC'] = '3.'; //prolog string to pass
+        this.gameType['PvP'] = 'pvp'; //prolog string to pass
+        this.gameType['PvC'] = 'pvc'; //prolog string to pass
+        this.gameType['CvC'] = 'cvc'; //prolog string to pass
         this.selectedGameType = this.gameType['PvP'];
 
         //level selection
         this.gameLevelName = ['Level 1','Level 2'];
         this.gameLevel = {}; 
         this.gameLevel['No Level'] = null;
-        this.gameLevel['Level 1'] = '1.'; //prolog string to pass
-        this.gameLevel['Level 2'] = '2.'; //prolog string to pass
+        this.gameLevel['Level 1'] = 'lvl1'; //prolog string to pass
+        this.gameLevel['Level 2'] = 'lvl2'; //prolog string to pass
         this.selectedGameLevel = this.gameLevel['No Level'];
 
 
@@ -164,12 +164,14 @@ class XMLscene extends CGFscene {
         }
     }
     updateGameLevel(val){
-        if(this.selectedGameType == this.gameType['PvP']){
-            this.selectedGameLevel = this.gameLevel['No Level'];
-            return;
-        }
-        if(!this.gameRunning && this.selectedGameType){
-            this.selectedGameLevel = this.gameLevel[val];
+        if(!this.gameRunning){
+            if(this.selectedGameType == this.gameType['PvP']){
+                this.selectedGameLevel = this.gameLevel['No Level'];
+                return;
+            }
+            if(!this.gameRunning && this.selectedGameType){
+                this.selectedGameLevel = this.gameLevel[val];
+            }
         }
     }
     start(){ 
@@ -378,6 +380,9 @@ class XMLscene extends CGFscene {
             this.graph.displayScene();
 
             //todo display orchestrator
+            if(this.gameRunning){
+                this.gameOrchestrator.orchestrate();
+            }
             this.gameOrchestrator.display();
             //todo maybe here???
         }
@@ -406,7 +411,7 @@ class XMLscene extends CGFscene {
         if (this.sceneInited) { //no need to use is loaded bc if scene is not inited it wont display 
             //this.textureRTT.attachToFrameBuffer();
             //this.render(this.secondaryCamera); //call RTT camera
-            //his.textureRTT.detachFromFrameBuffer();
+            //his.textureRTT.detachFromFrameBuffer()
             this.render(this.primaryCamera); //call scene camera
             this.interface.setActiveCamera(this.primaryCamera);
             //this.gl.disable(this.gl.DEPTH_TEST);

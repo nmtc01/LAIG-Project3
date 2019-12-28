@@ -15,15 +15,35 @@ class MyGameOrchestrator extends CGFobject{
         this.gameSequence = new MyGameSequence(this.scene); 
         this.animator = new MyAnimator(this.scene); 
         this.gameboard = new MyGameboard(this.scene); 
-        this.prolog = new MyPrologInterface(this.scene);
+        this.prologInterface = new MyPrologInterface(this.scene);
+        this.gameSequence = new MyGameSequence();
+
+        //use to determine game type 
+        this.gameType = null;
+        this.gameLevel = null;
+
+        //current player on prolog was set as red as custom, so the ai will alaways be the blue one
+        //if blue is playing on pvc ou cvc game mode it always be a ai move 
+        this.currentPlayer=null; 
+        this.currentBoard=null; 
+        this.validMoves=null;
     }
     //todo check best way to do this 
     startGame(type,level){
+        this.gameType = type; 
+        this.gameLevel=level;
         console.log('start game');
-        this.prolog.initGame(type,level);
+        this.prologInterface.initGame(type,level);
+        /*
+        this.currentBoard = ret[0]; 
+        this.currentPlayer = ret[1];
+        */
+        console.log(this.currentBoard);
+        console.log(this.currentPlayer);
     }
     orchestrate(){
-        //todo
+        //gameplay manage
+       
     }
     update(time) { 
         this.animator.update(time);

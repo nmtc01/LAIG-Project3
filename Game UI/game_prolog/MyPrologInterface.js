@@ -11,42 +11,46 @@ class MyPrologInterface{
     /**
      * initilizes prolog localhost server
      */
-    initGame(type,level){
-        this.getPrologRequest("play");
-        this.getPrologRequest(type);
-        if(level != null){
-            this.getPrologRequest(level);
-        }
+    initGame(){  
+        this.getPrologRequest('init');
+        console.log(this.responseArray);
+        return this.responseArray;
     }
     /**
     * 
     */
     getBoard(){
-
+        //todo
+    }
+    /**
+     * 
+     */
+    getPlayerPlaying(){
+        //todo
     }
     /**
      * 
      */
     getValidMoves(){
-
+        //todo
     }
     /**
      * 
      */
     move(){
-
+        //todo
     }
     /**
      * 
      */
     setBoard(){
-
+        //todo
     }
     /**
      * 
      */
     checkWin(){
-
+        //todo
     }
     /**
      * get request using string
@@ -56,7 +60,7 @@ class MyPrologInterface{
         let request = new XMLHttpRequest(this);
         request.addEventListener("load", this.parseStartPrologReply); 
         request.addEventListener("error",this.startPrologGameError);
-        request.open('GET', 'http://localhost:'+this.port+'/'+requestString, true); 
+        request.open('GET', 'http://localhost:'+this.port+'/'+requestString,true); 
         request.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8"); 
         request.send();
     }
@@ -70,11 +74,12 @@ class MyPrologInterface{
         }
         // the answer here is: [Board,CurrentPlayer,WhiteScore,BlackScore]
         let responseArray = textStringToArray(this.responseText,true);
+        
+        console.log(responseArray);
         // do something with responseArray[0]; 
         // do something with responseArray[1]; 
         // do something with responseArray[2]; 
         // do something with responseArray[3];
-        return responseArray; 
     }
     /**
      * 
@@ -82,4 +87,37 @@ class MyPrologInterface{
     parseStartPrologError(){
         console.log('ERROR')
     }
+}
+
+//Utils
+
+function textStringToArray(string,bool){ //todo check this bool
+    let len = string.length;
+    let str = string.substring(1,len); //delete first bracket
+
+    let count  = 0; 
+    let aux="";
+    let ret =[ ];  
+    //get inner objects
+    for(let i= 0; i< str.length; i++){
+        switch(str[i]){
+            case '[': 
+                count++; 
+                aux+=str[i];
+            break; 
+            case ']':
+                count--; 
+                aux+=str[i]; 
+            break; 
+            default:
+                aux+=str[i];
+            break;
+        }
+       if(count == 0){
+           ret.push(aux);
+           aux = "";
+       }
+    }
+    return ret;
+    
 }

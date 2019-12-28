@@ -122,9 +122,15 @@ print_header_line(_).
 parse_input(quit, goodbye).
 
 %TODO add game commands here
-parse_input(play, start) :- play.
-parse_input(1,pvp).
+
+
+%---- GET STATES ------
+parse_input(init,[Board,[red]]):-	
+	board(Board).
+
+
+
 %comands to choose game type 
 
 	
-%compile('/Users/gustavonrm/Desktop/LAIG/LAIG-Project3/Prolog/server.pl').
+%compile('/Users/gustavonrm/Desktop/LAIG/LAIG-Project3/Prolog/server.pl').      

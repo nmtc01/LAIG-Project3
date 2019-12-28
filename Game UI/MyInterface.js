@@ -63,6 +63,7 @@ class MyInterface extends CGFinterface {
             f0.add(this.scene.lightSwitch, i).name(key);
             i++;
         }
+        //todo if in time put here some event listener to build html 
         this.gui.add(this.scene,'selectedGameType',this.scene.gameTypeName)
             .name('Game Type:')
             .onChange(val => this.scene.updateGameType(val));
