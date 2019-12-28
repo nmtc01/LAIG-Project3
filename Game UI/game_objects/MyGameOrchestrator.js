@@ -8,9 +8,9 @@
 // • Manage object selection
 
 class MyGameOrchestrator extends CGFobject{
-    constructor(scene, obj_pick_index){
+    constructor(scene){
         super(scene);
-        this.uniqueId = obj_pick_index;
+        this.uniqueId = this.scene.getPickIndex();
         this.gameSequence = new MyGameSequence(this.scene); 
         this.animator = new MyAnimator(this.scene); 
         this.gameboard = new MyGameboard(this.scene, this); 

@@ -1,5 +1,4 @@
 var DEGREE_TO_RAD = Math.PI / 180;
-var pick_obj_index = 1;
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -11,7 +10,7 @@ class XMLscene extends CGFscene {
      */
     constructor(myinterface) {
         super();
-
+        this.pick_obj_index = 1;
         this.interface = myinterface;
     }
 
@@ -60,7 +59,7 @@ class XMLscene extends CGFscene {
         this.selectedFile = this.files['Ambient 1'];
 
         //* INIT 
-        this.gameOrchestrator = new MyGameOrchestrator(this, pick_obj_index);
+        this.gameOrchestrator = new MyGameOrchestrator(this);
         //todo should be here?
         this.setPickEnabled(true);
     }
@@ -283,6 +282,13 @@ class XMLscene extends CGFscene {
         }
         //todo
         this.gameOrchestrator.update(t);
+    }
+
+    getPickIndex() {
+        return this.pick_obj_index;
+    }
+    increasePickIndex() {
+        this.pick_obj_index++;
     }
 
       /**

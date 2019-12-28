@@ -11,7 +11,6 @@ var TRANSFORMATIONS_INDEX = 6;
 var ANIMATIONS_INDEX = 7
 var PRIMITIVES_INDEX = 8;
 var COMPONENTS_INDEX = 9;
-var pick_obj_index = 1;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -1510,6 +1509,7 @@ class MySceneGraph {
             else "children block must be declared"
 
             let visited = false;
+            let pick_obj_index = this.scene.getPickIndex();
 
             //store the data and pass it as a structure into the array 
             const component = { //node 
@@ -1532,7 +1532,7 @@ class MySceneGraph {
                 }
             }
             this.components[component.componentID] = component;
-            pick_obj_index++;
+            this.scene.increasePickIndex();
         }
     }
 

@@ -156,7 +156,7 @@
                 <material id="white" />
             </materials>
             <texture id="none" />
-            <pickable flag="false" />
+            <pickable flag="true" />
             <visible flag="true" />
             <children>
                 <componentref id="ambient" />
