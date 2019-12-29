@@ -90,12 +90,12 @@ class MyGameOrchestrator extends CGFobject{
                     //todo smth to paint tiles
                     //when move is valid!!
                     //todo
-                    let newBoard = this.prologInterface.playerMove(/*move,*/this.currentBoard); 
-                    this.currentBoard = newBoard; //update to newboard
+                    //let newBoard = this.prologInterface.playerMove(/*move,*/this.currentBoard); 
+                    //this.currentBoard = newBoard; //update to newboard
                     //get if there is a winner
                     let winner = this.prologInterface.checkWin(this.currentBoard,this.currentPlayer);
                     //check winner
-                    if(winner != null){
+                    if(winner != -1){
                         this.gameState = 'game_ended';
                         //smth to print winner 
                         //smth to lock the game 

@@ -25,7 +25,6 @@ class MyPrologInterface{
      */
     getValidMoves(Board,Player){
         let strBoard = convertBoardToString(Board);
-        console.log('get_valid_moves('+strBoard+','+Player+')');
         this.getPrologRequest('get_valid_moves('+strBoard+','+Player+')','valid_moves')
         return response;
     }
@@ -54,11 +53,13 @@ class MyPrologInterface{
      * 
      * @param {*} Board 
      * @param {*} Player 
-     * @returns winning player, if null game continues 
+     * @returns winning player, if -1 game continues if 5 red wins if 9 blue wins
      */
     checkWin(Board,Player){
-        //todo
-        return response;
+        let strBoard = convertBoardToString(Board);
+        console.log('check_game_over('+strBoard+','+Player+')');
+        this.getPrologRequest('check_game_over('+strBoard+','+Player+')','check_winner')
+        //return response;
     }
     /**
      * get request using string
@@ -73,6 +74,9 @@ class MyPrologInterface{
             case 'valid_moves':
                 request.addEventListener("load",this.parseValidMovesPrologReply); 
             break; 
+            case 'check_winner':
+                request.addEventListener("load",this.parseWinnerPrologReply);
+            break;
         }
         request.addEventListener("error",this.startPrologGameError);
         request.open('GET', 'http://localhost:'+this.port+'/'+requestString,false);  //todo check if this flag doesnt cereate problems
@@ -103,6 +107,16 @@ class MyPrologInterface{
 
         console.log(responseArray)
         response = responseArray;
+    }
+    parseWinnerPrologReply(){
+        if (this.status === 400) { 
+            console.log("ERROR"); 
+            return;
+        }
+        //let responseArray = convertValidMovesToArray(this.responseText);
+
+        console.log(this.responseText)
+        //response = responseArray;
     }
     /**
      * 
