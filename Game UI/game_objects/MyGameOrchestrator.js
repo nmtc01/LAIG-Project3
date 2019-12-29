@@ -37,6 +37,8 @@ class MyGameOrchestrator extends CGFobject{
             PLAYER_PLAYING: 'player_playing',
             AI_LVL1_PLAYING: 'ai_lvl1_playing', 
             AI_LVL2_PLAYING: 'ai_lvl2_playing', 
+            ANIMATE: 'animate',
+            CHECK_GAME_STATE: 'check_game_state',
             GAME_ENDED:'game_ended'
         }
         this.gameState = 'init'; 
@@ -93,6 +95,14 @@ class MyGameOrchestrator extends CGFobject{
                     //paint tiles
                     this.currentValidMoves = this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer);
                     console.log(this.currentValidMoves);
+
+                    for(let i = 0; i < this.currentValidMoves.length; i++){
+                        let tile = this.gameboard.getTileByCoords(this.currentValidMoves[i][0])
+                        let piece = this.gameboard.getPieceOnATile(tile)
+                        piece.addValidMove(this.currentValidMoves[i][1]);
+                        console.log(piece.validMoves);
+                    }
+
                     this.gameState = 'player_playing';
                 }
                 if(this.gameState == 'player_playing'){
@@ -101,6 +111,16 @@ class MyGameOrchestrator extends CGFobject{
                     //todo
                     //let newBoard = this.prologInterface.playerMove(/*move,*/this.currentBoard); 
                     //this.currentBoard = newBoard; //update to newboard
+                    //after successfull move 
+
+                    //this.gameboard.resetValidMoves();
+
+                    //if(valid move ) this.gameState = 'animate'
+                }
+                if(this.gameState == 'animate'){
+                    this.gameState = 'check_game_state'
+                }
+                if(this.gameState == 'check_game_state'){
                     //get player score after move 
                     this.currentScores[this.currentPlayer] = this.prologInterface.getScore(this.currentBoard,this.currentPlayer);
                     //get if there is a winner
@@ -167,6 +187,8 @@ class MyGameOrchestrator extends CGFobject{
             let piece = this.gameboard.getPieceOnATile(tiles[key]);
             if (piece != null)
                 piece.setPicked(false);
+            if(tiles[key].validMoveTile)
+                tiles[key].setValidMoveTile(false);
         }
         //Piece
         if(obj instanceof MyPiece){
@@ -178,7 +200,7 @@ class MyGameOrchestrator extends CGFobject{
         }
         //Tile
         else if(obj instanceof MyTile){
-
+            
         }
         else {
         // error ?

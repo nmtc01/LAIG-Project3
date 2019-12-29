@@ -5,7 +5,6 @@ class MyGameboard extends CGFobject{
         //Stores the set of tiles that composes the entire game board      
         //board 
         //visible tiles 
-        this.auxTiles = {}; //25 tiles
         this.tiles = {};
         this.orchestrator = gameOrchestrator;
         //todo invisible tiles 
@@ -31,21 +30,6 @@ class MyGameboard extends CGFobject{
                 else type = "tile_black"
             }
         }
-        //place 10 pieces
-        /*
-        this.tiles[[1,1]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true));
-        this.tiles[[1,2]].setPieceOnTile(new MyPiece(this.scene,"piece_red_black",true,true));
-        this.tiles[[1,3]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true));
-        this.tiles[[1,4]].setPieceOnTile(new MyPiece(this.scene,"piece_red_black",true,true));
-        this.tiles[[1,5]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true));
-
-        this.tiles[[5,1]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true));
-        this.tiles[[5,2]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_black",true,true));
-        this.tiles[[5,3]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true));
-        this.tiles[[5,4]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_black",true,true));
-        this.tiles[[5,5]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true));
-        */
-      
     }
     /**
      * add piece to a given tile
@@ -100,6 +84,13 @@ class MyGameboard extends CGFobject{
      */
     movePiece(piece,tileFrom,tileTo){
          //todo
+    }
+    resetValidMoves(){
+        for(let key in this.tiles){
+            let piece = this.tiles[key].getPiece()
+            if (piece != null )
+                piece.resetPieceValidMoves();
+        }
     }
     /**
      * render gameboard

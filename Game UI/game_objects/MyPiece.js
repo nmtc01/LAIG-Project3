@@ -8,18 +8,34 @@ class MyPiece extends CGFobject{
           this.tile = null;
           //Has pointer to holding tile (if a piece is placed on the gameboard/auxiliary board)
           this.type=type; 
+
+          this.validMoves = [];
+
           this.visible = visible; 
           this.selectable = selectable
+
           this.orchestrator = gameOrchestrator;
           this.uniqueId = gameOrchestrator.getUniqueId();
           gameOrchestrator.increaseUniqueId();
           this.picked = false;
+    }
+    getTile(){
+         return this.tile;
     }
     /**
      * set piece tile standing in
      */
     setTile(tile){
          this.tile= tile;
+    }
+    /**
+     * 
+     */
+    addValidMove(validMove){
+          this.validMoves.push(validMove);
+    }
+    resetPieceValidMoves(){
+         this.validMoves = []; 
     }
     /**
      * set piece type 
@@ -42,7 +58,7 @@ class MyPiece extends CGFobject{
      * @param {type} type - piece type
      */
     setPicked(picked){
-          this.picked = picked;
+        this.picked = picked;
      }
 
     /**
@@ -50,16 +66,26 @@ class MyPiece extends CGFobject{
      */
     display(){
           this.scene.pushMatrix();
+
           if (this.selectable) 
                this.orchestrator.getScene().registerForPick(this.uniqueId, this);
           //display specific template
           if (!this.visible)
                this.scene.setActiveShader(this.scene.invisibleShader);
-          else if (this.picked)
+          else if (this.picked){
+               //console.log(this.validMoves);
+               //display tiles with valid moves 
+               for(let i=0; i<this.validMoves.length; i++){
+                    this.orchestrator.gameboard.getTileByCoords(this.validMoves[i]).setValidMoveTile(true);
+               }
                this.scene.setActiveShader(this.scene.glowShader);
+          }
+
           this.scene.graph.displayTemplate(this.type);
+
           if (!this.visible || this.picked)
                this.scene.setActiveShader(this.scene.defaultShader);
+              
           if (this.selectable) 
                this.orchestrator.getScene().clearPickRegistration();
           this.scene.popMatrix(); 
