@@ -39,8 +39,8 @@ class MyGameOrchestrator extends CGFobject{
                     var obj = pickResults[i][0]; // get object from result 
                     if (obj) { // exists?
                         var uniqueId = pickResults[i][1] // get id
-                        //TODO: use onObjectSelected do something
-                        console.log("Picked object: " + obj + ", with pick id " + uniqueId); 
+                        //TODO: use onObjectSelected do something 
+                        this.onObjectSelected(obj, uniqueId);
                     }
                 }
                 // clear results
@@ -50,12 +50,24 @@ class MyGameOrchestrator extends CGFobject{
     }
 
     onObjectSelected(obj, id) { 
-        if(obj instanceof MyPiece){
-        // do something with id knowing it is a piece 
+        //Reset other objects glows
+        let tiles = this.gameboard.tiles;
+        for(let key in tiles){
+            let piece = this.gameboard.getPieceOnATile(tiles[key]);
+            if (piece != null)
+                piece.setPicked(false);
         }
-        else
-        if(obj instanceof MyTile){
-        // do something with id knowing it is a tile 
+        //Piece
+        if(obj instanceof MyPiece){
+            //Make the picked piece glow
+            this.scene.pushMatrix();
+            obj.setPicked(true);
+            obj.display();
+            this.scene.popMatrix();
+        }
+        //Tile
+        else if(obj instanceof MyTile){
+
         }
         else {
         // error ?

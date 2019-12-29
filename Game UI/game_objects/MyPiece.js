@@ -13,6 +13,7 @@ class MyPiece extends CGFobject{
           this.orchestrator = gameOrchestrator;
           this.uniqueId = gameOrchestrator.getUniqueId();
           gameOrchestrator.increaseUniqueId();
+          this.picked = false;
     }
     /**
      * set piece tile standing in
@@ -37,6 +38,14 @@ class MyPiece extends CGFobject{
          return this.type;
     }
     /**
+     * set piece picked flag 
+     * @param {type} type - piece type
+     */
+    setPicked(picked){
+          this.picked = picked;
+     }
+
+    /**
      * render piece
      */
     display(){
@@ -46,8 +55,10 @@ class MyPiece extends CGFobject{
           //display specific template
           if (!this.visible)
                this.scene.setActiveShader(this.scene.invisibleShader);
+          else if (this.picked)
+               this.scene.setActiveShader(this.scene.glowShader);
           this.scene.graph.displayTemplate(this.type);
-          if (!this.visible)
+          if (!this.visible || this.picked)
                this.scene.setActiveShader(this.scene.defaultShader);
           if (this.selectable) 
                this.orchestrator.getScene().clearPickRegistration();

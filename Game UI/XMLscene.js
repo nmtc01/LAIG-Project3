@@ -61,6 +61,8 @@ class XMLscene extends CGFscene {
         //* INIT 
         //Shaders
         this.invisibleShader = new CGFshader(this.gl,"shaders/scale.vert","shaders/invisible.frag");
+        this.glowShader = new CGFshader(this.gl,"shaders/scale.vert","shaders/glow.frag");
+        this.glowShader.setUniformsValues({ uSampler2: 1 });
         //Game orchestrator 
         this.gameOrchestrator = new MyGameOrchestrator(this);
         //todo should be here?

@@ -66,7 +66,7 @@ class MyGameboard extends CGFobject{
      * @returns piece
      */
     getPieceOnATile(tile){
-        tile.getPiece();
+        return tile.getPiece();
     }
     /**
      * get tile given a piece
