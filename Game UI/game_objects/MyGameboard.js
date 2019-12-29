@@ -15,7 +15,6 @@ class MyGameboard extends CGFobject{
      * @param {templates} model templates
      */
     createGameBoard(templates){
-        //todo
         let type = "tile_black";
         //visible tiles
         //generate 25 tiles 
@@ -31,6 +30,7 @@ class MyGameboard extends CGFobject{
             }
         }
         //place 10 pieces
+        /*
         this.tiles[[1,1]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true));
         this.tiles[[1,2]].setPieceOnTile(new MyPiece(this.scene,"piece_red_black",true,true));
         this.tiles[[1,3]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true));
@@ -42,6 +42,7 @@ class MyGameboard extends CGFobject{
         this.tiles[[5,3]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true));
         this.tiles[[5,4]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_black",true,true));
         this.tiles[[5,5]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true));
+        */
       
     }
     /**

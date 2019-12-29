@@ -125,10 +125,22 @@ parse_input(quit, goodbye).
 
 
 %---- GET STATES ------
-parse_input(init,[Board,[red]]):-	
+%get initial player playing and board
+parse_input(init,[Board,[5]]):-	
 	board(Board).
 
+parse_input(get_valid_moves(Board,Player),MovesList):- 
+	valid_moves(Board,Player,MovesList).
 
+parse_input(player_move(Move,Board),NewBoard):-
+	move(Move,Board,NewBoard).
+
+parse_input(ai_move(Board,Level,PlayerPlaying),NewBoard):-
+	choose_move(Board,Level,PlayerPlaying,Move),
+	move(Move,Board,NewBoard).
+
+parse_input(check_game_over(Board,PlayerPlaying),Winner):- %if winner null game continues 
+	game_over(Board,PlayerPlaying,Winner).
 
 %comands to choose game type 
 
