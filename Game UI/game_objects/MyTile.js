@@ -73,7 +73,7 @@ class MyTile extends CGFobject{
             this.scene.setActiveShader(this.scene.defaultShader);
         //if has piece display it
         //todo if is animating 
-        if( this.piece != null)
+        if(this.piece != null && !this.piece.getMoving())
             this.piece.display();
         if (this.selectable) 
             this.orchestrator.getScene().clearPickRegistration();

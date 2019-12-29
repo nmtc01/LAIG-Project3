@@ -43,6 +43,7 @@ class MyAnimator extends CGFobject{
     start(piece,tileFrom,tileTo){
         //todo
         this.active = true;
+
         vec3.set(this.p1,tileFrom.getDisplayCoords()[0],tileFrom.getDisplayCoords()[1],tileFrom.getDisplayCoords()[2]);
         vec3.set(this.p2,tileFrom.getDisplayCoords()[0],this.height,tileFrom.getDisplayCoords()[2]);
         vec3.set(this.p3,tileTo.getDisplayCoords()[0],this.height,tileTo.getDisplayCoords()[2]);
@@ -52,12 +53,8 @@ class MyAnimator extends CGFobject{
         this.tileFrom = tileFrom;
         this.tileTo = tileTo;
 
-        console.log(this.p1);
-        console.log(this.p2);
-        console.log(this.p3);
-        console.log(this.p4);
-
         this.sent = 0; 
+        this.piece_to_move.setMoving(true);
         //while time
     }
     /**
@@ -78,6 +75,7 @@ class MyAnimator extends CGFobject{
         if(this.sent > 2){
             this.sent = 0; 
             this.active = false; //end animation
+            this.piece_to_move.setMoving(false);
         }
         //animation is processed using a bezier curve
         bezier(this.translate_vector,this.p1,this.p2,this.p3,this.p4,interpolation);
@@ -106,6 +104,5 @@ function bezier(out,a,b,c,d,t){
     out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
     out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
 
-    console.log(out);    
     return out;
 }

@@ -110,7 +110,6 @@ class MyGameOrchestrator extends CGFobject{
                         let tile = this.gameboard.getTileByCoords(this.currentValidMoves[i][0])
                         let piece = this.gameboard.getPieceOnATile(tile)
                         piece.addValidMove(this.currentValidMoves[i][1]);
-                        console.log(piece.validMoves);
                     }
 
                     this.gameState = 'player_playing';
@@ -126,8 +125,8 @@ class MyGameOrchestrator extends CGFobject{
                     this.currentBoard = newBoard; //update to newboard
                     console.log(this.currentBoard)
                     //todo - adjust with animation
-                    console.log('Locked');
-                    setTimeout(() => {  console.log("Unlocked"); 
+                   // console.log('Locked');
+                   // setTimeout(() => {  console.log("Unlocked"); 
             
                         let tileFrom = this.gameboard.getTileByCoords(move[0]);
                         let tileTo = this.gameboard.getTileByCoords(move[1]);
@@ -135,7 +134,7 @@ class MyGameOrchestrator extends CGFobject{
                         //animate piece          
                         this.animator.start(pieceToMove,tileFrom,tileTo);
                         this.gameState = 'animate'
-                    }, 2000);
+                    //}, 2000);
                     
                     //todo
                     //this.gameboard.resetValidMoves();
@@ -148,12 +147,13 @@ class MyGameOrchestrator extends CGFobject{
 
                     if(!this.animator.active){
                         //move piece on gameboard
-                        //this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo)
+                        this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo)
                         //stop animation
                         this.gameState = 'check_game_state'
                     }
                 }
                 if(this.gameState == 'check_game_state'){
+                    console.log('state');
                     //get player score after move 
                     this.currentScores[this.currentPlayer] = this.prologInterface.getScore(this.currentBoard,this.currentPlayer);
                     //get if there is a winner

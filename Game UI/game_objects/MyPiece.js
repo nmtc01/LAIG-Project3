@@ -12,7 +12,9 @@ class MyPiece extends CGFobject{
           this.validMoves = [];
 
           this.visible = visible; 
-          this.selectable = selectable
+          this.selectable = selectable;
+          this.isMoving = false;
+
 
           this.orchestrator = gameOrchestrator;
           this.uniqueId = gameOrchestrator.getUniqueId();
@@ -36,6 +38,12 @@ class MyPiece extends CGFobject{
     }
     resetPieceValidMoves(){
          this.validMoves = []; 
+    }
+    setMoving(bool){
+         this.isMoving = bool;
+    }
+    getMoving(){
+         return this.isMoving;
     }
     /**
      * set piece type 

@@ -21,7 +21,6 @@ class MyGameboard extends CGFobject{
         for(let column = 1; column<=5; column++){
             for(let line = 1; line <=5; line++){
                 let coords = [line,column]; //todo confirm if is line column
-                console.log(this.orchestrator);
                 let tile = new MyTile(this.scene,this,type,coords,true,true,this.orchestrator);
                 this.tiles[coords] = tile; //todo check if it is the best way 
                 //change tile type 
