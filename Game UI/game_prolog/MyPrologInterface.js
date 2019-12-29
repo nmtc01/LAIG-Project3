@@ -51,6 +51,8 @@ class MyPrologInterface{
      */
     aiMove(Board,Level,Player){
         //todo
+        let strBoard = convertBoardToString(Board);
+        this.getPrologRequest('ai_move('+strBoard+','+Level+','+Player+')','ai_move');
         return response;
     }
     /**
@@ -88,7 +90,10 @@ class MyPrologInterface{
                 request.addEventListener("load",this.parseValidMovesPrologReply); 
             break; 
             case 'player_move':
-                request.addEventListener("load,",this.parsePlayerMovesPrologReply);
+                request.addEventListener("load,",this.parseBoardPrologReply);
+            break;
+            case 'ai_move':
+                request.addEventListener("load,",this.parseBoardPrologReply);
             break;
             case 'get_score':
                 request.addEventListener("load",this.parseScorePrologReply);
@@ -122,20 +127,6 @@ class MyPrologInterface{
             return;
         }
         let responseArray = convertValidMovesToArray(this.responseText);
-
-        response = responseArray;
-    }
-    /**
-     *  xhr handler for player moves
-     */
-    parsePlayerMovesPrologReply() {
-        if (this.status === 400) { 
-            console.log("ERROR"); 
-            return;
-        }
-        console.log(this.responseText);
-        //TODO
-        //let responseArray = convertValidMovesToArray(this.responseText);
 
         response = responseArray;
     }

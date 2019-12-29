@@ -21,12 +21,13 @@ class MyGameOrchestrator extends CGFobject{
         this.gameType = null;
         this.gameLevel = null;
 
-        //current player on prolog was set as red as custom, so the ai will alaways be the blue one
+        //current player on prolog was set as red as custom, so the ai will always be the blue one
         //if blue is playing on pvc ou cvc game mode it always be a ai move 
         this.currentPlayer=null;  //todo current playing 5-red 9-blue should i convert the numbers?
         this.currentBoard=null; 
         this.currentValidMoves = null;
         this.currentScores = {5:0, 9:0}
+        this.isAiPlaying = false;
         //todo 
         //pensar se reescrevo a peça ou comparo com um tabuleiro a anterior
         this.validMoves=null;
@@ -86,6 +87,77 @@ class MyGameOrchestrator extends CGFobject{
 
         return piece;
     }
+
+    getValidMoves() {
+        //paint tiles
+        this.currentValidMoves = this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer);
+        console.log(this.currentValidMoves);
+
+        for(let i = 0; i < this.currentValidMoves.length; i++){
+            let tile = this.gameboard.getTileByCoords(this.currentValidMoves[i][0])
+            let piece = this.gameboard.getPieceOnATile(tile)
+            piece.addValidMove(this.currentValidMoves[i][1]);
+            console.log(piece.validMoves);
+        }
+    }
+    playerPlaying(move) {
+        let newBoard = this.prologInterface.playerMove(this.currentBoard, move); 
+        this.currentBoard = newBoard; //update to newboard
+                   
+        //todo - adjust with animation
+        console.log('Locked');
+        setTimeout(() => {  console.log("Unlocked"); 
+            
+            let tileFrom = this.gameboard.getTileByCoords(move[0]);
+            let tileTo = this.gameboard.getTileByCoords(move[1]);
+
+            let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
+            this.gameboard.movePiece(pieceToMove,tileFrom,tileTo);
+
+        }, 2000);
+                    
+    
+        //this.gameboard.resetValidMoves();
+    }
+    aiPlaying() {
+        let newBoard = this.prologInterface.aiMove(this.currentBoard, this.gameLevel, this.currentPlayer); 
+        this.currentBoard = newBoard; //update to newboard
+       
+        //todo - adjust with animation
+        /*console.log('Locked');
+        setTimeout(() => {  console.log("Unlocked"); 
+
+            let tileFrom = this.gameboard.getTileByCoords(move[0]);
+            let tileTo = this.gameboard.getTileByCoords(move[1]);
+
+            let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
+            this.gameboard.movePiece(pieceToMove,tileFrom,tileTo);
+
+        }, 2000);*/
+        
+
+        //this.gameboard.resetValidMoves();
+    }
+    checkGameState() {
+        //get player score after move 
+        this.currentScores[this.currentPlayer] = this.prologInterface.getScore(this.currentBoard,this.currentPlayer);
+        //get if there is a winner
+        let winner = this.prologInterface.checkWin(this.currentBoard,this.currentPlayer);
+        //check winner
+        if(winner != -1){
+            this.gameState = 'game_ended';
+            //smth to print winner 
+            //smth to lock the game 
+            //maybe smth to change flag game running from the scene
+        }else { //if no winner game continues - prepare next player
+            if(this.currentPlayer == 5)
+                this.currentPlayer == 9;
+            else this.currentPlayer == 5; 
+            this.gameState = 'get_valid_moves';
+        }
+        //todo erase - this is just here to debug, so that the game can lock
+    }
+
     manageGameplay(){
         //* DEBUG - TO CHECK ID INTEGRITY
         /*
@@ -102,73 +174,56 @@ class MyGameOrchestrator extends CGFobject{
         switch(this.gameType){
             case 'pvp': 
                 if(this.gameState == 'get_valid_moves'){
-                    //paint tiles
-                    this.currentValidMoves = this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer);
-                    console.log(this.currentValidMoves);
-
-                    for(let i = 0; i < this.currentValidMoves.length; i++){
-                        let tile = this.gameboard.getTileByCoords(this.currentValidMoves[i][0])
-                        let piece = this.gameboard.getPieceOnATile(tile)
-                        piece.addValidMove(this.currentValidMoves[i][1]);
-                        console.log(piece.validMoves);
-                    }
-
+                    this.getValidMoves();
                     this.gameState = 'player_playing';
                 }
                 if(this.gameState == 'player_playing'){
-                    //todo smth to paint tiles
-                    //when move is valid!!
-                    //todo
                     //todo hardcoded now to test, then user needs to input a move by picking a tile
-                    
                     let move = [[1,1],[2,1]];
-                    let newBoard = this.prologInterface.playerMove(this.currentBoard, move); 
-                    this.currentBoard = newBoard; //update to newboard
-                   
-                    //todo - adjust with animation
-                    console.log('Locked');
-                    setTimeout(() => {  console.log("Unlocked"); 
-            
-                        let tileFrom = this.gameboard.getTileByCoords(move[0]);
-                        let tileTo = this.gameboard.getTileByCoords(move[1]);
-
-                        let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
-                        this.gameboard.movePiece(pieceToMove,tileFrom,tileTo);
-
-                    }, 2000);
-                    
-    
-                    //this.gameboard.resetValidMoves();
-
-                   this.gameState = 'animate'
+                    this.playerPlaying(move);
+                    this.gameState = 'animate'
                 }
                 if(this.gameState == 'animate'){
-                    //this.gameState = 'check_game_state'
+                    this.gameState = 'check_game_state'
                 }
                 if(this.gameState == 'check_game_state'){
-                    //get player score after move 
-                    this.currentScores[this.currentPlayer] = this.prologInterface.getScore(this.currentBoard,this.currentPlayer);
-                    //get if there is a winner
-                    let winner = this.prologInterface.checkWin(this.currentBoard,this.currentPlayer);
-                    //check winner
-                    if(winner != -1){
-                        this.gameState = 'game_ended';
-                        //smth to print winner 
-                        //smth to lock the game 
-                        //maybe smth to change flag game running from the scene
-                    }else { //if no winner game continues - prepare next player
-                        if(this.currentPlayer == 5)
-                            this.currentPlayer == 9;
-                        else this.currentPlayer == 5; 
-                        this.gameState = 'get_valid_moves';
-                    }
-                    //todo erase - this is just here to debug, so that the game can lock
+                    this.checkGameState();
                     this.gameState = 'game_ended';
                 }
             break;  
             case 'pvc': 
                 //todo
-                //when moving condition if blue play to check level 
+                //when moving condition if blue play to check level
+                if(this.gameState == 'get_valid_moves'){
+                    this.getValidMoves();
+                    if (!this.isAiPlaying) {
+                        this.gameState = 'player_playing';
+                        this.isAiPlaying = true;
+                    }
+                    else {
+                        this.gameState = 'ai_playing';
+                        this.isAiPlaying = false;
+                    }
+                }
+                if(this.gameState == 'player_playing'){
+                    //todo hardcoded now to test, then user needs to input a move by picking a tile
+                    let move = [[1,1],[2,1]];
+                    this.playerPlaying(move);
+                    this.gameState = 'animate';
+                }
+                if(this.gameState == 'ai_playing'){
+                    this.aiPlaying();
+                    //Just to stop
+                    this.gameState = 'game_end';
+                } 
+                if(this.gameState == 'animate'){
+                    this.gameState = 'check_game_state'
+                }
+                if(this.gameState == 'check_game_state'){
+                    this.checkGameState();
+                    //this.gameState = 'game_ended';
+                    this.gameState = 'get_valid_moves';
+                }
             break; 
             case 'cvc': 
                 //todo
