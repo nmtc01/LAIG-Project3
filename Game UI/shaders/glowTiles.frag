@@ -8,10 +8,11 @@ uniform sampler2D uSampler;
 
 void main(){
     vec4 color = texture2D(uSampler, vTextureCoord);
-    //dym rectangle  - done 
-    vec4 fragColor = vec4(color.rgb * 2.0,1.0);
-    color = vec4(0.2,0.2,0.2,1.0);
-    fragColor += color;
+    color += vec4(0.0,0.2,0.0,1.0);
+    if (color.r > 0.5)
+        color.r = 0.5;
+    if (color.b > 0.5)
+        color.b = 0.5;
 
-	gl_FragColor = fragColor;
+	gl_FragColor = color;
 }

@@ -134,6 +134,7 @@ class MyPrologInterface{
             return;
         }
         console.log(this.responseText);
+        //TODO
         //let responseArray = convertValidMovesToArray(this.responseText);
 
         response = responseArray;
