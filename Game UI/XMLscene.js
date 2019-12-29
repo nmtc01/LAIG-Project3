@@ -23,6 +23,7 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
         this.isLoading = false;
+        this.gameRunning = false;
         //initiliaze a camare build buy the program ignoring the xml
         this.initDefaultCamera();
 
@@ -46,7 +47,7 @@ class XMLscene extends CGFscene {
         this.selectedCamera = 0; //store index of the selected camera
         this.selectedSecondaryCamera = 0;
         this.keysPressed=false; //used to avoid infinite key pressing, always assume one tap, and reset with realease
-        
+
         //todo put the names we want
         this.fileNames = ['Ambient 1','Ambient 2'];
 
@@ -57,6 +58,23 @@ class XMLscene extends CGFscene {
  
         //find a way for him to received the file, or to know the current one 
         this.selectedFile = this.files['Ambient 1'];
+
+        //game type selection
+        this.gameTypeName = ['PvP','PvC', 'CvC'];
+        this.gameType = {}; 
+        this.gameType['PvP'] = 'pvp'; //prolog string to pass
+        this.gameType['PvC'] = 'pvc'; //prolog string to pass
+        this.gameType['CvC'] = 'cvc'; //prolog string to pass
+        this.selectedGameType = this.gameType['PvP'];
+
+        //level selection
+        this.gameLevelName = ['Level 1','Level 2'];
+        this.gameLevel = {}; 
+        this.gameLevel['No Level'] = null;
+        this.gameLevel['Level 1'] = 'lvl1'; //prolog string to pass
+        this.gameLevel['Level 2'] = 'lvl2'; //prolog string to pass
+        this.selectedGameLevel = this.gameLevel['No Level'];
+
 
         //* INIT 
         //Shaders
@@ -145,8 +163,26 @@ class XMLscene extends CGFscene {
         
         this.graph.updateFilename(this.selectedFile);
     }
+    updateGameType(val){
+        if(!this.gameRunning){
+            this.selectedGameType = this.gameType[val];
+        }
+    }
+    updateGameLevel(val){
+        if(!this.gameRunning){
+            if(this.selectedGameType == this.gameType['PvP']){
+                this.selectedGameLevel = this.gameLevel['No Level'];
+                return;
+            }
+            if(!this.gameRunning && this.selectedGameType){
+                this.selectedGameLevel = this.gameLevel[val];
+            }
+        }
+    }
     start(){ 
         //todo start playing game 
+        this.gameRunning = true; 
+        this.gameOrchestrator.startGame(this.selectedGameType,this.selectedGameLevel);
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -220,7 +256,7 @@ class XMLscene extends CGFscene {
             this.lights[i].update(); //update current light states
         }
 
-         }
+    }
     
     //init textures read on xml storing them on global texture array
     initTextures() {
@@ -256,7 +292,6 @@ class XMLscene extends CGFscene {
         this.initTextures();
 
         //create game board using elem templates
-
         this.gameOrchestrator.gameboard.createGameBoard(this.graph.templates);
         //update UI usuing data structures passed 
         this.interface.updateInterface();
@@ -341,6 +376,9 @@ class XMLscene extends CGFscene {
             this.graph.displayScene();
 
             //todo display orchestrator
+            if(this.gameRunning){
+                this.gameOrchestrator.orchestrate();
+            }
             this.gameOrchestrator.display();
             //todo maybe here???
         }
@@ -368,7 +406,7 @@ class XMLscene extends CGFscene {
         if (this.sceneInited) { //no need to use is loaded bc if scene is not inited it wont display 
             //this.textureRTT.attachToFrameBuffer();
             //this.render(this.secondaryCamera); //call RTT camera
-            //his.textureRTT.detachFromFrameBuffer();
+            //his.textureRTT.detachFromFrameBuffer()
             this.render(this.primaryCamera); //call scene camera
             this.interface.setActiveCamera(this.primaryCamera);
             //this.gl.disable(this.gl.DEPTH_TEST);

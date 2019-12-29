@@ -36,8 +36,7 @@ serialInclude(
     'game_objects/MyGameSequence.js',
     'game_objects/MyPiece.js',
     'game_objects/MyTile.js',
-    'game_prolog/Chameleon.js',
-    'game_prolog/Client.js',
+    'game_prolog/MyPrologInterface.js',
 
 
 main=function()

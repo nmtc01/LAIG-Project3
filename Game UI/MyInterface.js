@@ -63,9 +63,15 @@ class MyInterface extends CGFinterface {
             f0.add(this.scene.lightSwitch, i).name(key);
             i++;
         }
+        //todo if in time put here some event listener to build html 
+        this.gui.add(this.scene,'selectedGameType',this.scene.gameTypeName)
+            .name('Game Type:')
+            .onChange(val => this.scene.updateGameType(val));
+        this.gui.add(this.scene,'selectedGameLevel',this.scene.gameLevelName)
+            .name('Game Level:')
+            .onChange(val => this.scene.updateGameLevel(val));
         this.gui.add(this.scene,'start')
             .name('Start')
-            .onChange(this.scene.start());
         
     }
 

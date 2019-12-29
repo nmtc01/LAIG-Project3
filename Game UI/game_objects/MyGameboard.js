@@ -16,13 +16,13 @@ class MyGameboard extends CGFobject{
      * @param {templates} model templates
      */
     createGameBoard(templates){
-        //todo
         let type = "tile_black";
         //visible tiles
         //generate 25 tiles 
         for(let column = 1; column<=5; column++){
             for(let line = 1; line <=5; line++){
                 let coords = [line,column]; //todo confirm if is line column
+                console.log(this.orchestrator);
                 let tile = new MyTile(this.scene,this,type,coords,true,true,this.orchestrator);
                 this.tiles[coords] = tile; //todo check if it is the best way 
                 //change tile type 
@@ -32,17 +32,19 @@ class MyGameboard extends CGFobject{
             }
         }
         //place 10 pieces
-        this.tiles[[1,1]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true,this.orchestrator));
-        this.tiles[[1,2]].setPieceOnTile(new MyPiece(this.scene,"piece_red_black",true,true,this.orchestrator));
-        this.tiles[[1,3]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true,this.orchestrator));
-        this.tiles[[1,4]].setPieceOnTile(new MyPiece(this.scene,"piece_red_black",true,true,this.orchestrator));
-        this.tiles[[1,5]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true,this.orchestrator));
+        /*
+        this.tiles[[1,1]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true));
+        this.tiles[[1,2]].setPieceOnTile(new MyPiece(this.scene,"piece_red_black",true,true));
+        this.tiles[[1,3]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true));
+        this.tiles[[1,4]].setPieceOnTile(new MyPiece(this.scene,"piece_red_black",true,true));
+        this.tiles[[1,5]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true));
 
-        this.tiles[[5,1]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true,this.orchestrator));
-        this.tiles[[5,2]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_black",true,true,this.orchestrator));
-        this.tiles[[5,3]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true,this.orchestrator));
-        this.tiles[[5,4]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_black",true,true,this.orchestrator));
-        this.tiles[[5,5]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true,this.orchestrator));
+        this.tiles[[5,1]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true));
+        this.tiles[[5,2]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_black",true,true));
+        this.tiles[[5,3]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true));
+        this.tiles[[5,4]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_black",true,true));
+        this.tiles[[5,5]].setPieceOnTile(new MyPiece(this.scene,"piece_blue_white",true,true));
+        */
       
     }
     /**

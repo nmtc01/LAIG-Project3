@@ -109,14 +109,44 @@ print_header_line(_).
 :-consult('valid_moves.pl').
 :-consult('game_over.pl').
 :-consult('bot.pl').
+:-consult('game.pl').
 
-parse_input(handshake, handshake).
-parse_input(test(C,N), Res) :- test(C,Res,N).
+%testing comands
+%parse_input(handshake, handshake).
+
+%parse_input(test(C,N), Res) :- test(C,Res,N).
+
+%test(_,[],N) :- N =< 0.
+%test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
+%quit comand
 parse_input(quit, goodbye).
 
 %TODO add game commands here
 
 
-test(_,[],N) :- N =< 0.
-test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
+%---- GET STATES ------
+%get initial player playing and board
+parse_input(init,[Board,[5]]):-	
+	board(Board).
+
+parse_input(get_valid_moves(Board,Player),MovesList):- 
+	valid_moves(Board,Player,MovesList).
+
+parse_input(player_move(Move,Board),NewBoard):-
+	move(Move,Board,NewBoard).
+
+parse_input(ai_move(Board,Level,PlayerPlaying),NewBoard):-
+	sleep(1),
+	choose_move(Board,Level,PlayerPlaying,Move),
+	move(Move,Board,NewBoard).
+
+parse_input(get_player_score(Board,Player),Score):-
+	value(Board,Player,Score).
+
+parse_input(check_game_over(Board,PlayerPlaying),Winner):- %if winner null game continues 
+	game_over(Board,PlayerPlaying,Winner).
+
+%comands to choose game type 
+
 	
+%compile('/Users/gustavonrm/Desktop/LAIG/LAIG-Project3/Prolog/server.pl').      

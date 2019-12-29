@@ -192,3 +192,25 @@ play:-
     game_type(Option,Type),
     clear_console,
     start_game(Type).
+
+%------------  CHANGES FOR LAIG --------- % 
+%todo pass board to game 
+play_pvp:- 
+    board(Board),
+    pvp(Board).
+
+play_pvc_lvl1:-
+    board(Board),
+    pvc(Board,1).
+
+play_pvc_lvl2:-
+    board(Board),
+    pvc(Board,2).
+
+play_cvc_lvl1:- 
+    board(Board),
+    cvc(Board,1).
+
+play_cvc_lvl2:-
+    board(Board),
+    cvc(Board,2).
