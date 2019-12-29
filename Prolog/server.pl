@@ -136,6 +136,7 @@ parse_input(player_move(Move,Board),NewBoard):-
 	move(Move,Board,NewBoard).
 
 parse_input(ai_move(Board,Level,PlayerPlaying),NewBoard):-
+	sleep(1),
 	choose_move(Board,Level,PlayerPlaying,Move),
 	move(Move,Board,NewBoard).
 

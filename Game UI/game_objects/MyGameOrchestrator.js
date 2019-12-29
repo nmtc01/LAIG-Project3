@@ -26,6 +26,7 @@ class MyGameOrchestrator extends CGFobject{
         //if blue is playing on pvc ou cvc game mode it always be a ai move 
         this.currentPlayer=null;  //todo current playing 5-red 9-blue should i convert the numbers?
         this.currentBoard=null; 
+        this.currentValidMoves = null;
         //todo 
         //pensar se reescrevo a peça ou comparo com um tabuleiro a anterior
         this.validMoves=null;
@@ -44,7 +45,6 @@ class MyGameOrchestrator extends CGFobject{
     startGame(type,level){
         this.gameType = type; 
         this.gameLevel=level;
-        console.log('start game');
         let ret = this.prologInterface.initGame(type,level);
         this.currentBoard = ret[0];  //board
         this.currentPlayer = ret[1]; //player playing
@@ -54,7 +54,6 @@ class MyGameOrchestrator extends CGFobject{
             for(let column = 0 ; column < this.currentBoard[line].length; column++ )
             if(this.currentBoard[line][column] != 0 && this.currentBoard[line][column] != 1){
                 let piece_type = this.pieceTranslator(this.currentBoard[line][column]); 
-                //this.tiles[[1,1]].setPieceOnTile(new MyPiece(this.scene,"piece_red_white",true,true));
                 let coords = [line+1, column+1]; //always increment line/column when adding things 
                 let tile = this.gameboard.getTileByCoords(coords);
                 tile.setPieceOnTile(new MyPiece(this.scene,piece_type,true,true));
@@ -82,7 +81,8 @@ class MyGameOrchestrator extends CGFobject{
             case 'pvp': 
                 if(this.gameState == 'get_valid_moves'){
                     //paint tiles
-                    this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer);
+                    this.currentValidMoves = this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer);
+                    console.log(this.currentValidMoves);
                     this.gameState = 'playing_playing';
                 }
             break;  

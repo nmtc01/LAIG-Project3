@@ -21,10 +21,10 @@ class MyPrologInterface{
      * 
      */
     getValidMoves(Board,Player){
-        let strBoard = convertBoardToString(Board,'moves');
+        let strBoard = convertBoardToString(Board);
         console.log('get_valid_moves('+strBoard+','+Player+')');
-        this.getPrologRequest('get_valid_moves('+strBoard+','+Player+')')
-        //return validMoves;
+        this.getPrologRequest('get_valid_moves('+strBoard+','+Player+')','valid_moves')
+        return response;
     }
     /**
      * 
@@ -65,30 +65,20 @@ class MyPrologInterface{
             console.log("ERROR"); 
             return;
         }
-        // the answer here is: [Board,CurrentPlayer,WhiteScore,BlackScore]
-        let responseArray = textStringToArray(this.responseText,true);
-
+        let responseArray = textStringToArray(this.responseText);
         console.log(responseArray)
-        // do something with responseArray[0]; 
-        // do something with responseArray[1]; 
-        // do something with responseArray[2]; 
-        // do something with responseArray[3];
         response = responseArray;
     }
+
     parseValidMovesPrologReply() {
         if (this.status === 400) { 
             console.log("ERROR"); 
             return;
         }
-        // the answer here is: [Board,CurrentPlayer,WhiteScore,BlackScore]
-        //let responseArray = textStringToArray(this.responseText,true);
+        let responseArray = convertValidMovesToArray(this.responseText);
 
-        console.log(this.responseText)
-        // do something with responseArray[0]; 
-        // do something with responseArray[1]; 
-        // do something with responseArray[2]; 
-        // do something with responseArray[3];
-        response = this.responseText;
+        console.log(responseArray)
+        response = responseArray;
     }
     /**
      * 
@@ -99,7 +89,7 @@ class MyPrologInterface{
 }
 
 //Utils
-function textStringToArray(string,bool){ //todo check this bool
+function textStringToArray(string){ 
     let len = string.length;
     let str = string.substring(1,len); //delete first bracket
 
@@ -170,4 +160,40 @@ function convertBoardToString(Board){
     board = board.substring(0,board.length-1);
     board +=']'
     return board;
+}
+
+function convertValidMovesToArray(ValidMoves){
+    let str = ValidMoves
+        .replace(/[\[\]']+/g,"")
+        .replace(/a/g,"1")
+        .replace(/b/g,"2")
+        .replace(/c/g,"3")
+        .replace(/d/g,"4")
+        .replace(/e/g,"5")
+        .replace(/,/g,"");
+    
+    let to = []; 
+    let from = []; 
+    let move = []; 
+    let count = 0; 
+    let ret = []; 
+
+    for(let i = 0; i < str.length; i++){
+        count++;
+        if(count <= 2){
+            from.push(str[i]);
+        }else to.push(str[i]);
+        if(count == 4){
+            count = 0; 
+            move.push(from);
+            move.push(to);
+            ret.push(move);
+            //reset
+            to = []; 
+            from=[]; 
+            move=[];
+        }
+    }
+
+    return ret; 
 }
