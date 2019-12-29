@@ -98,9 +98,10 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == 'player_playing'){
                     //todo smth to paint tiles
                     //when move is valid!!
-                    //todo
-                    //let newBoard = this.prologInterface.playerMove(/*move,*/this.currentBoard); 
-                    //this.currentBoard = newBoard; //update to newboard
+                    //todo hardcoded now to test, then user needs to input a move by picking a tile
+                    let move = [[1,1],[2,1]];
+                    let newBoard = this.prologInterface.playerMove(this.currentBoard, move); 
+                    this.currentBoard = newBoard; //update to newboard
                     //get player score after move 
                     this.currentScores[this.currentPlayer] = this.prologInterface.getScore(this.currentBoard,this.currentPlayer);
                     //get if there is a winner
