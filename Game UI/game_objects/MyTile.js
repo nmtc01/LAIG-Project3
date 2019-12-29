@@ -64,12 +64,12 @@ class MyTile extends CGFobject{
             this.orchestrator.getScene().registerForPick(this.uniqueId, this);
         if (!this.visible)
             this.scene.setActiveShader(this.scene.invisibleShader);
-        else if (this.validMoveTile)
-            this.scene.setActiveShader(this.scene.glowShader);
+        else if (this.validMoveTile) 
+            this.scene.setActiveShader(this.scene.glowTileShader);
         //display specific template
         this.scene.translate(this.displayCoords[0],this.displayCoords[1],this.displayCoords[2]);
         this.scene.graph.displayTemplate(this.type);
-        if (!this.visible || this.validMoveTile )
+        if (!this.visible || this.validMoveTile)
             this.scene.setActiveShader(this.scene.defaultShader);
         //if has piece display it
         //todo if is animating 

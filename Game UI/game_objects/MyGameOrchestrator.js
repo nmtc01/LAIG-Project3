@@ -126,7 +126,7 @@ class MyGameOrchestrator extends CGFobject{
                     console.log(this.currentBoard)
                     //todo - adjust with animation
                    // console.log('Locked');
-                   // setTimeout(() => {  console.log("Unlocked"); 
+                    //setTimeout(() => {  console.log("Unlocked"); 
             
                         let tileFrom = this.gameboard.getTileByCoords(move[0]);
                         let tileTo = this.gameboard.getTileByCoords(move[1]);

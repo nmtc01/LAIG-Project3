@@ -63,7 +63,10 @@
         <texture id="BW" file="scenes/images/game/BlueWhitePiece.png" />
         <texture id="BB" file="scenes/images/game/BlueBlackPiece.png" />  
         <texture id="RW" file="scenes/images/game/RedWhitePiece.png" />  
-        <texture id="RB" file="scenes/images/game/RedBlackPiece.png" />     
+        <texture id="RB" file="scenes/images/game/RedBlackPiece.png" /> 
+
+        <texture id="WT" file="scenes/images/game/white_tile.jpg" />  
+        <texture id="BT" file="scenes/images/game/black_tile.jpg" />    
     </textures>
 
     <materials> 
@@ -446,7 +449,7 @@
             <materials>
                 <material id="black" />
             </materials>
-            <texture id="none" />
+            <texture id="BT" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="tile" />
             </children>
@@ -460,7 +463,7 @@
             <materials>
                 <material id="white" />
             </materials>
-            <texture id="none" />
+            <texture id="WT" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="tile" />
             </children>

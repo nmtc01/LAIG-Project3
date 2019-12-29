@@ -86,7 +86,7 @@ class MyPiece extends CGFobject{
                for(let i=0; i<this.validMoves.length; i++){
                     this.orchestrator.gameboard.getTileByCoords(this.validMoves[i]).setValidMoveTile(true);
                }
-               this.scene.setActiveShader(this.scene.glowShader);
+               this.scene.setActiveShader(this.scene.glowPieceShader);
           }
 
           this.scene.graph.displayTemplate(this.type);
