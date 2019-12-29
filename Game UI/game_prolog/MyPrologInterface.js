@@ -18,7 +18,10 @@ class MyPrologInterface{
         return response;
     }
     /**
-     * 
+     * list all valid moves on current board
+     * @param {*} Board 
+     * @param {*} Player 
+     * @returns list of all valid moves
      */
     getValidMoves(Board,Player){
         let strBoard = convertBoardToString(Board);
@@ -27,16 +30,35 @@ class MyPrologInterface{
         return response;
     }
     /**
-     * 
+     * makes human player move 
+     * @param {*} Board 
+     * @param {*} Move 
+     * @returns NewBoard after move
      */
-    move(){
+    playerMove(Board,Move){
         //todo
+        return response;
+    }
+    /**
+     * makes ai move
+     * @param {*} Board 
+     * @param {*} Level 
+     * @param {*} Player 
+     * @returns NewBoard after move
+     */
+    aiMove(Board,Level,Player){
+        //todo
+        return response;
     }
     /**
      * 
+     * @param {*} Board 
+     * @param {*} Player 
+     * @returns winning player, if null game continues 
      */
-    checkWin(){
+    checkWin(Board,Player){
         //todo
+        return response;
     }
     /**
      * get request using string
@@ -58,7 +80,7 @@ class MyPrologInterface{
         request.send();
     }
     /**
-     * 
+     * xhr handler for game init
      */
     parseBoardPrologReply() {
         if (this.status === 400) { 
@@ -69,7 +91,9 @@ class MyPrologInterface{
         console.log(responseArray)
         response = responseArray;
     }
-
+    /**
+     *  xhr handler for a valid move
+     */
     parseValidMovesPrologReply() {
         if (this.status === 400) { 
             console.log("ERROR"); 
@@ -89,6 +113,11 @@ class MyPrologInterface{
 }
 
 //Utils
+/**
+ * process string - used mainly to process board
+ * @param {*} string 
+ * @returns string porocessed into array
+ */
 function textStringToArray(string){ 
     let len = string.length;
     let str = string.substring(1,len); //delete first bracket
@@ -151,7 +180,11 @@ function textStringToArray(string){
     }
     return ret;
 }
-
+/**
+ * converts board array to string to be passed to prolog
+ * @param {*} Board 
+ * @returns board string
+ */
 function convertBoardToString(Board){
     let board = "["; 
     for(let line = 0; line < Board.length; line++){
@@ -161,7 +194,11 @@ function convertBoardToString(Board){
     board +=']'
     return board;
 }
-
+/**
+ * converts validmoves string to compatible js array
+ * @param {*} ValidMoves 
+ * @returns array valid moves
+ */
 function convertValidMovesToArray(ValidMoves){
     let str = ValidMoves
         .replace(/[\[\]']+/g,"")

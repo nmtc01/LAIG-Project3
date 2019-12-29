@@ -34,7 +34,7 @@ class MyGameOrchestrator extends CGFobject{
         this.gameState = {
             INIT:'init', 
             GET_VALID_MOVES:'get_valid_moves', 
-            PLAYER_PLAYING: 'playing_playing',
+            PLAYER_PLAYING: 'player_playing',
             AI_LVL1_PLAYING: 'ai_lvl1_playing', 
             AI_LVL2_PLAYING: 'ai_lvl2_playing', 
             GAME_ENDED:'game_ended'
@@ -77,13 +77,35 @@ class MyGameOrchestrator extends CGFobject{
     }
     manageGameplay(){
         //the management will depend on game type selected 
+        //each game managemente is a copy from prolog - game.pl 
         switch(this.gameType){
             case 'pvp': 
                 if(this.gameState == 'get_valid_moves'){
                     //paint tiles
                     this.currentValidMoves = this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer);
                     console.log(this.currentValidMoves);
-                    this.gameState = 'playing_playing';
+                    this.gameState = 'player_playing';
+                }
+                if(this.gameState == 'player_playing'){
+                    //todo smth to paint tiles
+                    //when move is valid!!
+                    //todo
+                    let newBoard = this.prologInterface.playerMove(/*move,*/this.currentBoard); 
+                    this.currentBoard = newBoard; //update to newboard
+                    //get if there is a winner
+                    let winner = this.prologInterface.checkWin(this.currentBoard,this.currentPlayer);
+                    //check winner
+                    if(winner != null){
+                        this.gameState = 'game_ended';
+                        //smth to print winner 
+                        //smth to lock the game 
+                        //maybe smth to change flag game running from the scene
+                    }else { //if no winner game continues - prepare next player
+                        if(this.currentPlayer == 5)
+                            this.currentPlayer == 9;
+                        else this.currentPlayer == 5; 
+                        this.gameState = 'get_valid_moves';
+                    }
                 }
             break;  
             case 'pvc': 
