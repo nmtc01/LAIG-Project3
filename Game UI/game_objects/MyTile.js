@@ -47,6 +47,9 @@ class MyTile extends CGFobject{
     getCoords(){
         return this.coords; 
     }
+    getDisplayCoords(){
+        return this.displayCoords;
+    }
     setValidMoveTile(bool){
         this.validMoveTile = bool;
     }
@@ -69,6 +72,7 @@ class MyTile extends CGFobject{
         if (!this.visible || this.validMoveTile )
             this.scene.setActiveShader(this.scene.defaultShader);
         //if has piece display it
+        //todo if is animating 
         if( this.piece != null)
             this.piece.display();
         if (this.selectable) 

@@ -40,6 +40,7 @@ class MyPrologInterface{
         console.log(strBoard);
         console.log(strMove);
         this.getPrologRequest('player_move('+strMove+','+strBoard+')','player_move');
+        console.log(response);
         return response;
     }
     /**
@@ -88,7 +89,7 @@ class MyPrologInterface{
                 request.addEventListener("load",this.parseValidMovesPrologReply); 
             break; 
             case 'player_move':
-                request.addEventListener("load,",this.parsePlayerMovesPrologReply);
+                request.addEventListener("load",this.parsePlayerMovesPrologReply);
             break;
             case 'get_score':
                 request.addEventListener("load",this.parseScorePrologReply);
@@ -133,9 +134,9 @@ class MyPrologInterface{
             console.log("ERROR"); 
             return;
         }
-        console.log(this.responseText);
-        //let responseArray = convertValidMovesToArray(this.responseText);
-
+        console.log(this.responseText)
+        let responseArray = boardStringToArray(this.responseText);
+        console.log(responseArray)
         response = responseArray;
     }
     /**
@@ -167,6 +168,62 @@ class MyPrologInterface{
 }
 
 //Utils
+/**
+ * 
+ * @param {*} string 
+ */
+function boardStringToArray(string){
+    
+    let str=string;
+
+    let count  = 0; 
+    let aux="";
+    let newStr = "";
+    let ret = []; 
+    let line = [NaN]; 
+    let board = []; //len 5
+
+    //process Board
+    for(let i= 0; i < str.length; i++){
+        switch(str[i]){
+            case '[': 
+                count++; 
+            break; 
+            case ']':
+                count--; 
+                if(count == 1){
+                    line.push(parseInt(aux,10));
+                    aux = "";
+                    line.splice(line[0],1);
+                    board.push(line);
+                    line = [];
+                }
+            break; 
+            case ',':
+                line.push(parseInt(aux,10));
+                aux = "";
+            break; 
+            default:
+                aux+=str[i];
+            break;
+        }
+    }
+    return board;
+}
+/**
+ * converts board array to string to be passed to prolog
+ * @param {*} Board 
+ * @returns board string
+ */
+function convertBoardToString(Board){
+    let board = "["; 
+    for(let line = 0; line < Board.length; line++){
+        board += '['+Board[line]+'],';
+    }
+    board = board.substring(0,board.length-1);
+    board +=']'
+    return board;
+}
 /**
  * process string - used mainly to process board
  * @param {*} string 

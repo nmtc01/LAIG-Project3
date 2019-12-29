@@ -83,7 +83,6 @@ class MyGameboard extends CGFobject{
      * @param tileTo - to where is going to be 
      */
     movePiece(piece,tileFrom,tileTo){
-        console.log(piece)
         tileFrom.unsetPieceOnTile();
         tileTo.setPieceOnTile(piece);        
     }
@@ -98,10 +97,7 @@ class MyGameboard extends CGFobject{
      * render gameboard
      */
     display(){
-         //todo
-         //se tiveres quebra de fps aqui, tem de se fazer o display so com mudanças, mas mesmo assim
-         //eu testei fazer display disto so uma vez e deu mal tbm, por isso n sei 
-            for(let key in this.tiles)
-                this.tiles[key].display();
+        for(let key in this.tiles)
+            this.tiles[key].display();
     }
 }

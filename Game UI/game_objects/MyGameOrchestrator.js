@@ -12,7 +12,7 @@ class MyGameOrchestrator extends CGFobject{
     constructor(scene){
         super(scene);
         this.gameSequence = new MyGameSequence(this.scene); 
-        this.animator = new MyAnimator(this.scene); 
+        this.animator = new MyAnimator(this.scene,this); 
         this.gameboard = new MyGameboard(this.scene,this); 
         this.prologInterface = new MyPrologInterface(this.scene);
         this.gameSequence = new MyGameSequence();
@@ -121,29 +121,37 @@ class MyGameOrchestrator extends CGFobject{
                     //todo
                     //todo hardcoded now to test, then user needs to input a move by picking a tile
                     
-                    let move = [[1,1],[2,1]];
+                    let move = [[1,1],[3,2]];
                     let newBoard = this.prologInterface.playerMove(this.currentBoard, move); 
                     this.currentBoard = newBoard; //update to newboard
-                   
+                    console.log(this.currentBoard)
                     //todo - adjust with animation
                     console.log('Locked');
                     setTimeout(() => {  console.log("Unlocked"); 
             
                         let tileFrom = this.gameboard.getTileByCoords(move[0]);
                         let tileTo = this.gameboard.getTileByCoords(move[1]);
-
                         let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
-                        this.gameboard.movePiece(pieceToMove,tileFrom,tileTo);
-
+                        //animate piece          
+                        this.animator.start(pieceToMove,tileFrom,tileTo);
+                        this.gameState = 'animate'
                     }, 2000);
                     
-    
+                    //todo
                     //this.gameboard.resetValidMoves();
-
-                   this.gameState = 'animate'
+                    //this.animator.start(pieceToMove,tileFrom,tileTo);
+                    this.gameState = 'animate'
                 }
                 if(this.gameState == 'animate'){
-                    //this.gameState = 'check_game_state'
+
+                    this.animator.processAnimation();
+
+                    if(!this.animator.active){
+                        //move piece on gameboard
+                        //this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo)
+                        //stop animation
+                        this.gameState = 'check_game_state'
+                    }
                 }
                 if(this.gameState == 'check_game_state'){
                     //get player score after move 
@@ -230,7 +238,7 @@ class MyGameOrchestrator extends CGFobject{
     display() { 
         //this.theme.display(); 
         this.gameboard.display(); 
-        //this.animator.display(); 
+        this.animator.display(); 
         //...
     }
 }
