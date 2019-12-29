@@ -109,16 +109,19 @@ class MyGameOrchestrator extends CGFobject{
                     //todo smth to paint tiles
                     //when move is valid!!
                     //todo
-                    //let newBoard = this.prologInterface.playerMove(/*move,*/this.currentBoard); 
-                    //this.currentBoard = newBoard; //update to newboard
-                    //after successfull move 
-
+                    //todo hardcoded now to test, then user needs to input a move by picking a tile
+                    
+                    let move = [[1,1],[2,1]];
+                    let newBoard = this.prologInterface.playerMove(this.currentBoard, move); 
+                    this.currentBoard = newBoard; //update to newboard
+                    
+                    
                     //this.gameboard.resetValidMoves();
 
-                    //if(valid move ) this.gameState = 'animate'
+                   this.gameState = 'animate'
                 }
                 if(this.gameState == 'animate'){
-                    this.gameState = 'check_game_state'
+                    //this.gameState = 'check_game_state'
                 }
                 if(this.gameState == 'check_game_state'){
                     //get player score after move 
