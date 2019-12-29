@@ -83,7 +83,9 @@ class MyGameboard extends CGFobject{
      * @param tileTo - to where is going to be 
      */
     movePiece(piece,tileFrom,tileTo){
-         //todo
+        console.log(piece)
+        tileFrom.unsetPieceOnTile();
+        tileTo.setPieceOnTile(piece);        
     }
     resetValidMoves(){
         for(let key in this.tiles){

@@ -87,6 +87,16 @@ class MyGameOrchestrator extends CGFobject{
         return piece;
     }
     manageGameplay(){
+        //* DEBUG - TO CHECK ID INTEGRITY
+        /*
+        let aux= []; 
+        for(let key in this.gameboard.tiles){
+            let piece = this.gameboard.tiles[key].getPiece()
+            if (piece != null )
+               aux.push(piece.uniqueId);
+        }
+        console.log(aux);
+        */
         //the management will depend on game type selected 
         //each game managemente is a copy from prolog - game.pl 
         switch(this.gameType){
@@ -114,8 +124,20 @@ class MyGameOrchestrator extends CGFobject{
                     let move = [[1,1],[2,1]];
                     let newBoard = this.prologInterface.playerMove(this.currentBoard, move); 
                     this.currentBoard = newBoard; //update to newboard
+                   
+                    //todo - adjust with animation
+                    console.log('Locked');
+                    setTimeout(() => {  console.log("Unlocked"); 
+            
+                        let tileFrom = this.gameboard.getTileByCoords(move[0]);
+                        let tileTo = this.gameboard.getTileByCoords(move[1]);
+
+                        let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
+                        this.gameboard.movePiece(pieceToMove,tileFrom,tileTo);
+
+                    }, 2000);
                     
-                    
+    
                     //this.gameboard.resetValidMoves();
 
                    this.gameState = 'animate'
@@ -162,10 +184,6 @@ class MyGameOrchestrator extends CGFobject{
     update(time) { 
         this.animator.update(time);
     }
-    updateGameBoard(){
-    
-    }
-
     managePick(mode, pickResults) {
         if (mode == false /* && some other game conditions */){
             if(pickResults != null && pickResults.length > 0) { // any pickResults? 
@@ -182,7 +200,6 @@ class MyGameOrchestrator extends CGFobject{
             }
         } 
     }
-
     onObjectSelected(obj, id) { 
         //Reset other objects glows
         let tiles = this.gameboard.tiles;
