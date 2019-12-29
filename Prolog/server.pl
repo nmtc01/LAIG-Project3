@@ -140,6 +140,9 @@ parse_input(ai_move(Board,Level,PlayerPlaying),NewBoard):-
 	choose_move(Board,Level,PlayerPlaying,Move),
 	move(Move,Board,NewBoard).
 
+parse_input(get_player_score(Board,Player),Score):-
+	value(Board,Player,Score).
+
 parse_input(check_game_over(Board,PlayerPlaying),Winner):- %if winner null game continues 
 	game_over(Board,PlayerPlaying,Winner).
 

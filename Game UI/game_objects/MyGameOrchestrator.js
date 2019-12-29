@@ -27,6 +27,7 @@ class MyGameOrchestrator extends CGFobject{
         this.currentPlayer=null;  //todo current playing 5-red 9-blue should i convert the numbers?
         this.currentBoard=null; 
         this.currentValidMoves = null;
+        this.currentScores = {5:0, 9:0}
         //todo 
         //pensar se reescrevo a peça ou comparo com um tabuleiro a anterior
         this.validMoves=null;
@@ -92,6 +93,8 @@ class MyGameOrchestrator extends CGFobject{
                     //todo
                     //let newBoard = this.prologInterface.playerMove(/*move,*/this.currentBoard); 
                     //this.currentBoard = newBoard; //update to newboard
+                    //get player score after move 
+                    this.currentScores[this.currentPlayer] = this.prologInterface.getScore(this.currentBoard,this.currentPlayer);
                     //get if there is a winner
                     let winner = this.prologInterface.checkWin(this.currentBoard,this.currentPlayer);
                     //check winner
@@ -106,6 +109,8 @@ class MyGameOrchestrator extends CGFobject{
                         else this.currentPlayer == 5; 
                         this.gameState = 'get_valid_moves';
                     }
+                    //todo erase - this is just here to debug, so that the game can lock
+                    this.gameState = 'game_ended';
                 }
             break;  
             case 'pvc': 

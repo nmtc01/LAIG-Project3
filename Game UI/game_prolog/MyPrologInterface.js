@@ -53,13 +53,22 @@ class MyPrologInterface{
      * 
      * @param {*} Board 
      * @param {*} Player 
+     */
+    getScore(Board,Player){
+        let strBoard = convertBoardToString(Board);
+        this.getPrologRequest('get_player_score('+strBoard+','+Player+')','get_score')
+        return response;
+    }
+    /**
+     * 
+     * @param {*} Board 
+     * @param {*} Player 
      * @returns winning player, if -1 game continues if 5 red wins if 9 blue wins
      */
     checkWin(Board,Player){
         let strBoard = convertBoardToString(Board);
-        console.log('check_game_over('+strBoard+','+Player+')');
         this.getPrologRequest('check_game_over('+strBoard+','+Player+')','check_winner')
-        //return response;
+        return response;
     }
     /**
      * get request using string
@@ -74,6 +83,9 @@ class MyPrologInterface{
             case 'valid_moves':
                 request.addEventListener("load",this.parseValidMovesPrologReply); 
             break; 
+            case 'get_score':
+                request.addEventListener("load",this.parseScorePrologReply);
+            break;
             case 'check_winner':
                 request.addEventListener("load",this.parseWinnerPrologReply);
             break;
@@ -92,7 +104,6 @@ class MyPrologInterface{
             return;
         }
         let responseArray = textStringToArray(this.responseText);
-        console.log(responseArray)
         response = responseArray;
     }
     /**
@@ -105,18 +116,21 @@ class MyPrologInterface{
         }
         let responseArray = convertValidMovesToArray(this.responseText);
 
-        console.log(responseArray)
         response = responseArray;
+    }
+    parseScorePrologReply(){
+        if (this.status === 400) { 
+            console.log("ERROR"); 
+            return;
+        }
+        response = parseInt(this.responseText,10);
     }
     parseWinnerPrologReply(){
         if (this.status === 400) { 
             console.log("ERROR"); 
             return;
         }
-        //let responseArray = convertValidMovesToArray(this.responseText);
-
-        console.log(this.responseText)
-        //response = responseArray;
+        response = parseInt(this.responseText,10);
     }
     /**
      * 
@@ -170,7 +184,6 @@ function textStringToArray(string){
        if(count == 0){
            aux = "";
            newStr = str.substring(i+2,str.len);
-           console.log(newStr);
             break;
        }
     }
