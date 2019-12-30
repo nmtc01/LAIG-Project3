@@ -36,24 +36,33 @@ class MyPrologInterface{
      */
     playerMove(Board,Move){
         let strBoard = convertBoardToString(Board);
-        let strMove = convertMoveToString(Move);
-        console.log(strBoard);
-        console.log(strMove);
+        let strMove = convertMoveAsciiToString(Move);
         this.getPrologRequest('player_move('+strMove+','+strBoard+')','player_move');
-        console.log(response);
+        return response;
+    }
+    /**
+     * chooses ai move
+     * @param {*} Board 
+     * @param {*} Level 
+     * @param {*} Player 
+     * @returns NewMove after choose
+     */
+    aiChooseMove(Board,Level,Player){
+        let strBoard = convertBoardToString(Board);
+        this.getPrologRequest('choose_ai_move('+strBoard+','+Level+','+Player+')','choose_ai_move');
         return response;
     }
     /**
      * makes ai move
      * @param {*} Board 
-     * @param {*} Level 
-     * @param {*} Player 
+     * @param {*} Move 
      * @returns NewBoard after move
      */
-    aiMove(Board,Level,Player){
-        //todo
+    aiMove(Board,Move){
         let strBoard = convertBoardToString(Board);
-        this.getPrologRequest('ai_move('+strBoard+','+Level+','+Player+')','ai_move');
+        let strMove = convertMoveToString(Move);
+        console.log(strMove);
+        this.getPrologRequest('ai_move('+strMove+','+strBoard+')','ai_move');
         return response;
     }
     /**
@@ -93,8 +102,11 @@ class MyPrologInterface{
             case 'player_move':
                 request.addEventListener("load",this.parsePlayerMovesPrologReply);
             break;
+            case 'choose_ai_move':
+                request.addEventListener("load",this.parseAIChooseMovesPrologReply);
+            break;
             case 'ai_move':
-                request.addEventListener("load,",this.parseBoardPrologReply);
+                request.addEventListener("load",this.parseAIMovesPrologReply);
             break;
             case 'get_score':
                 request.addEventListener("load",this.parseScorePrologReply);
@@ -131,10 +143,34 @@ class MyPrologInterface{
 
         response = responseArray;
     }
-    /**
+      /**
      *  xhr handler for player moves
      */
     parsePlayerMovesPrologReply() {
+        if (this.status === 400) { 
+            console.log("ERROR"); 
+            return;
+        }
+        let responseArray = boardStringToArray(this.responseText);
+        response = responseArray;
+    }
+    /**
+     *  xhr handler for ai moves
+     */
+    parseAIChooseMovesPrologReply() {
+        if (this.status === 400) { 
+            console.log("ERROR"); 
+            return;
+        }
+        console.log(this.responseText)
+        let responseArray = moveStringToArray(this.responseText);
+        console.log(responseArray)
+        response = responseArray
+    }
+    /**
+     *  xhr handler for ai moves
+     */
+    parseAIMovesPrologReply() {
         if (this.status === 400) { 
             console.log("ERROR"); 
             return;
@@ -183,8 +219,6 @@ function boardStringToArray(string){
 
     let count  = 0; 
     let aux="";
-    let newStr = "";
-    let ret = []; 
     let line = [NaN]; 
     let board = []; //len 5
 
@@ -214,6 +248,37 @@ function boardStringToArray(string){
         }
     }
     return board;
+}
+/**
+ * 
+ * @param {*} string 
+ */
+function moveStringToArray(string){
+    let str=string;
+
+    let aux = []; 
+    let move = []; 
+
+    //process move
+    for(let i= 0; i < str.length; i++){
+        switch(str[i]){
+            case '[':
+                break;
+            case ']':
+                move.push(aux);
+                break;
+            case ',':
+                if (i % 4 == 0) {
+                    move.push(aux);
+                    aux = [];
+                }
+                break; 
+            default:
+                aux.push(str[i]);
+                break;
+        }
+    }
+    return move;
 }
 /**
  * converts board array to string to be passed to prolog
@@ -310,6 +375,24 @@ function convertBoardToString(Board){
     return board;
 }
 /**
+ * converts move array with coords with letters and numbers to string to be passed to prolog
+ * @param {*} Move 
+ * @returns move string
+ */
+function convertMoveAsciiToString(Move){
+    let move = "["; 
+    for(let line = 0; line < Move.length; line++){
+        for (let column = 0; column < 2; column++) {
+            if (column % 2 == 0)
+                move += String.fromCharCode(Move[line][column] + 96) + ',';
+            else move += Move[line][column] + ',';
+        }
+    }
+    move = move.substring(0,move.length-1);
+    move +=']'
+    return move;
+}
+/**
  * converts move array to string to be passed to prolog
  * @param {*} Move 
  * @returns move string
@@ -318,9 +401,7 @@ function convertMoveToString(Move){
     let move = "["; 
     for(let line = 0; line < Move.length; line++){
         for (let column = 0; column < 2; column++) {
-            if (column % 2 == 0)
-                move += String.fromCharCode(Move[line][column] + 96) + ',';
-            else move += Move[line][column] + ',';
+            move += Move[line][column] + ',';
         }
     }
     move = move.substring(0,move.length-1);

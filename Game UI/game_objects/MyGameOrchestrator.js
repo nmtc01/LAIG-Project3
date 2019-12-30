@@ -28,6 +28,7 @@ class MyGameOrchestrator extends CGFobject{
         this.currentValidMoves = null;
         this.currentScores = {5:0, 9:0}
         this.isAiPlaying = false;
+        this.stop = false;
         //todo 
         //pensar se reescrevo a peça ou comparo com um tabuleiro a anterior
         this.validMoves=null;
@@ -36,8 +37,7 @@ class MyGameOrchestrator extends CGFobject{
             INIT:'init', 
             GET_VALID_MOVES:'get_valid_moves', 
             PLAYER_PLAYING: 'player_playing',
-            AI_LVL1_PLAYING: 'ai_lvl1_playing', 
-            AI_LVL2_PLAYING: 'ai_lvl2_playing', 
+            AI_PLAYING: 'ai_playing',  
             ANIMATE: 'animate',
             CHECK_GAME_STATE: 'check_game_state',
             GAME_ENDED:'game_ended'
@@ -91,21 +91,20 @@ class MyGameOrchestrator extends CGFobject{
     getValidMoves() {
         //paint tiles
         this.currentValidMoves = this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer);
-        console.log(this.currentValidMoves);
 
         for(let i = 0; i < this.currentValidMoves.length; i++){
             let tile = this.gameboard.getTileByCoords(this.currentValidMoves[i][0])
             let piece = this.gameboard.getPieceOnATile(tile)
             piece.addValidMove(this.currentValidMoves[i][1]);
-            console.log(piece.validMoves);
         }
     }
     playerPlaying(move) {
+        console.log(this.currentBoard);
         let newBoard = this.prologInterface.playerMove(this.currentBoard, move); 
         this.currentBoard = newBoard; //update to newboard
+        console.log(this.currentBoard);
                    
         //todo - adjust with animation
-        console.log('Locked'); 
             
         let tileFrom = this.gameboard.getTileByCoords(move[0]);
         let tileTo = this.gameboard.getTileByCoords(move[1]);
@@ -117,21 +116,19 @@ class MyGameOrchestrator extends CGFobject{
         //this.gameboard.resetValidMoves();
     }
     aiPlaying() {
-        let newBoard = this.prologInterface.aiMove(this.currentBoard, this.gameLevel, this.currentPlayer); 
+        let move = this.prologInterface.aiChooseMove(this.currentBoard, this.gameLevel, this.currentPlayer);
+        let newBoard = this.prologInterface.aiMove(this.currentBoard, move); 
         this.currentBoard = newBoard; //update to newboard
-       
-        //todo - adjust with animation
-        /*console.log('Locked');
-        setTimeout(() => {  console.log("Unlocked"); 
 
-            let tileFrom = this.gameboard.getTileByCoords(move[0]);
-            let tileTo = this.gameboard.getTileByCoords(move[1]);
+        let newMove = [[move[0][0].charCodeAt(0)-96, parseInt(move[0][1],10)],
+                       [move[1][0].charCodeAt(0)-96, parseInt(move[1][1],10)]];
 
-            let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
-            this.gameboard.movePiece(pieceToMove,tileFrom,tileTo);
+        let tileFrom = this.gameboard.getTileByCoords(newMove[0]);
+        let tileTo = this.gameboard.getTileByCoords(newMove[1]);
 
-        }, 2000);*/
-        
+        let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
+        //animate piece          
+        this.animator.start(pieceToMove,tileFrom,tileTo);
 
         //this.gameboard.resetValidMoves();
     }
@@ -140,9 +137,9 @@ class MyGameOrchestrator extends CGFobject{
 
         if(!this.animator.active){
             //move piece on gameboard
-            this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo)
+            this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
             //stop animation
-            this.gameState = 'check_game_state'
+            this.gameState = 'check_game_state';
         }
     }
     checkGameState() {
@@ -214,14 +211,14 @@ class MyGameOrchestrator extends CGFobject{
                 }
                 if(this.gameState == 'player_playing'){
                     //todo hardcoded now to test, then user needs to input a move by picking a tile
-                    let move = [[1,1],[2,1]];
+                    let move = [[1,1],[3,2]];
                     this.playerPlaying(move);
                     this.gameState = 'animate';
                 }
                 if(this.gameState == 'ai_playing'){
                     this.aiPlaying();
-                    //Just to stop
-                    this.gameState = 'game_end';
+                    this.gameState = 'animate';
+                    this.stop = true;
                 } 
                 if(this.gameState == 'animate'){
                     this.animate();
@@ -230,6 +227,9 @@ class MyGameOrchestrator extends CGFobject{
                     this.checkGameState();
                     //this.gameState = 'game_ended';
                     this.gameState = 'get_valid_moves';
+                    //TODO delete this.stop - just to make the game stops - testing
+                    if (this.stop)
+                        this.gameState = 'game_end';
                 }
             break; 
             case 'cvc': 

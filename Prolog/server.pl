@@ -135,10 +135,12 @@ parse_input(get_valid_moves(Board,Player),MovesList):-
 parse_input(player_move(Move,Board),NewBoard):-
 	move(Move,Board,NewBoard).
 
-parse_input(ai_move(Board,Level,PlayerPlaying),NewBoard):-
-	sleep(1),
-	choose_move(Board,Level,PlayerPlaying,Move),
+parse_input(ai_move(Move,Board),NewBoard):-
 	move(Move,Board,NewBoard).
+
+parse_input(choose_ai_move(Board,Level,PlayerPlaying),Move):-
+	sleep(1),
+	choose_move(Board,Level,PlayerPlaying,Move).
 
 parse_input(get_player_score(Board,Player),Score):-
 	value(Board,Player,Score).

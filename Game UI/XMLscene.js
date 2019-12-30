@@ -71,8 +71,8 @@ class XMLscene extends CGFscene {
         this.gameLevelName = ['Level 1','Level 2'];
         this.gameLevel = {}; 
         this.gameLevel['No Level'] = null;
-        this.gameLevel['Level 1'] = 'lvl1'; //prolog string to pass
-        this.gameLevel['Level 2'] = 'lvl2'; //prolog string to pass
+        this.gameLevel['Level 1'] = '1'; //prolog string to pass
+        this.gameLevel['Level 2'] = '2'; //prolog string to pass
         this.selectedGameLevel = this.gameLevel['No Level'];
 
 
