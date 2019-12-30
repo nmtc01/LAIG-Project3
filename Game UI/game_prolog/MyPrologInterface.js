@@ -432,8 +432,8 @@ function convertValidMovesToArray(ValidMoves){
     for(let i = 0; i < str.length; i++){
         count++;
         if(count <= 2){
-            from.push(str[i]);
-        }else to.push(str[i]);
+            from.push(Number(str[i],10));
+        }else to.push(Number(str[i],10));
         if(count == 4){
             count = 0; 
             move.push(from);

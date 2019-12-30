@@ -139,7 +139,6 @@ parse_input(ai_move(Move,Board),NewBoard):-
 	move(Move,Board,NewBoard).
 
 parse_input(choose_ai_move(Board,Level,PlayerPlaying),Move):-
-	sleep(1),
 	choose_move(Board,Level,PlayerPlaying,Move).
 
 parse_input(get_player_score(Board,Player),Score):-
