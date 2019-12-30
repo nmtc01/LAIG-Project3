@@ -105,18 +105,15 @@ class MyGameOrchestrator extends CGFobject{
         this.currentBoard = newBoard; //update to newboard
                    
         //todo - adjust with animation
-        console.log('Locked');
-        setTimeout(() => {  console.log("Unlocked"); 
+        console.log('Locked'); 
             
-            let tileFrom = this.gameboard.getTileByCoords(move[0]);
-            let tileTo = this.gameboard.getTileByCoords(move[1]);
+        let tileFrom = this.gameboard.getTileByCoords(move[0]);
+        let tileTo = this.gameboard.getTileByCoords(move[1]);
 
-            let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
-            this.gameboard.movePiece(pieceToMove,tileFrom,tileTo);
-
-        }, 2000);
+        let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
+        //animate piece          
+        this.animator.start(pieceToMove,tileFrom,tileTo);
                     
-    
         //this.gameboard.resetValidMoves();
     }
     aiPlaying() {
@@ -137,6 +134,16 @@ class MyGameOrchestrator extends CGFobject{
         
 
         //this.gameboard.resetValidMoves();
+    }
+    animate() {
+        this.animator.processAnimation();
+
+        if(!this.animator.active){
+            //move piece on gameboard
+            this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo)
+            //stop animation
+            this.gameState = 'check_game_state'
+        }
     }
     checkGameState() {
         //get player score after move 
@@ -181,10 +188,10 @@ class MyGameOrchestrator extends CGFobject{
                     //todo hardcoded now to test, then user needs to input a move by picking a tile
                     let move = [[1,1],[3,2]];
                     this.playerPlaying(move);
-                    this.gameState = 'animate'
+                    this.gameState = 'animate';
                 }
                 if(this.gameState == 'animate'){
-                    this.gameState = 'check_game_state'
+                    this.animate();
                 }
                 if(this.gameState == 'check_game_state'){
                     this.checkGameState();
@@ -217,7 +224,7 @@ class MyGameOrchestrator extends CGFobject{
                     this.gameState = 'game_end';
                 } 
                 if(this.gameState == 'animate'){
-                    this.gameState = 'check_game_state'
+                    this.animate();
                 }
                 if(this.gameState == 'check_game_state'){
                     this.checkGameState();
