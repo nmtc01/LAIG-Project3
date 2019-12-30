@@ -162,6 +162,7 @@ class MyGameOrchestrator extends CGFobject{
         //todo erase - this is just here to debug, so that the game can lock
     }
 
+    //TODO stop condition after win
     manageGameplay(){
         //* DEBUG - TO CHECK ID INTEGRITY
         /*
@@ -196,8 +197,6 @@ class MyGameOrchestrator extends CGFobject{
                 }
             break;  
             case 'pvc': 
-                //todo
-                //when moving condition if blue play to check level
                 if(this.gameState == 'get_valid_moves'){
                     this.getValidMoves();
                     if (!this.isAiPlaying) {
@@ -233,8 +232,27 @@ class MyGameOrchestrator extends CGFobject{
                 }
             break; 
             case 'cvc': 
-                //todo
-                //when moving condition if blue play to check level 
+                if(this.gameState == 'get_valid_moves'){
+                    this.getValidMoves();
+                    this.gameState = 'ai_playing';
+                }
+                if(this.gameState == 'ai_playing'){
+                    this.aiPlaying();
+                    this.gameState = 'animate';
+                    //Descomment to stop game
+                    //this.stop = true;
+                } 
+                if(this.gameState == 'animate'){
+                    this.animate();
+                }
+                if(this.gameState == 'check_game_state'){
+                    this.checkGameState();
+                    //this.gameState = 'game_ended';
+                    this.gameState = 'get_valid_moves';
+                    //TODO delete this.stop - just to make the game stops - testing
+                    if (this.stop)
+                        this.gameState = 'game_end';
+                }
             break; 
         }
         
