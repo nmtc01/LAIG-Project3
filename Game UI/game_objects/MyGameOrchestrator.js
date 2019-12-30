@@ -165,19 +165,34 @@ class MyGameOrchestrator extends CGFobject{
         }
         //todo erase - this is just here to debug, so that the game can lock
     }
+    equalMoves(move1, move2) {
+        let equal = true;
+        for (let i = 0; i < move1.length; i++) {
+            for (let j = 0; j < move1[i].length; j++) {
+                if (move1[i][j] != move2[i][j])
+                    equal = false;
+            }
+        }
+        return equal;
+    }
     validateMove(obj) {
+        let valid = false;
         let aux = [];
         aux.push(...this.currentPlayerMove);
         if (obj instanceof MyPiece)
             aux.push(obj.getTile().getCoords());
         else aux.push(obj.getCoords());
         for(let i = 0; i < this.currentValidMoves.length; i++) {
-            if (this.currentValidMoves[i] == aux) {
+            if (this.equalMoves(this.currentValidMoves[i],aux)) {
                 //Create a move to be used by manageGameplay() on pvp or pvc - to coords
                 this.currentPlayerMove = aux;
+                valid = true;
                 break;
             }
         }
+        //If not valid reset currentPlayerMove
+        if (!valid)
+            this.currentPlayerMove = [];
     }
 
     //TODO stop condition after win
