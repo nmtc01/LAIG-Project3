@@ -30,6 +30,7 @@ class MyGameOrchestrator extends CGFobject{
         this.currentScores = {5:0, 9:0}
         this.isAiPlaying = false;
         this.stop = false;
+        this.eaten_pieces = [];
 
         this.gameState = {
             INIT:'init', 
@@ -115,6 +116,12 @@ class MyGameOrchestrator extends CGFobject{
         let tileTo = this.gameboard.getTileByCoords(move[1]);
 
         let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
+
+        //get piece on tileTo - eaten piece to be put on auxiliary board
+        let eaten_piece = this.gameboard.getPieceOnATile(tileTo);
+        if (eaten_piece != null)
+            this.eaten_pieces.push(eaten_piece); 
+
         //animate piece          
         this.animator.start(pieceToMove,tileFrom,tileTo);
                     
@@ -132,6 +139,12 @@ class MyGameOrchestrator extends CGFobject{
         let tileTo = this.gameboard.getTileByCoords(newMove[1]);
 
         let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
+
+        //get piece on tileTo - eaten piece to be put on auxiliary board
+        let eaten_piece = this.gameboard.getPieceOnATile(tileTo);
+        if (eaten_piece != null)
+            this.eaten_pieces.push(eaten_piece); 
+
         //animate piece          
         this.animator.start(pieceToMove,tileFrom,tileTo);
 
