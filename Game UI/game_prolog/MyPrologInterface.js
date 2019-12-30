@@ -52,6 +52,8 @@ class MyPrologInterface{
      */
     aiMove(Board,Level,Player){
         //todo
+        let strBoard = convertBoardToString(Board);
+        this.getPrologRequest('ai_move('+strBoard+','+Level+','+Player+')','ai_move');
         return response;
     }
     /**
@@ -90,6 +92,9 @@ class MyPrologInterface{
             break; 
             case 'player_move':
                 request.addEventListener("load",this.parsePlayerMovesPrologReply);
+            break;
+            case 'ai_move':
+                request.addEventListener("load,",this.parseBoardPrologReply);
             break;
             case 'get_score':
                 request.addEventListener("load",this.parseScorePrologReply);
