@@ -7,6 +7,7 @@ class MyAnimator extends CGFobject{
         super(scene);
         this.orchestrator = orchestrator;
 
+        this.canAnimate = false;
         this.active = false;
         //Has:
             // Pointer to the orchestrator 
@@ -42,6 +43,7 @@ class MyAnimator extends CGFobject{
      */
     start(piece,tileFrom,tileTo){
         //todo
+        this.canAnimate = true;
         this.active = true;
 
         vec3.set(this.p1,tileFrom.getDisplayCoords()[0],tileFrom.getDisplayCoords()[1],tileFrom.getDisplayCoords()[2]);
@@ -75,7 +77,6 @@ class MyAnimator extends CGFobject{
         if(this.sent > 2){
             this.sent = 0; 
             this.active = false; //end animation
-            this.piece_to_move.setMoving(false);
         }
         //animation is processed using a bezier curve
         bezier(this.translate_vector,this.p1,this.p2,this.p3,this.p4,interpolation);

@@ -23,7 +23,7 @@ blue_player_moves([Line|Rest], Board, Board_Y, List_Moves, ReturnedMoves):-
 red_player_moves(_,_, 6, List_Moves, ReturnedMoves):- append(List_Moves,[],ReturnedMoves).
 red_player_moves([Line|Rest], Board, Board_Y, List_Moves, ReturnedMoves):-
     Board_X is 1,
-    line_moves(5, Line, [Line|Rest], Board_X, Board_Y, [], Line_Moves),
+    line_moves(5, Line, Board, Board_X, Board_Y, [], Line_Moves),
     append(List_Moves, Line_Moves, All_Moves),
     NextY is Board_Y + 1,
     red_player_moves(Rest, Board, NextY, All_Moves, ReturnedMoves).
