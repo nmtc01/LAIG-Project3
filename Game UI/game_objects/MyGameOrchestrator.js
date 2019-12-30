@@ -12,7 +12,7 @@ class MyGameOrchestrator extends CGFobject{
     constructor(scene){
         super(scene);
         this.gameSequence = new MyGameSequence(this.scene); 
-        this.animator = new MyAnimator(this.scene); 
+        this.animator = new MyAnimator(this.scene,this); 
         this.gameboard = new MyGameboard(this.scene,this); 
         this.prologInterface = new MyPrologInterface(this.scene);
         this.gameSequence = new MyGameSequence();
@@ -179,7 +179,7 @@ class MyGameOrchestrator extends CGFobject{
                 }
                 if(this.gameState == 'player_playing'){
                     //todo hardcoded now to test, then user needs to input a move by picking a tile
-                    let move = [[1,1],[2,1]];
+                    let move = [[1,1],[3,2]];
                     this.playerPlaying(move);
                     this.gameState = 'animate'
                 }
@@ -285,7 +285,7 @@ class MyGameOrchestrator extends CGFobject{
     display() { 
         //this.theme.display(); 
         this.gameboard.display(); 
-        //this.animator.display(); 
+        this.animator.display(); 
         //...
     }
 }

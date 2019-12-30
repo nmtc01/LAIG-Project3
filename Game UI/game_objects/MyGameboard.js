@@ -21,7 +21,6 @@ class MyGameboard extends CGFobject{
         for(let column = 1; column<=5; column++){
             for(let line = 1; line <=5; line++){
                 let coords = [line,column]; //todo confirm if is line column
-                console.log(this.orchestrator);
                 let tile = new MyTile(this.scene,this,type,coords,true,true,this.orchestrator);
                 this.tiles[coords] = tile; //todo check if it is the best way 
                 //change tile type 
@@ -83,7 +82,6 @@ class MyGameboard extends CGFobject{
      * @param tileTo - to where is going to be 
      */
     movePiece(piece,tileFrom,tileTo){
-        console.log(piece)
         tileFrom.unsetPieceOnTile();
         tileTo.setPieceOnTile(piece);        
     }
@@ -98,10 +96,7 @@ class MyGameboard extends CGFobject{
      * render gameboard
      */
     display(){
-         //todo
-         //se tiveres quebra de fps aqui, tem de se fazer o display so com mudanças, mas mesmo assim
-         //eu testei fazer display disto so uma vez e deu mal tbm, por isso n sei 
-            for(let key in this.tiles)
-                this.tiles[key].display();
+        for(let key in this.tiles)
+            this.tiles[key].display();
     }
 }
