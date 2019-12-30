@@ -387,21 +387,21 @@ class XMLscene extends CGFscene {
         // ---- END Background, camera and axis setup
     }
 
-    display_render_mode(){
+    /*display_render_mode(){
         //todo
     }
 
     selectable_render_mode(){
         //todo
-    }
+    }*/
 
     /**
      * Displays the scene.
      */
     display() {
-        //todo
-        this.display_render_mode();
-        this.selectable_render_mode();
+        //todo necessary??
+        /*this.display_render_mode();
+        this.selectable_render_mode();*/
 
         if (this.sceneInited) { //no need to use is loaded bc if scene is not inited it wont display 
             //this.textureRTT.attachToFrameBuffer();

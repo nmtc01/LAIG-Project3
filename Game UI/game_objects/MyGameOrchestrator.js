@@ -155,8 +155,8 @@ class MyGameOrchestrator extends CGFobject{
             //maybe smth to change flag game running from the scene
         }else { //if no winner game continues - prepare next player
             if(this.currentPlayer == 5)
-                this.currentPlayer == 9;
-            else this.currentPlayer == 5; 
+                this.currentPlayer = 9;
+            else this.currentPlayer = 5; 
             this.gameState = 'get_valid_moves';
         }
         //todo erase - this is just here to debug, so that the game can lock
