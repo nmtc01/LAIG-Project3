@@ -312,8 +312,16 @@ class MyGameOrchestrator extends CGFobject{
         }
         //Tile
         else if(obj instanceof MyTile){
-            //Create a move to be used by manageGameplay() on pvp or pvc - to coords
-            this.currentPlayerMove.push(obj.getCoords());
+            //Validate move
+            let aux = this.currentPlayerMove;
+            aux.push(obj.getCoords());
+            for(let i = 0; i < this.currentValidMoves.length; i++) {
+                if (this.currentValidMoves[i] == aux) {
+                    //Create a move to be used by manageGameplay() on pvp or pvc - to coords
+                    this.currentPlayerMove = aux;
+                    break;
+                }
+            }
         }
         else {
         // error ?
