@@ -43,12 +43,10 @@ class MyGameOrchestrator extends CGFobject{
         this.gameState = 'init'; 
 
         this.playerMoveState = {
-            BEGIN: 'begin',
             PIECE_SELECT: 'piece_select',
-            TILE_SELECT: 'tile_select',
-            END: 'end'
+            TILE_SELECT: 'tile_select'
         }
-        this.playerMoveState = 'begin';
+        this.playerMoveState = 'piece_select';
     }
     //todo check best way to do this 
     startGame(type,level){
@@ -166,6 +164,20 @@ class MyGameOrchestrator extends CGFobject{
             this.gameState = 'get_valid_moves';
         }
         //todo erase - this is just here to debug, so that the game can lock
+    }
+    validateMove(obj) {
+        let aux = [];
+        aux.push(...this.currentPlayerMove);
+        if (obj instanceof MyPiece)
+            aux.push(obj.getTile().getCoords());
+        else aux.push(obj.getCoords());
+        for(let i = 0; i < this.currentValidMoves.length; i++) {
+            if (this.currentValidMoves[i] == aux) {
+                //Create a move to be used by manageGameplay() on pvp or pvc - to coords
+                this.currentPlayerMove = aux;
+                break;
+            }
+        }
     }
 
     //TODO stop condition after win
@@ -312,12 +324,6 @@ class MyGameOrchestrator extends CGFobject{
         //State machine for player move
         switch(this.playerMoveState)
         {
-            case 'begin':
-            {
-                //Advance to the next state
-                this.playerMoveState = 'piece_select';
-                break;
-            }
             case 'piece_select':
             {
                 if(obj instanceof MyPiece){
@@ -342,54 +348,38 @@ class MyGameOrchestrator extends CGFobject{
                 if(obj instanceof MyTile){
                     if (this.currentPlayerMove.length != 0) {
                         //Validate move
-                        let aux = this.currentPlayerMove;
-                        aux.push(obj.getCoords());
-                        for(let i = 0; i < this.currentValidMoves.length; i++) {
-                            if (this.currentValidMoves[i] == aux) {
-                                //Create a move to be used by manageGameplay() on pvp or pvc - to coords
-                                this.currentPlayerMove = aux;
-                                break;
-                            }
-                        }
+                        this.validateMove(obj);
                     }
                     //Advance to the next state
-                    this.playerMoveState = 'end';
+                    this.playerMoveState = 'piece_select';
                 }
-                break;
-            }
-            case 'end':
-            {
-                break;
-            }
-        }
-        /*//Piece
-        if(obj instanceof MyPiece){
-            //Make the picked piece glow
-            this.scene.pushMatrix();
-            obj.setPicked(true);
-            obj.display();
-            this.scene.popMatrix();
-            //Create a move to be used by manageGameplay() on pvp or pvc - from coords
-            this.currentPlayerMove.push(obj.getTile().getCoords());
-        }
-        //Tile
-        else if(obj instanceof MyTile){
-            if (this.currentPlayerMove.length != 0) {
-                //Validate move
-                let aux = this.currentPlayerMove;
-                aux.push(obj.getCoords());
-                for(let i = 0; i < this.currentValidMoves.length; i++) {
-                    if (this.currentValidMoves[i] == aux) {
-                        //Create a move to be used by manageGameplay() on pvp or pvc - to coords
-                        this.currentPlayerMove = aux;
-                        break;
+                if(obj instanceof MyPiece){
+                    //Verify if it belongs to the player who is playing
+                    if ((this.currentPlayer == 5 && obj.type != 'piece_red_black' && obj.type != 'piece_red_white') ||
+                        (this.currentPlayer == 9 && obj.type != 'piece_blue_black' && obj.type != 'piece_blue_white')) {
+                        //If it belongs to the opponent, then verify if it is a valid move
+                        if (this.currentPlayerMove.length != 0) {
+                            //Validate move
+                            this.validateMove(obj);
+                        }
+                    }
+                    else {
+                        //Make the picked piece glow
+                        this.scene.pushMatrix();
+                        obj.setPicked(true);
+                        obj.display();
+                        this.scene.popMatrix();
+                        //Reset currentMove
+                        this.currentPlayerMove = [];
+                        //Create a move to be used by manageGameplay() on pvp or pvc - from coords
+                        this.currentPlayerMove.push(obj.getTile().getCoords());
+                        //Advance to the next state
+                        this.playerMoveState = 'tile_select';
                     }
                 }
+                break;
             }
         }
-        else {
-        // error ?
-        } */
     }
     
     display() { 
