@@ -26,12 +26,10 @@ class MyGameOrchestrator extends CGFobject{
         this.currentPlayer=null;  //todo current playing 5-red 9-blue should i convert the numbers?
         this.currentBoard=null; 
         this.currentValidMoves = null;
+        this.currentPlayerMove = [];
         this.currentScores = {5:0, 9:0}
         this.isAiPlaying = false;
         this.stop = false;
-        //todo 
-        //pensar se reescrevo a peça ou comparo com um tabuleiro a anterior
-        this.validMoves=null;
 
         this.gameState = {
             INIT:'init', 
@@ -178,15 +176,17 @@ class MyGameOrchestrator extends CGFobject{
         //each game managemente is a copy from prolog - game.pl 
         switch(this.gameType){
             case 'pvp': 
+            {
                 if(this.gameState == 'get_valid_moves'){
                     this.getValidMoves();
                     this.gameState = 'player_playing';
                 }
                 if(this.gameState == 'player_playing'){
-                    //todo hardcoded now to test, then user needs to input a move by picking a tile
-                    let move = [[1,1],[3,2]];
-                    this.playerPlaying(move);
-                    this.gameState = 'animate';
+                    if (this.currentPlayerMove != null)
+                        if (this.currentPlayerMove.length == 2) { 
+                            this.playerPlaying(this.currentPlayerMove);
+                            this.gameState = 'animate';
+                        }
                 }
                 if(this.gameState == 'animate'){
                     this.animate();
@@ -195,8 +195,10 @@ class MyGameOrchestrator extends CGFobject{
                     this.checkGameState();
                     this.gameState = 'game_ended';
                 }
-            break;  
+                break;  
+            }
             case 'pvc': 
+            {
                 if(this.gameState == 'get_valid_moves'){
                     this.getValidMoves();
                     if (!this.isAiPlaying) {
@@ -209,10 +211,11 @@ class MyGameOrchestrator extends CGFobject{
                     }
                 }
                 if(this.gameState == 'player_playing'){
-                    //todo hardcoded now to test, then user needs to input a move by picking a tile
-                    let move = [[1,1],[3,2]];
-                    this.playerPlaying(move);
-                    this.gameState = 'animate';
+                    if (this.currentPlayerMove != null)
+                        if (this.currentPlayerMove.length == 2) { 
+                            this.playerPlaying(this.currentPlayerMove);
+                            this.gameState = 'animate';
+                        }
                 }
                 if(this.gameState == 'ai_playing'){
                     this.aiPlaying();
@@ -230,8 +233,10 @@ class MyGameOrchestrator extends CGFobject{
                     if (this.stop)
                         this.gameState = 'game_end';
                 }
-            break; 
+                break; 
+            }
             case 'cvc': 
+            {
                 if(this.gameState == 'get_valid_moves'){
                     this.getValidMoves();
                     this.gameState = 'ai_playing';
@@ -253,7 +258,8 @@ class MyGameOrchestrator extends CGFobject{
                     if (this.stop)
                         this.gameState = 'game_end';
                 }
-            break; 
+                break;
+            } 
         }
         
     }
@@ -292,15 +298,20 @@ class MyGameOrchestrator extends CGFobject{
         }
         //Piece
         if(obj instanceof MyPiece){
+            //Reset currentPlayerMove
+            this.currentPlayerMove = [];
             //Make the picked piece glow
             this.scene.pushMatrix();
             obj.setPicked(true);
             obj.display();
             this.scene.popMatrix();
+            //Create a move to be used by manageGameplay() on pvp or pvc - from coords
+            this.currentPlayerMove.push(obj.getTile().getCoords());
         }
         //Tile
         else if(obj instanceof MyTile){
-            
+            //Create a move to be used by manageGameplay() on pvp or pvc - to coords
+            this.currentPlayerMove.push(obj.getCoords());
         }
         else {
         // error ?
