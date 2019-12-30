@@ -249,7 +249,6 @@ class MyGameOrchestrator extends CGFobject{
                     }
                 }
                 if(this.gameState == 'player_playing'){
-                    this.playerMoveState = 'begin';
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
                             this.playerPlaying(this.currentPlayerMove);
@@ -261,7 +260,7 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == 'ai_playing'){
                     this.aiPlaying();
                     this.gameState = 'animate';
-                    this.stop = true;
+                    //this.stop = true;
                 } 
                 if(this.gameState == 'animate'){
                     this.animate();
