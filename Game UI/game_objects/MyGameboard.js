@@ -15,6 +15,7 @@ class MyGameboard extends CGFobject{
      * @param {templates} model templates
      */
     createGameBoard(templates){
+
         let type = "tile_black";
         //visible tiles
         //generate 25 tiles 
@@ -28,6 +29,11 @@ class MyGameboard extends CGFobject{
                     type = "tile_white"
                 else type = "tile_black"
             }
+        }
+    }
+    resetGame(){
+        for(let key in this.tiles){
+            this.tiles[key].unsetPieceOnTile();
         }
     }
     /**

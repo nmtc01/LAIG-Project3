@@ -180,7 +180,6 @@ class XMLscene extends CGFscene {
         }
     }
     start(){ 
-        //todo start playing game 
         this.gameRunning = true; 
         this.gameOrchestrator.startGame(this.selectedGameType,this.selectedGameLevel);
     }
@@ -292,7 +291,9 @@ class XMLscene extends CGFscene {
         this.initTextures();
 
         //create game board using elem templates
-        this.gameOrchestrator.gameboard.createGameBoard(this.graph.templates);
+        if(!this.gameRunning){
+            this.gameOrchestrator.gameboard.createGameBoard(this.graph.templates);
+        }
         //update UI usuing data structures passed 
         this.interface.updateInterface();
         this.sceneInited = true;

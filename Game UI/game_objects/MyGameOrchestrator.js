@@ -50,6 +50,7 @@ class MyGameOrchestrator extends CGFobject{
     }
     //todo check best way to do this 
     startGame(type,level){
+        this.gameboard.resetGame();
         this.gameType = type; 
         this.gameLevel=level;
         let ret = this.prologInterface.initGame(type,level);
