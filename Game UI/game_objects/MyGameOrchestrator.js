@@ -185,6 +185,8 @@ class MyGameOrchestrator extends CGFobject{
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
                             this.playerPlaying(this.currentPlayerMove);
+                            //Reset currentPlayerMove
+                            this.currentPlayerMove = [];
                             this.gameState = 'animate';
                         }
                 }
@@ -193,7 +195,7 @@ class MyGameOrchestrator extends CGFobject{
                 }
                 if(this.gameState == 'check_game_state'){
                     this.checkGameState();
-                    this.gameState = 'game_ended';
+                    this.gameState = 'get_valid_moves';
                 }
                 break;  
             }
@@ -214,6 +216,8 @@ class MyGameOrchestrator extends CGFobject{
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
                             this.playerPlaying(this.currentPlayerMove);
+                            //Reset currentPlayerMove
+                            this.currentPlayerMove = [];
                             this.gameState = 'animate';
                         }
                 }
@@ -298,8 +302,6 @@ class MyGameOrchestrator extends CGFobject{
         }
         //Piece
         if(obj instanceof MyPiece){
-            //Reset currentPlayerMove
-            this.currentPlayerMove = [];
             //Make the picked piece glow
             this.scene.pushMatrix();
             obj.setPicked(true);
