@@ -118,7 +118,7 @@ class MyGameOrchestrator extends CGFobject{
         //animate piece          
         this.animator.start(pieceToMove,tileFrom,tileTo);
                     
-        //this.gameboard.resetValidMoves();
+        this.gameboard.resetValidMoves();
     }
     aiPlaying() {
         let move = this.prologInterface.aiChooseMove(this.currentBoard, this.gameLevel, this.currentPlayer);
@@ -135,7 +135,7 @@ class MyGameOrchestrator extends CGFobject{
         //animate piece          
         this.animator.start(pieceToMove,tileFrom,tileTo);
 
-        //this.gameboard.resetValidMoves();
+        this.gameboard.resetValidMoves();
     }
     animate() {
         this.animator.processAnimation();
