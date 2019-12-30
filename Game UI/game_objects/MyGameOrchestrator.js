@@ -41,6 +41,14 @@ class MyGameOrchestrator extends CGFobject{
             GAME_ENDED:'game_ended'
         }
         this.gameState = 'init'; 
+
+        this.playerMoveState = {
+            BEGIN: 'begin',
+            PIECE_SELECT: 'piece_select',
+            TILE_SELECT: 'tile_select',
+            END: 'end'
+        }
+        this.playerMoveState = 'begin';
     }
     //todo check best way to do this 
     startGame(type,level){
@@ -213,6 +221,7 @@ class MyGameOrchestrator extends CGFobject{
                     }
                 }
                 if(this.gameState == 'player_playing'){
+                    this.playerMoveState = 'begin';
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
                             this.playerPlaying(this.currentPlayerMove);
@@ -300,7 +309,60 @@ class MyGameOrchestrator extends CGFobject{
             if(tiles[key].validMoveTile)
                 tiles[key].setValidMoveTile(false);
         }
-        //Piece
+        //State machine for player move
+        switch(this.playerMoveState)
+        {
+            case 'begin':
+            {
+                //Advance to the next state
+                this.playerMoveState = 'piece_select';
+                break;
+            }
+            case 'piece_select':
+            {
+                if(obj instanceof MyPiece){
+                    //Verify if it belongs to the player who is playing
+                    if ((this.currentPlayer == 5 && obj.type != 'piece_red_black' && obj.type != 'piece_red_white') ||
+                        (this.currentPlayer == 9 && obj.type != 'piece_blue_black' && obj.type != 'piece_blue_white'))
+                        break;
+                    //Make the picked piece glow
+                    this.scene.pushMatrix();
+                    obj.setPicked(true);
+                    obj.display();
+                    this.scene.popMatrix();
+                    //Create a move to be used by manageGameplay() on pvp or pvc - from coords
+                    this.currentPlayerMove.push(obj.getTile().getCoords());
+                    //Advance to the next state
+                    this.playerMoveState = 'tile_select';
+                }
+                break;
+            }
+            case 'tile_select':
+            {
+                if(obj instanceof MyTile){
+                    if (this.currentPlayerMove.length != 0) {
+                        //Validate move
+                        let aux = this.currentPlayerMove;
+                        aux.push(obj.getCoords());
+                        for(let i = 0; i < this.currentValidMoves.length; i++) {
+                            if (this.currentValidMoves[i] == aux) {
+                                //Create a move to be used by manageGameplay() on pvp or pvc - to coords
+                                this.currentPlayerMove = aux;
+                                break;
+                            }
+                        }
+                    }
+                    //Advance to the next state
+                    this.playerMoveState = 'end';
+                }
+                break;
+            }
+            case 'end':
+            {
+                break;
+            }
+        }
+        /*//Piece
         if(obj instanceof MyPiece){
             //Make the picked piece glow
             this.scene.pushMatrix();
@@ -312,20 +374,22 @@ class MyGameOrchestrator extends CGFobject{
         }
         //Tile
         else if(obj instanceof MyTile){
-            //Validate move
-            let aux = this.currentPlayerMove;
-            aux.push(obj.getCoords());
-            for(let i = 0; i < this.currentValidMoves.length; i++) {
-                if (this.currentValidMoves[i] == aux) {
-                    //Create a move to be used by manageGameplay() on pvp or pvc - to coords
-                    this.currentPlayerMove = aux;
-                    break;
+            if (this.currentPlayerMove.length != 0) {
+                //Validate move
+                let aux = this.currentPlayerMove;
+                aux.push(obj.getCoords());
+                for(let i = 0; i < this.currentValidMoves.length; i++) {
+                    if (this.currentValidMoves[i] == aux) {
+                        //Create a move to be used by manageGameplay() on pvp or pvc - to coords
+                        this.currentPlayerMove = aux;
+                        break;
+                    }
                 }
             }
         }
         else {
         // error ?
-        } 
+        } */
     }
     
     display() { 
