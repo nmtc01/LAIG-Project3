@@ -90,6 +90,8 @@ class MyGameOrchestrator extends CGFobject{
         this.prologInterface.aiChooseMove(this.currentBoard, this.gameLevel, this.currentPlayer,this.prologInterface.parseAIChooseMove.bind(this));
     }
     aiPlaying() {
+        //console.log(this.currentBoard)
+        console.log(this.currentPlayerMove)
         this.prologInterface.aiMove(this.currentBoard, this.currentPlayerMove,this.prologInterface.parseAIMove.bind(this)); 
     }
     animate() {
@@ -112,6 +114,11 @@ class MyGameOrchestrator extends CGFobject{
         this.prologInterface.getScore(this.currentBoard,this.currentPlayer,this.prologInterface.parseScore.bind(this));
         //get if there is a winner
         this.prologInterface.checkWin(this.currentBoard,this.currentPlayer,this.prologInterface.parseWinner.bind(this));
+
+        if(this.currentPlayer == 5)
+            this.currentPlayer = 9;
+        else this.currentPlayer = 5; 
+            this.gameState = 'get_valid_moves';
     }
     equalMoves(move1, move2) {
         let equal = true;
@@ -217,11 +224,15 @@ class MyGameOrchestrator extends CGFobject{
                 }
                 if(this.gameState == 'ai_choosing_move'){
                     this.aiMoveSelection();
-                    //this.gameState = 'ai_playing';
+                    this.gameState = 'ai_playing';
                 }
                 if(this.gameState == 'ai_playing'){
-                    this.aiPlaying();
-                    this.gameState = 'animate';
+                    if(this.currentPlayerMove.length != null){
+                        if(this.currentPlayerMove.length == 2){
+                            this.aiPlaying();
+                            this.gameState = 'animate';
+                        }
+                    }
                     //Descomment to stop game
                     //this.stop = true;
                 } 

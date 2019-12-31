@@ -60,7 +60,7 @@ class MyPrologInterface extends CGFobject{
     }
     parseValidMoves(data){
         this.currentValidMoves = convertValidMovesToArray(data.target.response);
-
+        console.log(this.currentBoard);
         for(let i = 0; i < this.currentValidMoves.length; i++){
             let tile = this.gameboard.getTileByCoords(this.currentValidMoves[i][0])
             let piece = this.gameboard.getPieceOnATile(tile)
@@ -104,7 +104,6 @@ class MyPrologInterface extends CGFobject{
     }
     parseAIChooseMove(data) {
         this.currentPlayerMove = convertMoveStringToArray(data.target.response);
-        this.gameState = 'ai_playing';
     }
     /**
      * makes ai move
@@ -114,23 +113,21 @@ class MyPrologInterface extends CGFobject{
      */
     aiMove(Board,Move,callback){
         let strBoard = convertBoardToString(Board);
-        let strMove = convertMoveToString(Move);
+        let strMove = convertMoveAsciiToString(Move);
         this.getPrologRequest('ai_move('+strMove+','+strBoard+')',callback);
     }
     parseAIMove(data) {
-        console.log(this.currentPlayerMove)
         this.currentBoard = boardStringToArray(data.target.response);
        
         let tileFrom = this.gameboard.getTileByCoords(this.currentPlayerMove[0]);
         let tileTo = this.gameboard.getTileByCoords(this.currentPlayerMove[1]);
 
         let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
-        //animate piece          
+        //animate piece        
         this.animator.start(pieceToMove,tileFrom,tileTo);
         //Reset currentPlayerMove
         this.currentPlayerMove = [];
-        this.gameboard.resetValidMoves();
-  
+        //this.gameboard.resetValidMoves();
     }
     /**
      * 
@@ -163,10 +160,7 @@ class MyPrologInterface extends CGFobject{
             //smth to lock the game 
             //maybe smth to change flag game running from the scene
         }else { //if no winner game continues - prepare next player
-            if(this.currentPlayer == 5)
-                this.currentPlayer = 9;
-            else this.currentPlayer = 5; 
-            this.gameState = 'get_valid_moves';
+           
         }
     }
 }
