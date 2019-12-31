@@ -12,7 +12,7 @@ class MyGameOrchestrator extends CGFobject{
     constructor(scene){
         super(scene);
         this.gameSequence = new MyGameSequence(this.scene); 
-        this.animator = new MyAnimator(this.scene,this); 
+        this.animator = new MyAnimator(this.scene,this,this.gameSequence); 
         this.gameboard = new MyGameboard(this.scene,this); 
         this.prologInterface = new MyPrologInterface(this.scene,this);
         this.gameSequence = new MyGameSequence();
@@ -98,13 +98,12 @@ class MyGameOrchestrator extends CGFobject{
     animate() {
         if(this.animator.canAnimate){
             if(!this.animator.active){
-              //move piece on gameboarb
-              this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
-              this.animator.piece_to_move.setMoving(false);
-              //stop animation
-              this.animator.canAnimate = false;
+                this.animator.piece_to_move.setMoving(false);
+                //move piece on gameboarb
+                this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
+                //stop animation
+                this.animator.canAnimate = false;
                 this.gameState = this.gameStateEnum.CHECK_GAME_STATE; 
-
             }else {
                 this.animator.processAnimation();
             }
@@ -165,6 +164,7 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == this.gameStateEnum.PLAYER_PLAYING ){
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
+                            this.gameSequence.addGameMove(this.currentPlayerMove); //add move to the game sequence
                             this.playerPlaying();
                             this.gameState = this.gameStateEnum.ANIMATE;
                         }
@@ -195,6 +195,7 @@ class MyGameOrchestrator extends CGFobject{
                    // this.playerMoveState = 'begin'; //todo comentei isto 
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
+                            this.gameSequence.addGameMove(this.currentPlayerMove); //add move to the game sequence
                             this.playerPlaying(this.currentPlayerMove);
                             this.gameState = this.gameStateEnum.ANIMATE;
                         }
@@ -206,6 +207,7 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == this.gameStateEnum.AI_PLAYING){
                     if(this.currentPlayerMove.length != null){
                         if(this.currentPlayerMove.length == 2){
+                            this.gameSequence.addGameMove(this.currentPlayerMove); //add move to the game sequence
                             this.aiPlaying();
                             this.gameState = this.gameStateEnum.ANIMATE;
                         }
@@ -239,6 +241,7 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == this.gameStateEnum.AI_PLAYING){
                     if(this.currentPlayerMove.length != null){
                         if(this.currentPlayerMove.length == 2){
+                            this.gameSequence.addGameMove(this.currentPlayerMove); //add move to the game sequence
                             this.aiPlaying();
                             this.gameState = this.gameStateEnum.ANIMATE;
                         }

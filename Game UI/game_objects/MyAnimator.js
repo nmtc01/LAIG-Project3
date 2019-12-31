@@ -3,9 +3,11 @@
  */
 class MyAnimator extends CGFobject{
     //Manages the animation of a game sequence
-    constructor(scene,orchestrator){
+    constructor(scene,orchestrator,sequence){
         super(scene);
         this.orchestrator = orchestrator;
+
+        this.sequence = sequence;
 
         this.canAnimate = false;
         this.active = false;

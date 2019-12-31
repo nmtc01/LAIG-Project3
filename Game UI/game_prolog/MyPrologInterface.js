@@ -160,6 +160,12 @@ class MyPrologInterface extends CGFobject{
             //smth to print winner 
             //smth to lock the game 
             //maybe smth to change flag game running from the scene
+            //todo 
+            //debug - print game sequence
+            console.log('gameSequence');
+            this.gameSequence.replay();
+            console.log('animator');
+            this.animator.sequence.replay();
         }else { //if no winner game continues - prepare next player
            
         }
