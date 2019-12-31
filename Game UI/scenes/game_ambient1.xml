@@ -208,38 +208,6 @@
              <visible flag="inherit" />
             <children>
                 <componentref id="table" />
-                <componentref id="auxBoardRed" />
-                <componentref id="auxBoardBlue" />
-            </children>
-        </component>
-
-        <component id="auxBoardRed">
-            <transformation>
-                <translate x="-1.9" y="2.63" z="0" />
-            </transformation>
-            <materials>
-                <material id="red"/>
-            </materials>
-            <texture id="none" />
-            <pickable flag="inherit" />
-            <visible flag="inherit" />
-            <children>
-                <primitiveref id="auxBoard" />
-            </children>
-        </component>
-
-        <component id="auxBoardBlue">
-            <transformation>
-                <translate x="1.9" y="2.63" z="0" />
-            </transformation>
-            <materials>
-                <material id="blue"/>
-            </materials>
-            <texture id="none" />
-            <pickable flag="inherit" />
-            <visible flag="inherit" />
-            <children>
-                <primitiveref id="auxBoard" />
             </children>
         </component>
 

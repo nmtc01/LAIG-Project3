@@ -30,7 +30,6 @@ class MyGameOrchestrator extends CGFobject{
         this.currentScores = {5:0, 9:0}
         this.isAiPlaying = false;
         this.stop = false;
-        this.eaten_pieces = [];
 
         this.gameState = {
             INIT:'init', 
@@ -104,11 +103,26 @@ class MyGameOrchestrator extends CGFobject{
             piece.addValidMove(this.currentValidMoves[i][1]);
         }
     }
+    eatenPieceOnTile(tile) {
+        //get piece on tileTo - eaten piece to be put on auxiliary board
+        let eaten_piece = this.gameboard.getPieceOnATile(tile);
+        if (eaten_piece != null) {
+            for (let i = 1; i <= 5; i++) {
+                let auxTile;
+                if (this.currentPlayer == 9)
+                    auxTile = this.gameboard.getTileByCoords([i,-0.7]);
+                else auxTile = this.gameboard.getTileByCoords([i,6.7]);
+                let piece = this.gameboard.getPieceOnATile(auxTile);
+                if (piece == null ) {
+                    this.gameboard.addPieceToTile(auxTile, eaten_piece);
+                    break;
+                }
+            }
+        }
+    }
     playerPlaying(move) {
-        console.log(this.currentBoard);
         let newBoard = this.prologInterface.playerMove(this.currentBoard, move); 
         this.currentBoard = newBoard; //update to newboard
-        console.log(this.currentBoard);
                    
         //todo - adjust with animation
             
@@ -117,10 +131,7 @@ class MyGameOrchestrator extends CGFobject{
 
         let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
 
-        //get piece on tileTo - eaten piece to be put on auxiliary board
-        let eaten_piece = this.gameboard.getPieceOnATile(tileTo);
-        if (eaten_piece != null)
-            this.eaten_pieces.push(eaten_piece); 
+        this.eatenPieceOnTile(tileTo);
 
         //animate piece          
         this.animator.start(pieceToMove,tileFrom,tileTo);
@@ -140,10 +151,7 @@ class MyGameOrchestrator extends CGFobject{
 
         let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
 
-        //get piece on tileTo - eaten piece to be put on auxiliary board
-        let eaten_piece = this.gameboard.getPieceOnATile(tileTo);
-        if (eaten_piece != null)
-            this.eaten_pieces.push(eaten_piece); 
+        this.eatenPieceOnTile(tileTo); 
 
         //animate piece          
         this.animator.start(pieceToMove,tileFrom,tileTo);

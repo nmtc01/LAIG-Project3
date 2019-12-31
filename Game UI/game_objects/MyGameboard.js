@@ -30,6 +30,17 @@ class MyGameboard extends CGFobject{
                 else type = "tile_black"
             }
         }
+        //generate 10 auxiliary tiles
+        for(let red = 1; red <= 5; red++) {
+            let coords = [red,-0.7];
+            let tile = new MyTile(this.scene,this,type,coords,false,true,this.orchestrator);
+            this.tiles[coords] = tile; 
+        }
+        for(let blue = 1; blue <= 5; blue++) {
+            let coords = [blue,6.7];
+            let tile = new MyTile(this.scene,this,type,coords,false,true,this.orchestrator);
+            this.tiles[coords] = tile; 
+        }
     }
     resetGame(){
         for(let key in this.tiles){
@@ -41,15 +52,7 @@ class MyGameboard extends CGFobject{
      * @param tile - tile to put the piece in 
      */
     addPieceToTile(tile,piece){
-        this.removePieceFromTile(tile);
         tile.setPieceOnTile(piece);
-    }
-    /**
-     * remove piece from the given tile
-     * @param tile - tile to the piece from
-     */
-    removePieceFromTile(tile){
-        tile.setPieceOnTile(null);
     }
     /**
      * get piece on the given tile
