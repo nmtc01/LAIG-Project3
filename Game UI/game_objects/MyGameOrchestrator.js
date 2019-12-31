@@ -201,9 +201,11 @@ class MyGameOrchestrator extends CGFobject{
             {
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
+                    this.gameCounter.startTurn();
                     this.gameState = this.gameStateEnum.PLAYER_PLAYING
                 }
                 if(this.gameState == this.gameStateEnum.PLAYER_PLAYING ){
+                    this.gameCounter.processCounter(this.currentPlayer);
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
                             this.gameSequence.addGameMove(this.currentPlayerMove); //add move to the game sequence
@@ -224,6 +226,7 @@ class MyGameOrchestrator extends CGFobject{
             {
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
+                    this.gameCounter.startTurn();
                     if (!this.isAiPlaying) {
                         this.gameState = this.gameStateEnum.PLAYER_PLAYING;
                         this.isAiPlaying = true;
@@ -274,6 +277,7 @@ class MyGameOrchestrator extends CGFobject{
             {
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
+                    this.gameCounter.startTurn();
                     this.gameState = this.gameStateEnum.AI_CHOOSING_MOVE;
                 }
                 if(this.gameState == this.gameStateEnum.AI_CHOOSING_MOVE){
@@ -403,11 +407,9 @@ class MyGameOrchestrator extends CGFobject{
     }
     
     display() { 
-        //this.theme.display(); 
         this.gameboard.display(); 
         this.gameCounter.display();
         this.animator.display(); 
-        //...
     }
 }
 

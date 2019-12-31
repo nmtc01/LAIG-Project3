@@ -33,7 +33,7 @@ class MyPrologInterface extends CGFobject{
         let ret = textStringToArray(data.target.response);
 
         this.currentBoard = ret[0];  //board
-        this.currentPlayer = ret[1]; //player playing
+        this.currentPlayer = Number(ret[1],10); //player playing
 
         //set up board pieces 
         for(let line = 0; line < this.currentBoard.length; line++){ 
