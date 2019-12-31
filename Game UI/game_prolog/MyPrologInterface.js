@@ -1,32 +1,71 @@
-//global 
-var response;
-
-class MyPrologInterface{
-    constructor(/*scene*/){
-        //super(scene);
+class MyPrologInterface extends CGFobject{
+    constructor(scene){
+        super(scene);
         this.port = 8081;
     }
     /**
-     * Methods:
-        • all that are necessary to request data to prolog
-        • all that are necessary to parse responses and accommodate in game data structures (centralized in GameOrchestrator)
+     * get request using string
+     * @param {*} requestString 
+     */
+    getPrologRequest(requestString,onSucess,onError){
+        let request = new XMLHttpRequest(this);
+     
+        request.open('GET', 'http://localhost:' + this.port + '/' + requestString, true);
+    
+        request.onload = onSucess || function (data) {
+            console.log("Request Sucessful. Reply: " + data.target.response);
+        };
+        request.onerror = onError || function () {
+            console.log("Error waiting for response");
+        };
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        request.send();
+    
+    }
+
     /**
      * initilizes prolog localhost server
      */
-    initGame(){  
-        this.getPrologRequest('init','board');
-        return response;
+    initGame(callback){  
+        this.getPrologRequest('init',callback);
     }
+    parseInitGame(data){
+        let ret = textStringToArray(data.target.response);
+
+        this.currentBoard = ret[0];  //board
+        this.currentPlayer = ret[1]; //player playing
+
+        //set up board pieces 
+        for(let line = 0; line < this.currentBoard.length; line++){ 
+            for(let column = 0 ; column < this.currentBoard[line].length; column++ )
+            if(this.currentBoard[line][column] != 0 && this.currentBoard[line][column] != 1){
+                let piece_type = this.pieceTranslator(this.currentBoard[line][column]); 
+                let coords = [line+1, column+1]; //always increment line/column when adding things 
+                let tile = this.gameboard.getTileByCoords(coords);
+                tile.setPieceOnTile(new MyPiece(this.scene,piece_type,true,true,this));
+            }
+        } 
+        this.gameState = 'get_valid_moves';
+    }
+ 
     /**
      * list all valid moves on current board
      * @param {*} Board 
      * @param {*} Player 
      * @returns list of all valid moves
      */
-    getValidMoves(Board,Player){
+    getValidMoves(Board,Player,callback){
         let strBoard = convertBoardToString(Board);
-        this.getPrologRequest('get_valid_moves('+strBoard+','+Player+')','valid_moves');
-        return response;
+        this.getPrologRequest('get_valid_moves('+strBoard+','+Player+')',callback);
+    }
+    parseValidMoves(data){
+        this.currentValidMoves = convertValidMovesToArray(data.target.response);
+        console.log(this.currentBoard);
+        for(let i = 0; i < this.currentValidMoves.length; i++){
+            let tile = this.gameboard.getTileByCoords(this.currentValidMoves[i][0])
+            let piece = this.gameboard.getPieceOnATile(tile)
+            piece.addValidMove(this.currentValidMoves[i][1]);
+        }
     }
     /**
      * makes human player move 
@@ -34,12 +73,24 @@ class MyPrologInterface{
      * @param {*} Move 
      * @returns NewBoard after move
      */
-    playerMove(Board,Move){
+    playerMove(Board,Move,callback){
         let strBoard = convertBoardToString(Board);
         let strMove = convertMoveAsciiToString(Move);
-        this.getPrologRequest('player_move('+strMove+','+strBoard+')','player_move');
-        return response;
+        this.getPrologRequest('player_move('+strMove+','+strBoard+')',callback);
     }
+    parsePlayerMove(data){
+        this.currentBoard =  boardStringToArray(data.target.response); //update to newboard      
+        //todo - adjust with animation
+        let tileFrom = this.gameboard.getTileByCoords(this.currentPlayerMove[0]);
+        let tileTo = this.gameboard.getTileByCoords(this.currentPlayerMove[1]);
+        let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
+        //animate piece         
+        this.animator.start(pieceToMove,tileFrom,tileTo);
+        //Reset currentPlayerMove
+        this.currentPlayerMove = [];
+        this.gameboard.resetValidMoves();
+    }
+
     /**
      * chooses ai move
      * @param {*} Board 
@@ -47,10 +98,12 @@ class MyPrologInterface{
      * @param {*} Player 
      * @returns NewMove after choose
      */
-    aiChooseMove(Board,Level,Player){
+    aiChooseMove(Board,Level,Player,callback){
         let strBoard = convertBoardToString(Board);
-        this.getPrologRequest('choose_ai_move('+strBoard+','+Level+','+Player+')','choose_ai_move');
-        return response;
+        this.getPrologRequest('choose_ai_move('+strBoard+','+Level+','+Player+')',callback);
+    }
+    parseAIChooseMove(data) {
+        this.currentPlayerMove = convertMoveStringToArray(data.target.response);
     }
     /**
      * makes ai move
@@ -58,22 +111,35 @@ class MyPrologInterface{
      * @param {*} Move 
      * @returns NewBoard after move
      */
-    aiMove(Board,Move){
+    aiMove(Board,Move,callback){
         let strBoard = convertBoardToString(Board);
-        let strMove = convertMoveToString(Move);
-        console.log(strMove);
-        this.getPrologRequest('ai_move('+strMove+','+strBoard+')','ai_move');
-        return response;
+        let strMove = convertMoveAsciiToString(Move);
+        this.getPrologRequest('ai_move('+strMove+','+strBoard+')',callback);
+    }
+    parseAIMove(data) {
+        this.currentBoard = boardStringToArray(data.target.response);
+       
+        let tileFrom = this.gameboard.getTileByCoords(this.currentPlayerMove[0]);
+        let tileTo = this.gameboard.getTileByCoords(this.currentPlayerMove[1]);
+
+        let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
+        //animate piece        
+        this.animator.start(pieceToMove,tileFrom,tileTo);
+        //Reset currentPlayerMove
+        this.currentPlayerMove = [];
+        this.gameboard.resetValidMoves();
     }
     /**
      * 
      * @param {*} Board 
      * @param {*} Player 
      */
-    getScore(Board,Player){
+    getScore(Board,Player,callback){
         let strBoard = convertBoardToString(Board);
-        this.getPrologRequest('get_player_score('+strBoard+','+Player+')','get_score');
-        return response;
+        this.getPrologRequest('get_player_score('+strBoard+','+Player+')',callback);
+    }  
+    parseScore(data){
+        this.currentScores[this.currentPlayer] = parseInt(data.target.response,10);
     }
     /**
      * 
@@ -81,130 +147,21 @@ class MyPrologInterface{
      * @param {*} Player 
      * @returns winning player, if -1 game continues if 5 red wins if 9 blue wins
      */
-    checkWin(Board,Player){
+    checkWin(Board,Player,callback){
         let strBoard = convertBoardToString(Board);
-        this.getPrologRequest('check_game_over('+strBoard+','+Player+')','check_winner')
-        return response;
+        this.getPrologRequest('check_game_over('+strBoard+','+Player+')',callback)
     }
-    /**
-     * get request using string
-     * @param {*} requestString 
-     */
-    getPrologRequest(requestString,type){
-        let request = new XMLHttpRequest(this);
-        switch(type){
-            case 'board': 
-                request.addEventListener("load",this.parseBoardPrologReply); 
-            break ; 
-            case 'valid_moves':
-                request.addEventListener("load",this.parseValidMovesPrologReply); 
-            break; 
-            case 'player_move':
-                request.addEventListener("load",this.parsePlayerMovesPrologReply);
-            break;
-            case 'choose_ai_move':
-                request.addEventListener("load",this.parseAIChooseMovesPrologReply);
-            break;
-            case 'ai_move':
-                request.addEventListener("load",this.parseAIMovesPrologReply);
-            break;
-            case 'get_score':
-                request.addEventListener("load",this.parseScorePrologReply);
-            break;
-            case 'check_winner':
-                request.addEventListener("load",this.parseWinnerPrologReply);
-            break;
+    parseWinner(data){
+        let winner = parseInt(data.target.response,10);
+        //check winner
+        if(winner != -1){
+            this.gameState = 'game_ended';
+            //smth to print winner 
+            //smth to lock the game 
+            //maybe smth to change flag game running from the scene
+        }else { //if no winner game continues - prepare next player
+           
         }
-        request.addEventListener("error",this.startPrologGameError);
-        request.open('GET', 'http://localhost:'+this.port+'/'+requestString,false);  //todo check if this flag doesnt cereate problems
-        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8"); 
-        request.send();
-    }
-    /**
-     * xhr handler for game init
-     */
-    parseBoardPrologReply() {
-        if (this.status === 400) { 
-            console.log("ERROR"); 
-            return;
-        }
-        let responseArray = textStringToArray(this.responseText);
-        response = responseArray;
-    }
-    /**
-     *  xhr handler for a valid move
-     */
-    parseValidMovesPrologReply() {
-        if (this.status === 400) { 
-            console.log("ERROR"); 
-            return;
-        }
-        let responseArray = convertValidMovesToArray(this.responseText);
-
-        response = responseArray;
-    }
-      /**
-     *  xhr handler for player moves
-     */
-    parsePlayerMovesPrologReply() {
-        if (this.status === 400) { 
-            console.log("ERROR"); 
-            return;
-        }
-        let responseArray = boardStringToArray(this.responseText);
-        response = responseArray;
-    }
-    /**
-     *  xhr handler for ai moves
-     */
-    parseAIChooseMovesPrologReply() {
-        if (this.status === 400) { 
-            console.log("ERROR"); 
-            return;
-        }
-        console.log(this.responseText)
-        let responseArray = moveStringToArray(this.responseText);
-        console.log(responseArray)
-        response = responseArray
-    }
-    /**
-     *  xhr handler for ai moves
-     */
-    parseAIMovesPrologReply() {
-        if (this.status === 400) { 
-            console.log("ERROR"); 
-            return;
-        }
-        console.log(this.responseText)
-        let responseArray = boardStringToArray(this.responseText);
-        console.log(responseArray)
-        response = responseArray;
-    }
-    /**
-     *  xhr handler for score
-     */
-    parseScorePrologReply(){
-        if (this.status === 400) { 
-            console.log("ERROR"); 
-            return;
-        }
-        response = parseInt(this.responseText,10);
-    }
-    /**
-     *  xhr handler for winner
-     */
-    parseWinnerPrologReply(){
-        if (this.status === 400) { 
-            console.log("ERROR"); 
-            return;
-        }
-        response = parseInt(this.responseText,10);
-    }
-    /**
-     *  xhr handler for errors on start
-     */
-    parseStartPrologError(){
-        console.log('ERROR')
     }
 }
 
@@ -407,6 +364,18 @@ function convertMoveToString(Move){
     move = move.substring(0,move.length-1);
     move +=']'
     return move;
+}
+function convertMoveStringToArray(string){
+    let str = string
+    .replace(/[\[\]']+/g,"")
+    .replace(/a/g,"1")
+    .replace(/b/g,"2")
+    .replace(/c/g,"3")
+    .replace(/d/g,"4")
+    .replace(/e/g,"5")
+    .replace(/,/g,"");
+
+    return [[Number(str[0],10), Number(str[1],10)],[Number(str[2],10),Number(str[3],10)]];
 }
 /**
  * converts validmoves string to compatible js array

@@ -14,7 +14,7 @@ class MyGameOrchestrator extends CGFobject{
         this.gameSequence = new MyGameSequence(this.scene); 
         this.animator = new MyAnimator(this.scene,this); 
         this.gameboard = new MyGameboard(this.scene,this); 
-        this.prologInterface = new MyPrologInterface(this.scene);
+        this.prologInterface = new MyPrologInterface(this.scene,this);
         this.gameSequence = new MyGameSequence();
 
         //use to determine game type 
@@ -49,27 +49,6 @@ class MyGameOrchestrator extends CGFobject{
         this.playerMoveState = 'piece_select';
     }
     //todo check best way to do this 
-    startGame(type,level){
-        this.gameboard.resetGame();
-        this.gameType = type; 
-        this.gameLevel=level;
-        let ret = this.prologInterface.initGame(type,level);
-        this.currentBoard = ret[0];  //board
-        this.currentPlayer = ret[1]; //player playing
-
-        //set up board pieces 
-        for(let line = 0; line < this.currentBoard.length; line++){ 
-            for(let column = 0 ; column < this.currentBoard[line].length; column++ )
-            if(this.currentBoard[line][column] != 0 && this.currentBoard[line][column] != 1){
-                let piece_type = this.pieceTranslator(this.currentBoard[line][column]); 
-                let coords = [line+1, column+1]; //always increment line/column when adding things 
-                let tile = this.gameboard.getTileByCoords(coords);
-                tile.setPieceOnTile(new MyPiece(this.scene,piece_type,true,true,this));
-            }
-        } 
-        //todo check who will play 
-        this.gameState = 'get_valid_moves';
-    }
     getScene() {
         return this.scene;
     }
@@ -93,78 +72,53 @@ class MyGameOrchestrator extends CGFobject{
         return piece;
     }
 
-    getValidMoves() {
-        //paint tiles
-        this.currentValidMoves = this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer);
+    startGame(type,level){
+        this.gameboard.resetGame();
+        this.gameType = type; 
+        this.gameLevel=level;
 
-        for(let i = 0; i < this.currentValidMoves.length; i++){
-            let tile = this.gameboard.getTileByCoords(this.currentValidMoves[i][0])
-            let piece = this.gameboard.getPieceOnATile(tile)
-            piece.addValidMove(this.currentValidMoves[i][1]);
-        }
+        this.prologInterface.initGame(this.prologInterface.parseInitGame.bind(this)); 
     }
-    playerPlaying(move) {
-        console.log(this.currentBoard);
-        let newBoard = this.prologInterface.playerMove(this.currentBoard, move); 
-        this.currentBoard = newBoard; //update to newboard
-        console.log(this.currentBoard);
-                   
-        //todo - adjust with animation
-            
-        let tileFrom = this.gameboard.getTileByCoords(move[0]);
-        let tileTo = this.gameboard.getTileByCoords(move[1]);
+    getValidMoves() {
+        this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer,this.prologInterface.parseValidMoves.bind(this));
+    }
 
-        let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
-        //animate piece          
-        this.animator.start(pieceToMove,tileFrom,tileTo);
-                    
-        this.gameboard.resetValidMoves();
+    playerPlaying() {
+        this.prologInterface.playerMove(this.currentBoard,this.currentPlayerMove,this.prologInterface.parsePlayerMove.bind(this));   
+    }
+    aiMoveSelection(){
+        this.prologInterface.aiChooseMove(this.currentBoard, this.gameLevel, this.currentPlayer,this.prologInterface.parseAIChooseMove.bind(this));
     }
     aiPlaying() {
-        let move = this.prologInterface.aiChooseMove(this.currentBoard, this.gameLevel, this.currentPlayer);
-        let newBoard = this.prologInterface.aiMove(this.currentBoard, move); 
-        this.currentBoard = newBoard; //update to newboard
-
-        let newMove = [[move[0][0].charCodeAt(0)-96, parseInt(move[0][1],10)],
-                       [move[1][0].charCodeAt(0)-96, parseInt(move[1][1],10)]];
-
-        let tileFrom = this.gameboard.getTileByCoords(newMove[0]);
-        let tileTo = this.gameboard.getTileByCoords(newMove[1]);
-
-        let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
-        //animate piece          
-        this.animator.start(pieceToMove,tileFrom,tileTo);
-
-        this.gameboard.resetValidMoves();
+        //console.log(this.currentBoard)
+        console.log(this.currentPlayerMove)
+        this.prologInterface.aiMove(this.currentBoard, this.currentPlayerMove,this.prologInterface.parseAIMove.bind(this)); 
     }
     animate() {
-        this.animator.processAnimation();
+        if(this.animator.canAnimate){
+            if(!this.animator.active){
+              //move piece on gameboarb
+              this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
+              this.animator.piece_to_move.setMoving(false);
+              //stop animation
+              this.animator.canAnimate = false;
+              this.gameState = 'check_game_state';
 
-        if(!this.animator.active){
-            //move piece on gameboard
-            this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
-            //stop animation
-            this.gameState = 'check_game_state';
+            }else {
+                this.animator.processAnimation();
+            }
         }
     }
     checkGameState() {
         //get player score after move 
-        this.currentScores[this.currentPlayer] = this.prologInterface.getScore(this.currentBoard,this.currentPlayer);
+        this.prologInterface.getScore(this.currentBoard,this.currentPlayer,this.prologInterface.parseScore.bind(this));
         //get if there is a winner
-        let winner = this.prologInterface.checkWin(this.currentBoard,this.currentPlayer);
-        //check winner
-        if(winner != -1){
-            this.gameState = 'game_ended';
-            //smth to print winner 
-            //smth to lock the game 
-            //maybe smth to change flag game running from the scene
-        }else { //if no winner game continues - prepare next player
-            if(this.currentPlayer == 5)
-                this.currentPlayer = 9;
-            else this.currentPlayer = 5; 
+        this.prologInterface.checkWin(this.currentBoard,this.currentPlayer,this.prologInterface.parseWinner.bind(this));
+
+        if(this.currentPlayer == 5)
+            this.currentPlayer = 9;
+        else this.currentPlayer = 5; 
             this.gameState = 'get_valid_moves';
-        }
-        //todo erase - this is just here to debug, so that the game can lock
     }
     equalMoves(move1, move2) {
         let equal = true;
@@ -198,16 +152,6 @@ class MyGameOrchestrator extends CGFobject{
 
     //TODO stop condition after win
     manageGameplay(){
-        //* DEBUG - TO CHECK ID INTEGRITY
-        /*
-        let aux= []; 
-        for(let key in this.gameboard.tiles){
-            let piece = this.gameboard.tiles[key].getPiece()
-            if (piece != null )
-               aux.push(piece.uniqueId);
-        }
-        console.log(aux);
-        */
         //the management will depend on game type selected 
         //each game managemente is a copy from prolog - game.pl 
         switch(this.gameType){
@@ -220,9 +164,7 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == 'player_playing'){
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
-                            this.playerPlaying(this.currentPlayerMove);
-                            //Reset currentPlayerMove
-                            this.currentPlayerMove = [];
+                            this.playerPlaying();
                             this.gameState = 'animate';
                         }
                 }
@@ -237,6 +179,7 @@ class MyGameOrchestrator extends CGFobject{
             }
             case 'pvc': 
             {
+                console.log(this.gameState);
                 if(this.gameState == 'get_valid_moves'){
                     this.getValidMoves();
                     if (!this.isAiPlaying) {
@@ -244,22 +187,30 @@ class MyGameOrchestrator extends CGFobject{
                         this.isAiPlaying = true;
                     }
                     else {
-                        this.gameState = 'ai_playing';
+                        this.gameState = 'ai_choosing_move';
                         this.isAiPlaying = false;
                     }
                 }
                 if(this.gameState == 'player_playing'){
+                   // this.playerMoveState = 'begin'; //todo comentei isto 
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
                             this.playerPlaying(this.currentPlayerMove);
-                            //Reset currentPlayerMove
-                            this.currentPlayerMove = [];
                             this.gameState = 'animate';
                         }
                 }
+                if(this.gameState == 'ai_choosing_move'){
+                    this.aiMoveSelection();
+                    this.gameState = 'ai_playing';
+                }
                 if(this.gameState == 'ai_playing'){
-                    this.aiPlaying();
-                    this.gameState = 'animate';
+                    if(this.currentPlayerMove.length != null){
+                        if(this.currentPlayerMove.length == 2){
+                            this.aiPlaying();
+                            this.gameState = 'animate';
+                        }
+                    }
+                    //Descomment to stop game
                     //this.stop = true;
                 } 
                 if(this.gameState == 'animate'){
@@ -279,11 +230,19 @@ class MyGameOrchestrator extends CGFobject{
             {
                 if(this.gameState == 'get_valid_moves'){
                     this.getValidMoves();
+                    this.gameState = 'ai_choosing_move';
+                }
+                if(this.gameState == 'ai_choosing_move'){
+                    this.aiMoveSelection();
                     this.gameState = 'ai_playing';
                 }
                 if(this.gameState == 'ai_playing'){
-                    this.aiPlaying();
-                    this.gameState = 'animate';
+                    if(this.currentPlayerMove.length != null){
+                        if(this.currentPlayerMove.length == 2){
+                            this.aiPlaying();
+                            this.gameState = 'animate';
+                        }
+                    }
                     //Descomment to stop game
                     //this.stop = true;
                 } 
