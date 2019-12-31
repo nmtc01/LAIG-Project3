@@ -16,6 +16,7 @@ class MyGameOrchestrator extends CGFobject{
         this.gameboard = new MyGameboard(this.scene,this); 
         this.prologInterface = new MyPrologInterface(this.scene,this);
         this.gameSequence = new MyGameSequence();
+        this.gameCounter = new MyCounter(this.scene,this); 
 
         //use to determine game type 
         this.gameType = null;
@@ -312,6 +313,7 @@ class MyGameOrchestrator extends CGFobject{
     }
     update(time) { 
         this.animator.update(time);
+        this.gameCounter.update(time);
     }
     managePick(mode, pickResults) {
         if (mode == false /* && some other game conditions */){
@@ -403,6 +405,7 @@ class MyGameOrchestrator extends CGFobject{
     display() { 
         //this.theme.display(); 
         this.gameboard.display(); 
+        this.gameCounter.display();
         this.animator.display(); 
         //...
     }

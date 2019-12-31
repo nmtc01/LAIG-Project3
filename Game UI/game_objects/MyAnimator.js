@@ -44,7 +44,6 @@ class MyAnimator extends CGFobject{
      * start animation
      */
     start(piece,tileFrom,tileTo){
-        //todo
         this.canAnimate = true;
         this.active = true;
 
