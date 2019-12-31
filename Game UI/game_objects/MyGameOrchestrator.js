@@ -30,6 +30,8 @@ class MyGameOrchestrator extends CGFobject{
         this.currentScores = {5:0, 9:0}
         this.isAiPlaying = false;
         this.stop = false;
+        this.currentEatenProps = [];
+        this.isEatenMoving = false;
 
         this.gameState = {
             INIT:'init', 
@@ -103,22 +105,18 @@ class MyGameOrchestrator extends CGFobject{
             piece.addValidMove(this.currentValidMoves[i][1]);
         }
     }
-    eatenPieceOnTile(tile) {
-        //get piece on tileTo - eaten piece to be put on auxiliary board
-        let eaten_piece = this.gameboard.getPieceOnATile(tile);
-        if (eaten_piece != null) {
-            for (let i = 1; i <= 5; i++) {
-                let auxTile;
-                if (this.currentPlayer == 9)
-                    auxTile = this.gameboard.getTileByCoords([i,-0.7]);
-                else auxTile = this.gameboard.getTileByCoords([i,6.7]);
-                let piece = this.gameboard.getPieceOnATile(auxTile);
-                if (piece == null ) {
-                    this.gameboard.addPieceToTile(auxTile, eaten_piece);
-                    break;
-                }
+    getEatenPieceTileTo() {
+        for (let i = 1; i <= 5; i++) {
+            let tile;
+            if (this.currentPlayer == 9)
+                tile = this.gameboard.getTileByCoords([i,-0.7]);
+            else tile = this.gameboard.getTileByCoords([i,6.7]);
+            let piece = this.gameboard.getPieceOnATile(tile);
+            if (piece == null ) {
+                return tile 
             }
         }
+        return tile;
     }
     playerPlaying(move) {
         let newBoard = this.prologInterface.playerMove(this.currentBoard, move); 
@@ -131,7 +129,12 @@ class MyGameOrchestrator extends CGFobject{
 
         let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
 
-        this.eatenPieceOnTile(tileTo);
+        //Check for eaten pieces
+        let eaten_piece = this.gameboard.getPieceOnATile(tileTo);
+        if (eaten_piece != null) {
+            let eaten_tile_to = this.getEatenPieceTileTo();
+            this.currentEatenProps = [eaten_piece, tileTo, eaten_tile_to];
+        }
 
         //animate piece          
         this.animator.start(pieceToMove,tileFrom,tileTo);
@@ -151,21 +154,44 @@ class MyGameOrchestrator extends CGFobject{
 
         let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
 
-        this.eatenPieceOnTile(tileTo); 
+        //Check for eaten pieces
+        let eaten_piece = this.gameboard.getPieceOnATile(tileTo);
+        if (eaten_piece != null) {
+            let eaten_tile_to = this.getEatenPieceTileTo();
+            this.currentEatenProps = [eaten_piece, tileTo, eaten_tile_to];
+        }
 
         //animate piece          
         this.animator.start(pieceToMove,tileFrom,tileTo);
 
         this.gameboard.resetValidMoves();
     }
+    checkEatenProps() {
+        //If there are eaten pieces then animate again
+        if (this.currentEatenProps.length != 0) {
+            let piece = this.currentEatenProps[0];
+            let tileFrom = this.currentEatenProps[1];
+            let tileTo = this.currentEatenProps[2];
+            this.animator.start(piece, tileFrom, tileTo);
+            //Reset currentEatenProps
+            this.currentEatenProps = [];
+            this.isEatenMoving = true;
+            this.gameState = 'animate';
+        }
+        else //stop animation
+        this.gameState = 'check_game_state';
+    }
     animate() {
         this.animator.processAnimation();
 
         if(!this.animator.active){
             //move piece on gameboard
-            this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
-            //stop animation
-            this.gameState = 'check_game_state';
+            if (this.isEatenMoving) {
+                this.animator.tileTo.setPieceOnTile(this.animator.piece_to_move);
+                this.isEatenMoving = false;
+            }
+            else this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
+            this.checkEatenProps();
         }
     }
     checkGameState() {
@@ -248,7 +274,7 @@ class MyGameOrchestrator extends CGFobject{
                         }
                 }
                 if(this.gameState == 'animate'){
-                    this.animate();
+                    this.animate(); 
                 }
                 if(this.gameState == 'check_game_state'){
                     this.checkGameState();
