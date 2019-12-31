@@ -179,6 +179,7 @@ class MyGameOrchestrator extends CGFobject{
             }
             case 'pvc': 
             {
+                console.log(this.gameState);
                 if(this.gameState == 'get_valid_moves'){
                     this.getValidMoves();
                     if (!this.isAiPlaying) {
@@ -186,22 +187,31 @@ class MyGameOrchestrator extends CGFobject{
                         this.isAiPlaying = true;
                     }
                     else {
-                        this.gameState = 'ai_playing';
+                        this.gameState = 'ai_choosing_move';
                         this.isAiPlaying = false;
                     }
                 }
                 if(this.gameState == 'player_playing'){
-                    this.playerMoveState = 'begin';
+                   // this.playerMoveState = 'begin'; //todo comentei isto 
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
                             this.playerPlaying(this.currentPlayerMove);
                             this.gameState = 'animate';
                         }
                 }
+                if(this.gameState == 'ai_choosing_move'){
+                    this.aiMoveSelection();
+                    this.gameState = 'ai_playing';
+                }
                 if(this.gameState == 'ai_playing'){
-                    this.aiPlaying();
-                    this.gameState = 'animate';
-                    this.stop = true;
+                    if(this.currentPlayerMove.length != null){
+                        if(this.currentPlayerMove.length == 2){
+                            this.aiPlaying();
+                            this.gameState = 'animate';
+                        }
+                    }
+                    //Descomment to stop game
+                    //this.stop = true;
                 } 
                 if(this.gameState == 'animate'){
                     this.animate();
