@@ -76,10 +76,8 @@ class MyAnimator extends CGFobject{
     processAnimation(){
         //calculate interpolation 
         let val = this.sent;
-        if(this.sent>2)
-            val= 2;
         let interpolation =  val/this.animation_time;
-        if(this.sent > 2.1){
+        if(this.sent >= 2){
             this.sent = 0;
             this.active = false; //end animation
         }

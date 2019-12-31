@@ -128,6 +128,7 @@ class MyGameOrchestrator extends CGFobject{
     }
     animate() {
         if(this.animator.canAnimate){
+            this.animator.processAnimation();
             if(!this.animator.active){
                 if(this.isEatenMoving){ 
                     this.animator.piece_to_move.setMoving(false);
@@ -146,8 +147,6 @@ class MyGameOrchestrator extends CGFobject{
                     this.gameState = this.gameStateEnum.CHECK_GAME_STATE; 
                 }
                 this.checkEatenProps();
-            }else {
-                this.animator.processAnimation();
             }
         }
     }
