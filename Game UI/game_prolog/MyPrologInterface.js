@@ -181,8 +181,6 @@ class MyPrologInterface extends CGFobject{
             this.gameSequence.replay();
             console.log('animator');
             this.animator.sequence.replay();
-        }else { //if no winner game continues - prepare next player
-           
         }
     }
 }
