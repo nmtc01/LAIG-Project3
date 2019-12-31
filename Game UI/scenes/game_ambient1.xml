@@ -116,8 +116,8 @@
             <skybox size="30" />
         </primitive> 
 
-        <primitive id="MyPrism">
-            <rect_prism width="3" length="5" height="2" />
+        <primitive id="auxBoard">
+            <rect_prism width="3" length="1" height="0.05" />
         </primitive> 
 
         <primitive id="tableTop">
@@ -455,7 +455,6 @@
             </children>
         </component>
         
-
          <component id="tile_white" template="true">
             <transformation>
                 <translate x="0" y="5.25" z="0"/>

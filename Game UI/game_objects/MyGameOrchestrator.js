@@ -30,6 +30,8 @@ class MyGameOrchestrator extends CGFobject{
         this.currentScores = {5:0, 9:0}
         this.isAiPlaying = false;
         this.stop = false;
+        this.currentEatenProps = [];
+        this.isEatenMoving = false;
 
         this.gameStateEnum = {
             INIT:0, 
@@ -95,15 +97,55 @@ class MyGameOrchestrator extends CGFobject{
         console.log(this.currentPlayerMove)
         this.prologInterface.aiMove(this.currentBoard, this.currentPlayerMove,this.prologInterface.parseAIMove.bind(this)); 
     }
+    getEatenPieceTileTo() {
+        for (let i = 1; i <= 5; i++) {
+            let tile;
+            if (this.currentPlayer == 9)
+                tile = this.gameboard.getTileByCoords([i,-0.7]);
+            else tile = this.gameboard.getTileByCoords([i,6.7]);
+            let piece = this.gameboard.getPieceOnATile(tile);
+            if (piece == null ) {
+                return tile; 
+            }
+        }
+        return tile;
+    }
+    checkEatenProps() {
+        //If there are eaten pieces then animate again
+        if (this.currentEatenProps.length != 0) {
+            let piece = this.currentEatenProps[0];
+            let tileFrom = this.currentEatenProps[1];
+            let tileTo = this.currentEatenProps[2];
+
+            this.animator.start(piece, tileFrom, tileTo);
+            //Reset currentEatenProps
+            this.currentEatenProps = [];
+            this.isEatenMoving = true;
+            this.gameState = this.gameStateEnum.ANIMATE;
+        }
+        else //stop animation
+        this.gameState = this.gameStateEnum.CHECK_GAME_STATE;
+    }
     animate() {
         if(this.animator.canAnimate){
             if(!this.animator.active){
-                this.animator.piece_to_move.setMoving(false);
-                //move piece on gameboarb
-                this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
-                //stop animation
-                this.animator.canAnimate = false;
-                this.gameState = this.gameStateEnum.CHECK_GAME_STATE; 
+                if(this.isEatenMoving){ 
+                    this.animator.piece_to_move.setMoving(false);
+                    this.animator.tileTo.setPieceOnTile(this.animator.piece_to_move);      
+                    this.isEatenMoving = false;
+                    //stop animation
+                    this.animator.canAnimate = false;
+                    this.gameState = this.gameStateEnum.CHECK_GAME_STATE; 
+                    
+                }else{
+                    this.animator.piece_to_move.setMoving(false);
+                    //move piece on gameboarb
+                    this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
+                    //stop animation
+                    this.animator.canAnimate = false;
+                    this.gameState = this.gameStateEnum.CHECK_GAME_STATE; 
+                }
+                this.checkEatenProps();
             }else {
                 this.animator.processAnimation();
             }

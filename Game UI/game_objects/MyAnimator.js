@@ -75,9 +75,12 @@ class MyAnimator extends CGFobject{
     }
     processAnimation(){
         //calculate interpolation 
-        let interpolation =  this.sent/this.animation_time;
-        if(this.sent > 2){
-            this.sent = 0; 
+        let val = this.sent;
+        if(this.sent>2)
+            val= 2;
+        let interpolation =  val/this.animation_time;
+        if(this.sent > 2.1){
+            this.sent = 0;
             this.active = false; //end animation
         }
         //animation is processed using a bezier curve
