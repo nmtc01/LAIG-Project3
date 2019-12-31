@@ -45,7 +45,8 @@ class MyPrologInterface extends CGFobject{
                 tile.setPieceOnTile(new MyPiece(this.scene,piece_type,true,true,this));
             }
         } 
-        this.gameState = 'get_valid_moves';
+
+        this.gameState = this.gameStateEnum.GET_VALID_MOVES;
     }
  
     /**
@@ -155,7 +156,7 @@ class MyPrologInterface extends CGFobject{
         let winner = parseInt(data.target.response,10);
         //check winner
         if(winner != -1){
-            this.gameState = 'game_ended';
+            this.gameState = this.gameStateEnum.GAME_ENDED;
             //smth to print winner 
             //smth to lock the game 
             //maybe smth to change flag game running from the scene

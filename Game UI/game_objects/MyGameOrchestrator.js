@@ -31,16 +31,17 @@ class MyGameOrchestrator extends CGFobject{
         this.isAiPlaying = false;
         this.stop = false;
 
-        this.gameState = {
-            INIT:'init', 
-            GET_VALID_MOVES:'get_valid_moves', 
-            PLAYER_PLAYING: 'player_playing',
-            AI_PLAYING: 'ai_playing',  
-            ANIMATE: 'animate',
-            CHECK_GAME_STATE: 'check_game_state',
-            GAME_ENDED:'game_ended'
+        this.gameStateEnum = {
+            INIT:0, 
+            GET_VALID_MOVES: 1, 
+            PLAYER_PLAYING: 2,
+            AI_CHOOSING_MOVE: 3,
+            AI_PLAYING: 4,  
+            ANIMATE: 5,
+            CHECK_GAME_STATE: 6,
+            GAME_ENDED:7
         }
-        this.gameState = 'init'; 
+        this.gameState = this.gameStateEnum.INIT; 
 
         this.playerMoveState = {
             PIECE_SELECT: 'piece_select',
@@ -102,7 +103,7 @@ class MyGameOrchestrator extends CGFobject{
               this.animator.piece_to_move.setMoving(false);
               //stop animation
               this.animator.canAnimate = false;
-              this.gameState = 'check_game_state';
+                this.gameState = this.gameStateEnum.CHECK_GAME_STATE; 
 
             }else {
                 this.animator.processAnimation();
@@ -118,7 +119,7 @@ class MyGameOrchestrator extends CGFobject{
         if(this.currentPlayer == 5)
             this.currentPlayer = 9;
         else this.currentPlayer = 5; 
-            this.gameState = 'get_valid_moves';
+        this.gameState = this.gameStateEnum.GET_VALID_MOVES; 
     }
     equalMoves(move1, move2) {
         let equal = true;
@@ -157,105 +158,104 @@ class MyGameOrchestrator extends CGFobject{
         switch(this.gameType){
             case 'pvp': 
             {
-                if(this.gameState == 'get_valid_moves'){
+                if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
-                    this.gameState = 'player_playing';
+                    this.gameState = this.gameStateEnum.PLAYER_PLAYING
                 }
-                if(this.gameState == 'player_playing'){
+                if(this.gameState == this.gameStateEnum.PLAYER_PLAYING ){
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
                             this.playerPlaying();
-                            this.gameState = 'animate';
+                            this.gameState = this.gameStateEnum.ANIMATE;
                         }
                 }
-                if(this.gameState == 'animate'){
+                if(this.gameState == this.gameStateEnum.ANIMATE){
                     this.animate();
                 }
-                if(this.gameState == 'check_game_state'){
+                if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
                     this.checkGameState();
-                    this.gameState = 'get_valid_moves';
+                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                 }
                 break;  
             }
             case 'pvc': 
             {
-                console.log(this.gameState);
-                if(this.gameState == 'get_valid_moves'){
+                if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
                     if (!this.isAiPlaying) {
-                        this.gameState = 'player_playing';
+                        this.gameState = this.gameStateEnum.PLAYER_PLAYING;
                         this.isAiPlaying = true;
                     }
                     else {
-                        this.gameState = 'ai_choosing_move';
+                        this.gameState = this.gameStateEnum.AI_CHOOSING_MOVE;
                         this.isAiPlaying = false;
                     }
                 }
-                if(this.gameState == 'player_playing'){
+                if(this.gameState == this.gameStateEnum.PLAYER_PLAYING){
                    // this.playerMoveState = 'begin'; //todo comentei isto 
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
                             this.playerPlaying(this.currentPlayerMove);
-                            this.gameState = 'animate';
+                            this.gameState = this.gameStateEnum.ANIMATE;
                         }
                 }
-                if(this.gameState == 'ai_choosing_move'){
+                if(this.gameState == this.gameStateEnum.AI_CHOOSING_MOVE){
                     this.aiMoveSelection();
-                    this.gameState = 'ai_playing';
+                    this.gameState = this.gameStateEnum.AI_PLAYING;
                 }
-                if(this.gameState == 'ai_playing'){
+                if(this.gameState == this.gameStateEnum.AI_PLAYING){
                     if(this.currentPlayerMove.length != null){
                         if(this.currentPlayerMove.length == 2){
                             this.aiPlaying();
-                            this.gameState = 'animate';
+                            this.gameState = this.gameStateEnum.ANIMATE;
                         }
                     }
                     //Descomment to stop game
                     //this.stop = true;
                 } 
-                if(this.gameState == 'animate'){
+                if(this.gameState == this.gameStateEnum.ANIMATE){
                     this.animate();
                 }
-                if(this.gameState == 'check_game_state'){
+                if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
                     this.checkGameState();
                     //this.gameState = 'game_ended';
-                    this.gameState = 'get_valid_moves';
+                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                     //TODO delete this.stop - just to make the game stops - testing
                     if (this.stop)
-                        this.gameState = 'game_end';
+                        this.gameState = this.gameStateEnum.GAME_ENDED;
                 }
                 break; 
             }
             case 'cvc': 
             {
-                if(this.gameState == 'get_valid_moves'){
+                if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
-                    this.gameState = 'ai_choosing_move';
+                    this.gameState = this.gameStateEnum.AI_CHOOSING_MOVE;
                 }
-                if(this.gameState == 'ai_choosing_move'){
+                if(this.gameState == this.gameStateEnum.AI_CHOOSING_MOVE){
                     this.aiMoveSelection();
-                    this.gameState = 'ai_playing';
+                    this.gameState = this.gameStateEnum.AI_PLAYING;
                 }
-                if(this.gameState == 'ai_playing'){
+                if(this.gameState == this.gameStateEnum.AI_PLAYING){
                     if(this.currentPlayerMove.length != null){
                         if(this.currentPlayerMove.length == 2){
                             this.aiPlaying();
-                            this.gameState = 'animate';
+                            this.gameState = this.gameStateEnum.ANIMATE;
                         }
                     }
                     //Descomment to stop game
                     //this.stop = true;
                 } 
-                if(this.gameState == 'animate'){
+                if(this.gameState == this.gameStateEnum.ANIMATE){
                     this.animate();
                 }
-                if(this.gameState == 'check_game_state'){
+                if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
                     this.checkGameState();
                     //this.gameState = 'game_ended';
-                    this.gameState = 'get_valid_moves';
+                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                     //TODO delete this.stop - just to make the game stops - testing
                     if (this.stop)
-                        this.gameState = 'game_end';
+                        this.gameState = this.gameStateEnum.GAME_ENDED;
                 }
                 break;
             } 
