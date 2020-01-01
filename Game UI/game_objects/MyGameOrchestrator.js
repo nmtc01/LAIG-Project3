@@ -16,6 +16,7 @@ class MyGameOrchestrator extends CGFobject{
         this.gameboard = new MyGameboard(this.scene,this); 
         this.prologInterface = new MyPrologInterface(this.scene,this);
         this.gameSequence = new MyGameSequence();
+        this.gameCounter = new MyCounter(this.scene,this); 
 
         //use to determine game type 
         this.gameType = null;
@@ -113,6 +114,10 @@ class MyGameOrchestrator extends CGFobject{
     checkEatenProps() {
         //If there are eaten pieces then animate again
         if (this.currentEatenProps.length != 0) {
+
+            //update score because a piece was eaten
+            this.gameCounter.updateScores(this.currentPlayer);
+
             let piece = this.currentEatenProps[0];
             let tileFrom = this.currentEatenProps[1];
             let tileTo = this.currentEatenProps[2];
@@ -155,7 +160,11 @@ class MyGameOrchestrator extends CGFobject{
         this.prologInterface.getScore(this.currentBoard,this.currentPlayer,this.prologInterface.parseScore.bind(this));
         //get if there is a winner
         this.prologInterface.checkWin(this.currentBoard,this.currentPlayer,this.prologInterface.parseWinner.bind(this));
+        
+        this.changePlayerPlaying();
 
+    }
+    changePlayerPlaying(){
         if(this.currentPlayer == 5)
             this.currentPlayer = 9;
         else this.currentPlayer = 5; 
@@ -199,9 +208,11 @@ class MyGameOrchestrator extends CGFobject{
             {
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
+                    this.gameCounter.startTurn();
                     this.gameState = this.gameStateEnum.PLAYER_PLAYING
                 }
                 if(this.gameState == this.gameStateEnum.PLAYER_PLAYING ){
+                    this.gameCounter.processCounter(this.currentPlayer);
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
                             this.gameSequence.addGameMove(this.currentPlayerMove); //add move to the game sequence
@@ -225,6 +236,7 @@ class MyGameOrchestrator extends CGFobject{
             {
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
+                    this.gameCounter.startTurn();
                     if (!this.isAiPlaying) {
                         this.gameState = this.gameStateEnum.PLAYER_PLAYING;
                         this.isAiPlaying = true;
@@ -269,6 +281,7 @@ class MyGameOrchestrator extends CGFobject{
             {
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
+                    this.gameCounter.startTurn();
                     this.gameState = this.gameStateEnum.AI_CHOOSING_MOVE;
                 }
                 if(this.gameState == this.gameStateEnum.AI_CHOOSING_MOVE){
@@ -304,6 +317,7 @@ class MyGameOrchestrator extends CGFobject{
     }
     update(time) { 
         this.animator.update(time);
+        this.gameCounter.update(time);
     }
     managePick(mode, pickResults) {
         if (mode == false /* && some other game conditions */){
@@ -393,10 +407,9 @@ class MyGameOrchestrator extends CGFobject{
     }
     
     display() { 
-        //this.theme.display(); 
         this.gameboard.display(); 
+        this.gameCounter.display();
         this.animator.display(); 
-        //...
     }
 }
 
