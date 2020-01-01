@@ -114,6 +114,10 @@ class MyGameOrchestrator extends CGFobject{
     checkEatenProps() {
         //If there are eaten pieces then animate again
         if (this.currentEatenProps.length != 0) {
+
+            //update score because a piece was eaten
+            this.gameCounter.updateScores(this.currentPlayer);
+
             let piece = this.currentEatenProps[0];
             let tileFrom = this.currentEatenProps[1];
             let tileTo = this.currentEatenProps[2];
@@ -156,8 +160,9 @@ class MyGameOrchestrator extends CGFobject{
         this.prologInterface.getScore(this.currentBoard,this.currentPlayer,this.prologInterface.parseScore.bind(this));
         //get if there is a winner
         this.prologInterface.checkWin(this.currentBoard,this.currentPlayer,this.prologInterface.parseWinner.bind(this));
-
+        
         this.changePlayerPlaying();
+
     }
     changePlayerPlaying(){
         if(this.currentPlayer == 5)
