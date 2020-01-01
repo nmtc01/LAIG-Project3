@@ -157,10 +157,12 @@ class MyGameOrchestrator extends CGFobject{
         //get if there is a winner
         this.prologInterface.checkWin(this.currentBoard,this.currentPlayer,this.prologInterface.parseWinner.bind(this));
 
+        this.changePlayerPlaying();
+    }
+    changePlayerPlaying(){
         if(this.currentPlayer == 5)
             this.currentPlayer = 9;
         else this.currentPlayer = 5; 
-        this.gameState = this.gameStateEnum.GET_VALID_MOVES; 
     }
     equalMoves(move1, move2) {
         let equal = true;
@@ -264,12 +266,8 @@ class MyGameOrchestrator extends CGFobject{
                     this.animate();
                 }
                 if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
-                    this.checkGameState();
-                    //this.gameState = 'game_ended';
                     this.gameState = this.gameStateEnum.GET_VALID_MOVES;
-                    //TODO delete this.stop - just to make the game stops - testing
-                    if (this.stop)
-                        this.gameState = this.gameStateEnum.GAME_ENDED;
+                    this.checkGameState();
                 }
                 break; 
             }
@@ -299,12 +297,8 @@ class MyGameOrchestrator extends CGFobject{
                     this.animate();
                 }
                 if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
-                    this.checkGameState();
-                    //this.gameState = 'game_ended';
                     this.gameState = this.gameStateEnum.GET_VALID_MOVES;
-                    //TODO delete this.stop - just to make the game stops - testing
-                    if (this.stop)
-                        this.gameState = this.gameStateEnum.GAME_ENDED;
+                    this.checkGameState();
                 }
                 break;
             } 

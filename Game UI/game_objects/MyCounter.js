@@ -1,6 +1,7 @@
 class MyCounter extends CGFobject{
-    constructor(scene){
+    constructor(scene,orchestrator){
         super(scene);
+        this.orchestrator = orchestrator;
 
         this.player; 
         this.redPlayerComponent= "red_counter"
@@ -16,7 +17,7 @@ class MyCounter extends CGFobject{
         this.material.setDiffuse(0,0,0,0);
         this.material.setSpecular(0,0,0,0);
 
-        this.moveTime = 30;
+        this.moveTime = 30; //defines turn time in seconds
 
         this.angleRed = 0; 
         this.angleBlue = 0; 
@@ -43,10 +44,19 @@ class MyCounter extends CGFobject{
     processCounter(currentPlayer){
         switch(currentPlayer){
             case 5: 
+                //check if player has lost their turn 
+                if(this.redTime > this.moveTime){
+                    this.orchestrator.changePlayerPlaying();
+                    this.orchestrator.gameState = this.orchestrator.gameStateEnum.GET_VALID_MOVES;
+                }
+                //calculate times
                 this.redTime = this.sent;
                 this.angleRed = -this.sent*2*Math.PI/this.moveTime;
             break; 
             case 9: 
+                //check if player has lost their turn 
+
+                //calculate times
                 this.blueTime = this.sent;
                 this.angleBlue = this.sent*2*Math.PI/this.moveTime;
             break; 
@@ -68,7 +78,7 @@ class MyCounter extends CGFobject{
 
         //display red player time and score
         this.scene.pushMatrix();
-        this.scene.translate(0.4,-0.1,0.7);
+        this.scene.translate(0.4,-0.15,0.7);
         this.scene.multMatrix(this.scene.graph.components['red_counter'].transformation);
         this.scene.rotate(this.angleRed,1,0,0);
         this.scene.translate(0,0.2,0);
@@ -79,7 +89,7 @@ class MyCounter extends CGFobject{
         //diplay blue player time and score
 
         this.scene.pushMatrix();
-        this.scene.translate(-0.4,-0.1,-0.7);
+        this.scene.translate(-0.4,-0.15,-0.7);
         this.scene.multMatrix(this.scene.graph.components['blue_counter'].transformation);
         this.scene.rotate(this.angleBlue,1,0,0)
         this.scene.translate(0,0.2,0);

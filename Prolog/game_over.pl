@@ -7,7 +7,7 @@ game_over(Board,PlayerPlaying,Winner):-
     check_if_forget_to_eat(Board,PlayerPlaying,Winner),
     check_if_no_pieces(Board,0,0,CountedRedPieces,CountedBluePieces,Winner), %first winning condition check if no pieces
     check_if_end_reached_one_piece(Board,CountedRedPieces,CountedBluePieces,Winner), %2nd, check if player reached the end with one piece
-    check_if_end_reached(Board,PlayerPlaying,Winner), % 3rd check if player reached the end and the oposing player can eat
+    %check_if_end_reached(Board,PlayerPlaying,Winner), % 3rd check if player reached the end and the oposing player can eat
     integer(Winner), %if winner is found stop and return winner playerr number
     !,
     true.
