@@ -100,7 +100,7 @@ class MyGameOrchestrator extends CGFobject{
         let deltaAngle = Math.PI * this.sent / 3;
         this.currentCameraAngle += deltaAngle;
         //Correcting associated error
-        if (this.rotateTime >= 3) {
+        if (this.rotateTime > 2.9) {
             let rest = this.currentCameraAngle - Math.PI;
             //Reset currentCameraAngle, rotateTime and isRotateActive
             this.currentCameraAngle = 0;

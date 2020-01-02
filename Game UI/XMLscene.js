@@ -35,7 +35,7 @@ class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
-        this.setUpdatePeriod(60);
+        this.setUpdatePeriod(10);
         //todo
         this.setPickEnabled(true); // false to disable pick feature. // Some game states do not require pick.
 
@@ -361,7 +361,6 @@ class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
 
-            //todo display orchestrator
             if(this.gameRunning){
                 this.gameOrchestrator.orchestrate();
             }
