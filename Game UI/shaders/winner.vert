@@ -12,7 +12,7 @@ varying vec3 vCoords;
 
 void main(){
 
-    gl_Position = vec4(aVertexPosition.x * 0.5 + 0.75, aVertexPosition.y * 0.5 - 0.75, aVertexPosition.z, 1.0);
+    gl_Position = vec4(aVertexPosition.x * 0.5, aVertexPosition.y * 0.5, aVertexPosition.z, 1.0);
     vTextureCoord = aTextureCoord; 
     vCoords = aVertexPosition;
 }

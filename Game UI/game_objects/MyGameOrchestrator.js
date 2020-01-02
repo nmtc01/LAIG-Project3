@@ -17,6 +17,7 @@ class MyGameOrchestrator extends CGFobject{
         this.prologInterface = new MyPrologInterface(this.scene,this);
         this.gameSequence = new MyGameSequence();
         this.gameCounter = new MyCounter(this.scene,this); 
+        this.winner = new MyWinner(this.scene, 0);
 
         //use to determine game type 
         this.gameType = null;
@@ -162,7 +163,6 @@ class MyGameOrchestrator extends CGFobject{
         this.prologInterface.checkWin(this.currentBoard,this.currentPlayer,this.prologInterface.parseWinner.bind(this));
         
         this.changePlayerPlaying();
-
     }
     changePlayerPlaying(){
         if(this.currentPlayer == 5)
@@ -228,6 +228,7 @@ class MyGameOrchestrator extends CGFobject{
                     this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
+                    this.winner.setWinner(this.currentPlayer);
                     console.log(this.currentPlayer+' wins');
                 }
                 break;  
@@ -275,6 +276,10 @@ class MyGameOrchestrator extends CGFobject{
                     this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                     this.checkGameState();
                 }
+                if (this.gameState == this.gameStateEnum.GAME_ENDED) {
+                    this.winner.setWinner(this.currentPlayer);
+                    console.log(this.currentPlayer+' wins');
+                }
                 break; 
             }
             case 'cvc': 
@@ -306,6 +311,10 @@ class MyGameOrchestrator extends CGFobject{
                     this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                     this.checkGameState();
                 }
+                if (this.gameState == this.gameStateEnum.GAME_ENDED) {
+                    this.winner.setWinner(this.currentPlayer);
+                    console.log(this.currentPlayer+' wins');
+                }
                 break;
             } 
         }
@@ -326,7 +335,6 @@ class MyGameOrchestrator extends CGFobject{
                     var obj = pickResults[i][0]; // get object from result 
                     if (obj) { // exists?
                         var uniqueId = pickResults[i][1] // get id
-                        //TODO: use onObjectSelected do something 
                         this.onObjectSelected(obj, uniqueId);
                     }
                 }
@@ -409,7 +417,8 @@ class MyGameOrchestrator extends CGFobject{
     display() { 
         this.gameboard.display(); 
         this.gameCounter.display();
-        this.animator.display(); 
+        this.animator.display();
+        this.winner.display(); 
     }
 }
 
