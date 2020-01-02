@@ -34,6 +34,8 @@ class MyGameOrchestrator extends CGFobject{
         this.stop = false;
         this.currentEatenProps = [];
         this.isEatenMoving = false;
+        this.deltaAngle = Math.PI/10;
+        this.currentCameraAngle = 0;
 
         this.gameStateEnum = {
             INIT:0, 
@@ -84,6 +86,19 @@ class MyGameOrchestrator extends CGFobject{
         this.gameLevel=level;
 
         this.prologInterface.initGame(this.prologInterface.parseInitGame.bind(this)); 
+    }
+    rotateCamera() {
+        this.currentCameraAngle += this.deltaAngle;
+        //Correcting associated error
+        if (this.currentCameraAngle > Math.PI) {
+            let rest = this.currentCameraAngle - Math.PI;
+            //Reset currentCameraAngle
+            this.currentCameraAngle = 0;
+            //Rotate camera
+            this.scene.camera.orbit(vec3.fromValues(0, 1, 0), this.deltaAngle-rest);
+        }
+        //Rotate camera
+        else this.scene.camera.orbit(vec3.fromValues(0, 1, 0), this.deltaAngle);
     }
     getValidMoves() {
         this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer,this.prologInterface.parseValidMoves.bind(this));
@@ -208,8 +223,10 @@ class MyGameOrchestrator extends CGFobject{
             case 'pvp': 
             {
                 if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
-                    this.scene.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI);
-                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                    this.rotateCamera();
+                    if (this.currentCameraAngle == 0) {
+                        this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                    }
                 }
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
@@ -241,8 +258,10 @@ class MyGameOrchestrator extends CGFobject{
             case 'pvc': 
             {
                 if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
-                    this.scene.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI);
-                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                    this.rotateCamera();
+                    if (this.currentCameraAngle == 0) {
+                        this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                    }
                 }
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
@@ -293,8 +312,10 @@ class MyGameOrchestrator extends CGFobject{
             case 'cvc': 
             {
                 if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
-                    this.scene.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI);
-                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                    this.rotateCamera();
+                    if (this.currentCameraAngle == 0) {
+                        this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                    }
                 }
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
