@@ -46,7 +46,7 @@ class MyPrologInterface extends CGFobject{
             }
         } 
 
-        this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+        this.gameState = this.gameStateEnum.ROTATE_CAMERA;
     }
  
     /**

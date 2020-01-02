@@ -37,21 +37,22 @@ class MyGameOrchestrator extends CGFobject{
 
         this.gameStateEnum = {
             INIT:0, 
-            GET_VALID_MOVES: 1, 
-            PLAYER_PLAYING: 2,
-            AI_CHOOSING_MOVE: 3,
-            AI_PLAYING: 4,  
-            ANIMATE: 5,
-            CHECK_GAME_STATE: 6,
-            GAME_ENDED:7
+            ROTATE_CAMERA: 1,
+            GET_VALID_MOVES: 2, 
+            PLAYER_PLAYING: 3,
+            AI_CHOOSING_MOVE: 4,
+            AI_PLAYING: 5,  
+            ANIMATE: 6,
+            CHECK_GAME_STATE: 7,
+            GAME_ENDED: 8
         }
         this.gameState = this.gameStateEnum.INIT; 
 
-        this.playerMoveState = {
-            PIECE_SELECT: 'piece_select',
-            TILE_SELECT: 'tile_select'
+        this.playerMoveStateEnum = {
+            PIECE_SELECT: 0,
+            TILE_SELECT: 1
         }
-        this.playerMoveState = 'piece_select';
+        this.playerMoveState = this.playerMoveStateEnum.PIECE_SELECT;
     }
     //todo check best way to do this 
     getScene() {
@@ -85,7 +86,6 @@ class MyGameOrchestrator extends CGFobject{
         this.prologInterface.initGame(this.prologInterface.parseInitGame.bind(this)); 
     }
     getValidMoves() {
-        this.scene.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI);
         this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer,this.prologInterface.parseValidMoves.bind(this));
     }
 
@@ -207,6 +207,10 @@ class MyGameOrchestrator extends CGFobject{
         switch(this.gameType){
             case 'pvp': 
             {
+                if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
+                    this.scene.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI);
+                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                }
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
                     this.gameCounter.startTurn();
@@ -225,7 +229,7 @@ class MyGameOrchestrator extends CGFobject{
                     this.animate();
                 }
                 if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
-                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                    this.gameState = this.gameStateEnum.ROTATE_CAMERA;
                     this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
@@ -236,6 +240,10 @@ class MyGameOrchestrator extends CGFobject{
             }
             case 'pvc': 
             {
+                if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
+                    this.scene.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI);
+                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                }
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
                     this.gameCounter.startTurn();
@@ -274,17 +282,20 @@ class MyGameOrchestrator extends CGFobject{
                     this.animate();
                 }
                 if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
-                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                    this.gameState = this.gameStateEnum.ROTATE_CAMERA;
                     this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
                     this.winner.setWinner(this.currentPlayer);
-                    console.log(this.currentPlayer+' wins');
                 }
                 break; 
             }
             case 'cvc': 
             {
+                if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
+                    this.scene.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI);
+                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                }
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
                     this.gameCounter.startTurn();
@@ -309,12 +320,11 @@ class MyGameOrchestrator extends CGFobject{
                     this.animate();
                 }
                 if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
-                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                    this.gameState = this.gameStateEnum.ROTATE_CAMERA;
                     this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
                     this.winner.setWinner(this.currentPlayer);
-                    console.log(this.currentPlayer+' wins');
                 }
                 break;
             } 
@@ -357,7 +367,7 @@ class MyGameOrchestrator extends CGFobject{
         //State machine for player move
         switch(this.playerMoveState)
         {
-            case 'piece_select':
+            case this.playerMoveStateEnum.PIECE_SELECT:
             {
                 if(obj instanceof MyPiece){
                     //Verify if it belongs to the player who is playing
@@ -372,11 +382,11 @@ class MyGameOrchestrator extends CGFobject{
                     //Create a move to be used by manageGameplay() on pvp or pvc - from coords
                     this.currentPlayerMove.push(obj.getTile().getCoords());
                     //Advance to the next state
-                    this.playerMoveState = 'tile_select';
+                    this.playerMoveState = this.playerMoveStateEnum.TILE_SELECT;
                 }
                 break;
             }
-            case 'tile_select':
+            case this.playerMoveStateEnum.TILE_SELECT:
             {
                 if(obj instanceof MyTile){
                     if (this.currentPlayerMove.length != 0) {
@@ -384,7 +394,7 @@ class MyGameOrchestrator extends CGFobject{
                         this.validateMove(obj);
                     }
                     //Advance to the next state
-                    this.playerMoveState = 'piece_select';
+                    this.playerMoveState = this.playerMoveStateEnum.PIECE_SELECT;
                 }
                 if(obj instanceof MyPiece){
                     //Verify if it belongs to the player who is playing
@@ -407,7 +417,7 @@ class MyGameOrchestrator extends CGFobject{
                         //Create a move to be used by manageGameplay() on pvp or pvc - from coords
                         this.currentPlayerMove.push(obj.getTile().getCoords());
                         //Advance to the next state
-                        this.playerMoveState = 'tile_select';
+                        this.playerMoveState = this.playerMoveStateEnum.TILE_SELECT;
                     }
                 }
                 break;

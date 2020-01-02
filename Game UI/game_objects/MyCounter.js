@@ -139,7 +139,7 @@ class MyCounter extends CGFobject{
                 //check if player has lost their turn 
                 if(this.redTime > this.moveTime){
                     this.orchestrator.changePlayerPlaying();
-                    this.orchestrator.gameState = this.orchestrator.gameStateEnum.GET_VALID_MOVES;
+                    this.orchestrator.gameState = this.orchestrator.gameStateEnum.ROTATE_CAMERA;
                 }
                 //calculate times
                 this.redTime = this.sent;
@@ -147,7 +147,10 @@ class MyCounter extends CGFobject{
             break; 
             case 9: 
                 //check if player has lost their turn 
-
+                if(this.blueTime > this.moveTime){
+                    this.orchestrator.changePlayerPlaying();
+                    this.orchestrator.gameState = this.orchestrator.gameStateEnum.ROTATE_CAMERA;
+                }
                 //calculate times
                 this.blueTime = this.sent;
                 this.angleBlue = this.sent*2*Math.PI/this.moveTime;
