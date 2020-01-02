@@ -85,6 +85,7 @@ class MyGameOrchestrator extends CGFobject{
         this.prologInterface.initGame(this.prologInterface.parseInitGame.bind(this)); 
     }
     getValidMoves() {
+        this.scene.camera.orbit(vec3.fromValues(0, 1, 0), Math.PI);
         this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer,this.prologInterface.parseValidMoves.bind(this));
     }
 
