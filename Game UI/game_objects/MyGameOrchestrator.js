@@ -30,12 +30,19 @@ class MyGameOrchestrator extends CGFobject{
         this.currentValidMoves = null;
         this.currentPlayerMove = [];
         this.currentScores = {5:0, 9:0}
+        //Flag to verify if AI is playing
         this.isAiPlaying = false;
-        this.stop = false;
+        //Eaten pieces
         this.currentEatenProps = [];
         this.isEatenMoving = false;
-        this.deltaAngle = Math.PI/10;
+        //Camera rotation
         this.currentCameraAngle = 0;
+        this.isRotateActive = false;
+        //times 
+        this.delta_t = 0;
+        this.last_t = 0;
+        this.sent = 0;
+        this.rotateTime = 0;
 
         this.gameStateEnum = {
             INIT:0, 
@@ -88,17 +95,21 @@ class MyGameOrchestrator extends CGFobject{
         this.prologInterface.initGame(this.prologInterface.parseInitGame.bind(this)); 
     }
     rotateCamera() {
-        this.currentCameraAngle += this.deltaAngle;
+        this.isRotateActive = true;
+        let deltaAngle = Math.PI * this.sent / 3;
+        this.currentCameraAngle += deltaAngle;
         //Correcting associated error
-        if (this.currentCameraAngle > Math.PI) {
+        if (this.rotateTime > 2.9) {
             let rest = this.currentCameraAngle - Math.PI;
-            //Reset currentCameraAngle
+            //Reset currentCameraAngle, rotateTime and isRotateActive
             this.currentCameraAngle = 0;
+            this.rotateTime = 0;
+            this.isRotateActive = false;
             //Rotate camera
-            this.scene.camera.orbit(vec3.fromValues(0, 1, 0), this.deltaAngle-rest);
+            this.scene.camera.orbit(vec3.fromValues(0, 1, 0), deltaAngle-rest);
         }
         //Rotate camera
-        else this.scene.camera.orbit(vec3.fromValues(0, 1, 0), this.deltaAngle);
+        else this.scene.camera.orbit(vec3.fromValues(0, 1, 0), deltaAngle);
     }
     getValidMoves() {
         this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer,this.prologInterface.parseValidMoves.bind(this));
@@ -111,8 +122,6 @@ class MyGameOrchestrator extends CGFobject{
         this.prologInterface.aiChooseMove(this.currentBoard, this.gameLevel, this.currentPlayer,this.prologInterface.parseAIChooseMove.bind(this));
     }
     aiPlaying() {
-        //console.log(this.currentBoard)
-        console.log(this.currentPlayerMove)
         this.prologInterface.aiMove(this.currentBoard, this.currentPlayerMove,this.prologInterface.parseAIMove.bind(this)); 
     }
     getEatenPieceTileTo() {
@@ -215,7 +224,6 @@ class MyGameOrchestrator extends CGFobject{
             this.currentPlayerMove = [];
     }
 
-    //TODO stop condition after win
     manageGameplay(){
         //the management will depend on game type selected 
         //each game managemente is a copy from prolog - game.pl 
@@ -251,7 +259,6 @@ class MyGameOrchestrator extends CGFobject{
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
                     this.winner.setWinner(this.currentPlayer);
-                    console.log(this.currentPlayer+' wins');
                 }
                 break;  
             }
@@ -276,7 +283,6 @@ class MyGameOrchestrator extends CGFobject{
                     }
                 }
                 if(this.gameState == this.gameStateEnum.PLAYER_PLAYING){
-                   // this.playerMoveState = 'begin'; //todo comentei isto 
                    this.gameCounter.processCounter(this.currentPlayer);
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
@@ -337,8 +343,6 @@ class MyGameOrchestrator extends CGFobject{
                             this.gameState = this.gameStateEnum.ANIMATE;
                         }
                     }
-                    //Descomment to stop game
-                    //this.stop = true;
                 } 
                 if(this.gameState == this.gameStateEnum.ANIMATE){
                     this.animate();
@@ -362,6 +366,16 @@ class MyGameOrchestrator extends CGFobject{
     update(time) { 
         this.animator.update(time);
         this.gameCounter.update(time);
+
+        //Camera rotation time
+        if(this.last_t == 0)
+            this.last_t = time; 
+        this.delta_t = time - this.last_t;
+        this.last_t = time;
+        this.sent = this.delta_t/1000;
+        if (this.isRotateActive) {
+            this.rotateTime += this.sent;
+        }
     }
     managePick(mode, pickResults) {
         if (mode == false /* && some other game conditions */){
