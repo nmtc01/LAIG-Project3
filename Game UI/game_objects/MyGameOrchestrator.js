@@ -277,6 +277,7 @@ class MyGameOrchestrator extends CGFobject{
                 }
                 if(this.gameState == this.gameStateEnum.PLAYER_PLAYING){
                    // this.playerMoveState = 'begin'; //todo comentei isto 
+                   this.gameCounter.processCounter(this.currentPlayer);
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
                             this.gameSequence.addGameMove(this.currentPlayerMove); //add move to the game sequence
@@ -289,6 +290,7 @@ class MyGameOrchestrator extends CGFobject{
                     this.gameState = this.gameStateEnum.AI_PLAYING;
                 }
                 if(this.gameState == this.gameStateEnum.AI_PLAYING){
+                    this.gameCounter.processCounter(this.currentPlayer);
                     if(this.currentPlayerMove.length != null){
                         if(this.currentPlayerMove.length == 2){
                             this.gameSequence.addGameMove(this.currentPlayerMove); //add move to the game sequence
@@ -327,6 +329,7 @@ class MyGameOrchestrator extends CGFobject{
                     this.gameState = this.gameStateEnum.AI_PLAYING;
                 }
                 if(this.gameState == this.gameStateEnum.AI_PLAYING){
+                    this.gameCounter.processCounter(this.currentPlayer);
                     if(this.currentPlayerMove.length != null){
                         if(this.currentPlayerMove.length == 2){
                             this.gameSequence.addGameMove(this.currentPlayerMove); //add move to the game sequence
