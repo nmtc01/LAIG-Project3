@@ -30,6 +30,8 @@ class MyGameOrchestrator extends CGFobject{
         this.currentValidMoves = null;
         this.currentPlayerMove = [];
         this.currentScores = {5:0, 9:0}
+        //Flag to verify if undo is active 
+        this.undoEatenPieceActive = false; 
         //Flag to verify if AI is playing
         this.isAiPlaying = false;
         //Eaten pieces
@@ -69,7 +71,6 @@ class MyGameOrchestrator extends CGFobject{
     getGameState(){
         return this.gameState;
     }
-    //todo check best way to do this 
     getScene() {
         return this.scene;
     }
@@ -92,7 +93,33 @@ class MyGameOrchestrator extends CGFobject{
 
         return piece;
     }
+    undoEatenPieceBoardString(piece,oldPos){
+        let line = oldPos[0]; 
+        let col = oldPos[1];
+        let type = piece.getType(); 
+        let pieceNum = 0; 
 
+        switch(type){
+            case 'piece_red_white':
+                pieceNum = 510;
+            break;
+            case 'piece_red_black':
+                pieceNum = 500;
+            break;
+            case 'piece_blue_white':
+                pieceNum = 910;
+            break; 
+            case 'piece_blue_black':
+                pieceNum = 900;
+            break; 
+        }
+        //check if piece is on white or black tile, if line+col even black if odd white
+        let colorCheck = line + col; 
+        if((colorCheck % 2) != 0 )
+            pieceNum++; //tile gets white  
+
+        this.currentBoard[line-1][col-1] = pieceNum; 
+    }
     startGame(type,level){
         this.gameboard.resetGame();
         this.gameType = type; 
@@ -187,28 +214,39 @@ class MyGameOrchestrator extends CGFobject{
             }
         }
     }
+    undoEatenPiece(){
+        //todo - adjust with animation
+        let tileFrom = this.gameboard.getTileByCoords(this.currentPlayerMove[0]);
+        let tileTo = this.gameboard.getTileByCoords(this.currentPlayerMove[1]);
+        let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
+
+        this.undoEatenPieceBoardString(pieceToMove,tileTo.getCoords());
+        //animate piece         
+        this.animator.start(pieceToMove,tileFrom,tileTo);
+        //Reset currentPlayerMove
+        this.currentPlayerMove = [];
+        this.gameboard.resetValidMoves();
+    }
     undo(){
         let lastMove = this.gameSequence.undo();
-
         console.log(lastMove);
-        if(lastMove[1][1] == -0.7 || lastMove[1][1] == 6.7){ //if unduing an eaten piece 
+        if((lastMove[1][1] == -0.7 || lastMove[1][1] == 6.7) && this.undoEatenPieceActive == false){ //if unduing an eaten piece 
             this.gameCounter.downScore(this.currentPlayer);
-            console.log('comido');
             let normalMove = this.gameSequence.undo();
             this.currentPlayerMove = [normalMove[1],normalMove[0]]; 
             this.playerPlaying(); 
+            this.gameSequence.addGameMove(lastMove); //add the piece eaten move again, so that it will make that move
             this.gameState = this.gameStateEnum.ANIMATE;
-        /* 
-            this.currentPlayerMove = [lastMove[1],lastMove[0]]; //exchange positions and move again 
-            this.playerPlaying(); 
-            
+            this.undoEatenPieceActive = true; 
+        }else if((lastMove[1][1] == -0.7 || lastMove[1][1] == 6.7) && this.undoEatenPieceActive == true){
+            this.undoEatenPieceActive = false; 
+            this.currentPlayerMove = [lastMove[1],lastMove[0]]; //exchange positions and move again
+            this.undoEatenPiece(); 
             this.gameState = this.gameStateEnum.ANIMATE;
-        */
         }else{
             //update current board 
-            this.currentPlayerMove = [lastMove[1],lastMove[0]]; //exchange positions and move again 
+            this.currentPlayerMove = [lastMove[1],lastMove[0]]; //exchange positions and move again
             this.playerPlaying(); 
-            this.undoActive = false;
             this.gameState = this.gameStateEnum.ANIMATE;
         }
     }
@@ -273,6 +311,9 @@ class MyGameOrchestrator extends CGFobject{
                     this.gameState = this.gameStateEnum.PLAYER_PLAYING
                 }
                 if(this.gameState == this.gameStateEnum.PLAYER_PLAYING ){
+                    if(this.undoEatenPieceActive){ //if undo is active go back with piece eaten 
+                        this.undo();
+                    }else{
                     this.gameCounter.processCounter(this.currentPlayer);
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
@@ -280,6 +321,7 @@ class MyGameOrchestrator extends CGFobject{
                             this.playerPlaying();
                             this.gameState = this.gameStateEnum.ANIMATE;
                         }
+                    }
                 }
                 if(this.gameState == this.gameStateEnum.UNDO){
                    this.undo();

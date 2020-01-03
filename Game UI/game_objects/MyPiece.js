@@ -50,7 +50,6 @@ class MyPiece extends CGFobject{
      * @param {type} type - piece type
      */
     setType(type){
-         //todo
          this.type = type;
     }
     /**
@@ -58,7 +57,6 @@ class MyPiece extends CGFobject{
      * @returns type - piece type 
      */
     getType(){
-         //todo
          return this.type;
     }
     /**
