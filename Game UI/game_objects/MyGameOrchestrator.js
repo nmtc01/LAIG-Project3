@@ -121,11 +121,12 @@ class MyGameOrchestrator extends CGFobject{
 
         this.currentBoard[line-1][col-1] = pieceNum; 
     }
-    startGame(type,level){
+    startGame(type,level,turnTime){
         this.gameboard.resetGame();
         this.gameType = type; 
         this.gameLevel=level;
         this.gameCounter.reset();
+        this.gameCounter.setTurnTime(turnTime);
         this.prologInterface.initGame(this.prologInterface.parseInitGame.bind(this)); 
     }
     rotateCamera() {

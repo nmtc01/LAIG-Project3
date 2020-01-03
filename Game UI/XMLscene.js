@@ -84,6 +84,8 @@ class XMLscene extends CGFscene {
         //Game orchestrator 
         this.gameOrchestrator = new MyGameOrchestrator(this);
 
+        this.turnTime = 30;
+
         this.setPickEnabled(true);
     }
 
@@ -172,7 +174,7 @@ class XMLscene extends CGFscene {
     }
     start(){ 
         this.gameRunning = true; 
-        this.gameOrchestrator.startGame(this.selectedGameType,this.selectedGameLevel);
+        this.gameOrchestrator.startGame(this.selectedGameType,this.selectedGameLevel,this.turnTime);
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -306,13 +308,11 @@ class XMLscene extends CGFscene {
         
     }
     update(t){
-        //todo remover isto 
         for(var key in this.graph.components){
             if (this.graph.components[key].animation != null){
                 this.graph.components[key].animation.update(t);
             }       
         }
-        //todo
         this.gameOrchestrator.update(t);
     }
 
@@ -327,7 +327,6 @@ class XMLscene extends CGFscene {
      * Renders the scene.
      */
     render(camera) {
-        //todo
         //this.gameOrchestrator.orchestrate()
         this.gameOrchestrator.managePick(this.pickMode, this.pickResults); 
         this.clearPickRegistration();

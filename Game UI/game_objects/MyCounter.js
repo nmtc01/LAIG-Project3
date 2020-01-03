@@ -64,6 +64,9 @@ class MyCounter extends CGFobject{
         this.sent = 0;
 
     }
+    setTurnTime(time){
+        this.moveTime = time;
+    }
     reset(){
         this.sent = 0 ; 
             this.blueTime =0; 
