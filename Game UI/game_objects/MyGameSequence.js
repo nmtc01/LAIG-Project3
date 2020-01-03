@@ -4,19 +4,20 @@
 class MyGameSequence{
     //Stores the a sequence of game moves (MyGameMove objects):
     constructor(){
-        //todo
-        this.moves = []
+        this.moves = [];
+        this.film = []; 
     }
     /**
      * Add game move to the stack
      * @param {MyGameMove} Move 
      */
     addGameMove(move){
-        this.moves.push(move)
+        this.moves.push(move);
+        this.film.push(move);
     }
     undo(){
-        //todo 
-        //manage Undo
+        if(this.moves.length != 0)
+            return this.moves.pop();
     }
     replay(){
         //todo 

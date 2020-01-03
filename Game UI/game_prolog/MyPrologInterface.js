@@ -87,11 +87,12 @@ class MyPrologInterface extends CGFobject{
         let pieceToMove = this.gameboard.getPieceOnATile(tileFrom);
 
           //Check for eaten pieces
-          let eaten_piece = this.gameboard.getPieceOnATile(tileTo);
-          if (eaten_piece != null) {
-              let eaten_tile_to = this.getEatenPieceTileTo();
-              this.currentEatenProps = [eaten_piece, tileTo, eaten_tile_to];
-          }
+            let eaten_piece = this.gameboard.getPieceOnATile(tileTo);
+            if (eaten_piece != null) {
+                let eaten_tile_to = this.getEatenPieceTileTo();
+                this.currentEatenProps = [eaten_piece, tileTo, eaten_tile_to];
+                this.gameSequence.addGameMove([this.currentPlayerMove[1],eaten_tile_to['coords']]);
+            }       
 
         //animate piece         
         this.animator.start(pieceToMove,tileFrom,tileTo);

@@ -12,10 +12,10 @@ class MyGameOrchestrator extends CGFobject{
     constructor(scene){
         super(scene);
         this.gameSequence = new MyGameSequence(this.scene); 
+        this.gameSequence = new MyGameSequence();
         this.animator = new MyAnimator(this.scene,this,this.gameSequence); 
         this.gameboard = new MyGameboard(this.scene,this); 
         this.prologInterface = new MyPrologInterface(this.scene,this);
-        this.gameSequence = new MyGameSequence();
         this.gameCounter = new MyCounter(this.scene,this); 
         this.winner = new MyWinner(this.scene, 0);
 
@@ -38,6 +38,7 @@ class MyGameOrchestrator extends CGFobject{
         //Camera rotation
         this.currentCameraAngle = 0;
         this.isRotateActive = false;
+
         //times 
         this.delta_t = 0;
         this.last_t = 0;
@@ -50,11 +51,13 @@ class MyGameOrchestrator extends CGFobject{
             GET_VALID_MOVES: 2, 
             PLAYER_PLAYING: 3,
             AI_CHOOSING_MOVE: 4,
-            AI_PLAYING: 5,  
-            ANIMATE: 6,
-            CHECK_GAME_STATE: 7,
-            GAME_ENDED: 8
+            AI_PLAYING: 5,   
+            UNDO: 6,
+            ANIMATE: 7,
+            CHECK_GAME_STATE: 8,
+            GAME_ENDED: 9
         }
+
         this.gameState = this.gameStateEnum.INIT; 
 
         this.playerMoveStateEnum = {
@@ -62,6 +65,9 @@ class MyGameOrchestrator extends CGFobject{
             TILE_SELECT: 1
         }
         this.playerMoveState = this.playerMoveStateEnum.PIECE_SELECT;
+    }
+    getGameState(){
+        return this.gameState;
     }
     //todo check best way to do this 
     getScene() {
@@ -91,7 +97,7 @@ class MyGameOrchestrator extends CGFobject{
         this.gameboard.resetGame();
         this.gameType = type; 
         this.gameLevel=level;
-
+        this.gameCounter.reset();
         this.prologInterface.initGame(this.prologInterface.parseInitGame.bind(this)); 
     }
     rotateCamera() {
@@ -181,6 +187,31 @@ class MyGameOrchestrator extends CGFobject{
             }
         }
     }
+    undo(){
+        let lastMove = this.gameSequence.undo();
+
+        console.log(lastMove);
+        if(lastMove[1][1] == -0.7 || lastMove[1][1] == 6.7){ //if unduing an eaten piece 
+            this.gameCounter.downScore(this.currentPlayer);
+            console.log('comido');
+            let normalMove = this.gameSequence.undo();
+            this.currentPlayerMove = [normalMove[1],normalMove[0]]; 
+            this.playerPlaying(); 
+            this.gameState = this.gameStateEnum.ANIMATE;
+        /* 
+            this.currentPlayerMove = [lastMove[1],lastMove[0]]; //exchange positions and move again 
+            this.playerPlaying(); 
+            
+            this.gameState = this.gameStateEnum.ANIMATE;
+        */
+        }else{
+            //update current board 
+            this.currentPlayerMove = [lastMove[1],lastMove[0]]; //exchange positions and move again 
+            this.playerPlaying(); 
+            this.undoActive = false;
+            this.gameState = this.gameStateEnum.ANIMATE;
+        }
+    }
     checkGameState() {
         //get player score after move 
         this.prologInterface.getScore(this.currentBoard,this.currentPlayer,this.prologInterface.parseScore.bind(this));
@@ -231,7 +262,7 @@ class MyGameOrchestrator extends CGFobject{
             case 'pvp': 
             {
                 if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
-                    this.rotateCamera();
+                   // this.rotateCamera();
                     if (this.currentCameraAngle == 0) {
                         this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                     }
@@ -249,6 +280,9 @@ class MyGameOrchestrator extends CGFobject{
                             this.playerPlaying();
                             this.gameState = this.gameStateEnum.ANIMATE;
                         }
+                }
+                if(this.gameState == this.gameStateEnum.UNDO){
+                   this.undo();
                 }
                 if(this.gameState == this.gameStateEnum.ANIMATE){
                     this.animate();

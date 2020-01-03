@@ -64,6 +64,14 @@ class MyCounter extends CGFobject{
         this.sent = 0;
 
     }
+    reset(){
+        this.sent = 0 ; 
+            this.blueTime =0; 
+            this.redTime =0; 
+            this.angleBlue = 0; 
+            this.angleRed = 0; 
+            this.updateScores();
+    }
     startTurn(){
             this.sent = 0 ; 
             this.blueTime =0; 
@@ -71,8 +79,19 @@ class MyCounter extends CGFobject{
             this.angleBlue = 0; 
             this.angleRed = 0; 
     }
-    reset(){
-      
+    downScore(playerPlaying){
+      switch(playerPlaying){
+        case 5: 
+        console.log(this.blueScore);
+            this.blueScore -= 2; 
+            this.updateScores(9);
+        break; 
+
+        case 9:
+            this.redScore -= 2; 
+            this.updateScores(5);
+        break;
+      }
     }
     updateScores(playerPlaying){
         switch(playerPlaying){

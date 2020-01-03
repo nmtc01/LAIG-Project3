@@ -39,6 +39,7 @@ class MyAnimator extends CGFobject{
      */
     reset(){
         //todo
+        console.log(this.sequence);
     }
     /**
      * start animation

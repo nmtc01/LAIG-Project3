@@ -7,7 +7,6 @@ class MyGameboard extends CGFobject{
         //visible tiles 
         this.tiles = {};
         this.orchestrator = gameOrchestrator;
-        //todo invisible tiles 
 
     }
     /**

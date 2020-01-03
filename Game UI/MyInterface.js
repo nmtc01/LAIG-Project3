@@ -70,8 +70,10 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.scene,'selectedGameLevel',this.scene.gameLevelName)
             .name('Game Level:')
             .onChange(val => this.scene.updateGameLevel(val));
+        this.gui.add(this.scene,'undo')
+            .name('Undo');
         this.gui.add(this.scene,'start')
-            .name('Start')
+            .name('Start');
         
     }
 
