@@ -32,6 +32,7 @@ class MyGameOrchestrator extends CGFobject{
         this.currentScores = {5:0, 9:0}
         //Flag to verify if undo is active 
         this.undoEatenPieceActive = false; 
+        this.undoAI =false;
         //Flag to verify if AI is playing
         this.isAiPlaying = false;
         //Eaten pieces
@@ -300,7 +301,7 @@ class MyGameOrchestrator extends CGFobject{
             case 'pvp': 
             {
                 if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
-                   // this.rotateCamera();
+                    this.rotateCamera();
                     if (this.currentCameraAngle == 0) {
                         this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                     }
@@ -350,15 +351,24 @@ class MyGameOrchestrator extends CGFobject{
                     this.getValidMoves();
                     this.gameCounter.startTurn();
                     if (!this.isAiPlaying) {
-                        this.gameState = this.gameStateEnum.PLAYER_PLAYING;
-                        this.isAiPlaying = true;
+                        if(!this.undoAI){
+                            this.isAiPlaying = true;
+                            this.gameState = this.gameStateEnum.PLAYER_PLAYING;
+                        }
+                        else{
+                            this.changePlayerPlaying();
+                            this.gameState = this.gameStateEnum.UNDO;
+                        }
                     }
                     else {
                         this.gameState = this.gameStateEnum.AI_CHOOSING_MOVE;
                         this.isAiPlaying = false;
                     }
                 }
-                if(this.gameState == this.gameStateEnum.PLAYER_PLAYING){
+                if(this.gameState == this.gameStateEnum.PLAYER_PLAYING){ //in this case i need to make 2 undos one for the player another for the AI 
+                    if(this.undoEatenPieceActive){ //if undo is active go back with piece eaten 
+                        this.undo();
+                    }else{
                    this.gameCounter.processCounter(this.currentPlayer);
                     if (this.currentPlayerMove != null)
                         if (this.currentPlayerMove.length == 2) { 
@@ -366,21 +376,36 @@ class MyGameOrchestrator extends CGFobject{
                             this.playerPlaying(this.currentPlayerMove);
                             this.gameState = this.gameStateEnum.ANIMATE;
                         }
+                    }
                 }
                 if(this.gameState == this.gameStateEnum.AI_CHOOSING_MOVE){
                     this.aiMoveSelection();
                     this.gameState = this.gameStateEnum.AI_PLAYING;
                 }
                 if(this.gameState == this.gameStateEnum.AI_PLAYING){
-                    this.gameCounter.processCounter(this.currentPlayer);
-                    if(this.currentPlayerMove.length != null){
-                        if(this.currentPlayerMove.length == 2){
-                            this.gameSequence.addGameMove(this.currentPlayerMove); //add move to the game sequence
-                            this.aiPlaying();
-                            this.gameState = this.gameStateEnum.ANIMATE;
+                    console.log(this.gameSequence.moves); 
+                    if(this.undoEatenPieceActive){ //if undo is active go back with piece eaten 
+                        this.undo();
+                    }else{
+                        this.gameCounter.processCounter(this.currentPlayer);
+                        if(this.currentPlayerMove.length != null){
+                            if(this.currentPlayerMove.length == 2){
+                                this.gameSequence.addGameMove(this.currentPlayerMove); //add move to the game sequence
+                                this.aiPlaying();
+                                this.gameState = this.gameStateEnum.ANIMATE;
+                            }
                         }
                     }
                 } 
+                if(this.gameState == this.gameStateEnum.UNDO){
+                    if(this.undoAI){
+                        this.undo();
+                        this.undoAI = false;
+                    }else{
+                        this.undo();
+                        this.undoAI = true;
+                    }
+                }
                 if(this.gameState == this.gameStateEnum.ANIMATE){
                     this.animate();
                 }

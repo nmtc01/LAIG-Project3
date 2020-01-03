@@ -165,9 +165,10 @@ class XMLscene extends CGFscene {
         }
     }
     undo(){
-        if(this.gameRunning && this.gameOrchestrator.getGameState() == 3){
+        console.log(this.gameOrchestrator.gameSequence.moves.length)
+        if((this.gameRunning && this.gameOrchestrator.getGameState() == 3) && (this.gameOrchestrator.gameSequence.moves.length != 0)){
             this.gameOrchestrator.gameState = this.gameOrchestrator.gameStateEnum.UNDO; 
-        }else console.warn('Can only undo if player is playing');
+        }else console.warn('Can only undo if player is playing or moves have been made');
     }
     start(){ 
         this.gameRunning = true; 
