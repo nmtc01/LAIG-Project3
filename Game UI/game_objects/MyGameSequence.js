@@ -21,6 +21,9 @@ class MyGameSequence extends CGFobject{
         if(this.moves.length != 0)
             return this.moves.pop();
     }
+    getMoves(){
+        return this.moves;
+    }
     replay(){
         //todo 
         //remove eaten pieces moves 
