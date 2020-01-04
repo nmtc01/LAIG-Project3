@@ -43,7 +43,8 @@ class MyGameboard extends CGFobject{
     }
     resetGame(){
         for(let key in this.tiles){
-            this.tiles[key].unsetPieceOnTile();
+            if(this.tiles[key].getPiece() != null)
+                this.tiles[key].unsetPieceOnTile();
         }
     }
     /**

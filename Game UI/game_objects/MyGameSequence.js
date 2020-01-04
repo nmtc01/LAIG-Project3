@@ -1,9 +1,11 @@
 /**
  * 
  */
-class MyGameSequence{
+class MyGameSequence extends CGFobject{
     //Stores the a sequence of game moves (MyGameMove objects):
-    constructor(){
+    constructor(scene,orchestrator){
+        super(scene);
+        this.orchestrator = orchestrator;
         this.moves = [];
         this.film = []; 
     }
@@ -21,8 +23,17 @@ class MyGameSequence{
     }
     replay(){
         //todo 
-        //feeds move replay
-        //degub only 
-        console.log(this.moves)
+        //remove eaten pieces moves 
+        for(let i = 0; i <this.moves.length; i++ ){
+            if(this.moves[i][1][1] == -0.7 ||this.moves[i][1][1] == 6.7)
+                this.moves.splice(i,1);
+        }
+        //reset board 
+        this.orchestrator.gameState = this.orchestrator.gameStateEnum.GAME_ENDED;
+        this.orchestrator.gameboard.resetGame();
+
+       // this.orchestrator.prologInterface.initGame(this.orchestrator.prologInterface.parseInitGame.bind(this.orchestrator)); 
+
+        alert('ended');
     }
 }

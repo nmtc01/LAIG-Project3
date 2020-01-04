@@ -35,9 +35,9 @@ class MyAnimator extends CGFobject{
  
     }
     /**
-     * resert animation
+     * replay animation
      */
-    reset(){
+    replay(){
         //todo
         console.log(this.sequence);
     }

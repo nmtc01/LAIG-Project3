@@ -11,8 +11,8 @@
 class MyGameOrchestrator extends CGFobject{
     constructor(scene){
         super(scene);
-        this.gameSequence = new MyGameSequence(this.scene); 
-        this.gameSequence = new MyGameSequence();
+        this.gameSequence = new MyGameSequence(this.scene,this); 
+        //this.gameSequence = new MyGameSequence(this.scene,this);
         this.animator = new MyAnimator(this.scene,this,this.gameSequence); 
         this.gameboard = new MyGameboard(this.scene,this); 
         this.prologInterface = new MyPrologInterface(this.scene,this);
@@ -33,6 +33,7 @@ class MyGameOrchestrator extends CGFobject{
         //Flag to verify if undo is active 
         this.undoEatenPieceActive = false; 
         this.undoAI =false;
+        this.undoPieceEatenCamera = false;
         //Flag to verify if AI is playing
         this.isAiPlaying = false;
         //Eaten pieces
@@ -58,7 +59,9 @@ class MyGameOrchestrator extends CGFobject{
             UNDO: 6,
             ANIMATE: 7,
             CHECK_GAME_STATE: 8,
-            GAME_ENDED: 9
+            GAME_ENDED: 9,
+            PLAY_FILM: 10,
+            GAME_STOP: 11
         }
 
         this.gameState = this.gameStateEnum.INIT; 
@@ -315,6 +318,7 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == this.gameStateEnum.PLAYER_PLAYING ){
                     if(this.undoEatenPieceActive){ //if undo is active go back with piece eaten 
                         this.undo();
+                        this.undoPieceEatenCamera = true;
                     }else{
                     this.gameCounter.processCounter(this.currentPlayer);
                     if (this.currentPlayerMove != null)
@@ -331,8 +335,12 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == this.gameStateEnum.ANIMATE){
                     this.animate();
                 }
-                if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
-                    this.gameState = this.gameStateEnum.ROTATE_CAMERA;
+                if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){   
+                    if(this.undoPieceEatenCamera){
+                        this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                        this.changePlayerPlaying();
+                        this.undoPieceEatenCamera = false;
+                    }else  this.gameState = this.gameStateEnum.ROTATE_CAMERA;
                     this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
@@ -369,6 +377,8 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == this.gameStateEnum.PLAYER_PLAYING){ //in this case i need to make 2 undos one for the player another for the AI 
                     if(this.undoEatenPieceActive){ //if undo is active go back with piece eaten 
                         this.undo();
+                        this.undoAi= false;
+                        this.undoPieceEatenCamera = true;
                     }else{
                    this.gameCounter.processCounter(this.currentPlayer);
                     if (this.currentPlayerMove != null)
@@ -387,6 +397,7 @@ class MyGameOrchestrator extends CGFobject{
                     console.log(this.gameSequence.moves); 
                     if(this.undoEatenPieceActive){ //if undo is active go back with piece eaten 
                         this.undo();
+                        this.undoPieceEatenCamera = true;
                     }else{
                         this.gameCounter.processCounter(this.currentPlayer);
                         if(this.currentPlayerMove.length != null){
@@ -411,8 +422,15 @@ class MyGameOrchestrator extends CGFobject{
                     this.animate();
                 }
                 if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
-                    this.gameState = this.gameStateEnum.ROTATE_CAMERA;
+
+                    if(this.undoPieceEatenCamera){
+                        this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                        this.undoPieceEatenCamera = false;
+                    }else  this.gameState = this.gameStateEnum.ROTATE_CAMERA;
                     this.checkGameState();
+
+                    //this.gameState = this.gameStateEnum.ROTATE_CAMERA;
+                    //this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
                     this.winner.setWinner(this.currentPlayer);
@@ -422,7 +440,7 @@ class MyGameOrchestrator extends CGFobject{
             case 'cvc': 
             {
                 if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
-                    this.rotateCamera();
+                    //this.rotateCamera();
                     if (this.currentCameraAngle == 0) {
                         this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                     }
@@ -454,12 +472,19 @@ class MyGameOrchestrator extends CGFobject{
                     this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
-                    this.winner.setWinner(this.currentPlayer);
+                    //this.winner.setWinner(this.currentPlayer);
+                    //this.gameCounterState = this.gameStateEnum.PLAY_FILM; //play film
+                    this.playFilm();
+                    this.gameCounterState = this.gameStateEnum.PLAY_FILM; //play film
                 }
                 break;
             } 
         }
         
+    }
+    playFilm(){
+        this.gameSequence.replay(); 
+        //this.animator.replay();
     }
     orchestrate(){  
         this.manageGameplay(); 

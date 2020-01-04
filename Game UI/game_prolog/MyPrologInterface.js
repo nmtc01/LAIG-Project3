@@ -180,9 +180,9 @@ class MyPrologInterface extends CGFobject{
             //todo 
             //debug - print game sequence
             console.log('gameSequence');
-            this.gameSequence.replay();
-            console.log('animator');
-            this.animator.sequence.replay();
+            //this.gameSequence.replay();
+            //console.log('animator');
+            //this.animator.sequence.replay();
         }
     }
 }
