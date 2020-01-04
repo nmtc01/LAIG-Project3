@@ -36,7 +36,7 @@ class XMLscene extends CGFscene {
 
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(10);
-        //todo
+        
         this.setPickEnabled(true); // false to disable pick feature. // Some game states do not require pick.
 
         //animation stuff 
@@ -85,8 +85,6 @@ class XMLscene extends CGFscene {
         this.gameOrchestrator = new MyGameOrchestrator(this);
 
         this.turnTime = 30;
-
-        this.setPickEnabled(true);
     }
 
     initDefaultCamera() { // todo create default camera
@@ -326,7 +324,6 @@ class XMLscene extends CGFscene {
      * Renders the scene.
      */
     render(camera) {
-        //this.gameOrchestrator.orchestrate()
         this.gameOrchestrator.managePick(this.pickMode, this.pickResults); 
         this.clearPickRegistration();
 
@@ -337,8 +334,9 @@ class XMLscene extends CGFscene {
         
         this.camera = camera;
 
-        // Initialize Model-View matrix as identity (no transformation
+        // Initialize Model-View matrix as identity (no transformation)
         this.updateProjectionMatrix();
+        if (!this.graph.isRotateActive)
         this.loadIdentity();
 
         // Apply transformations corresponding to the camera position relative to the origin

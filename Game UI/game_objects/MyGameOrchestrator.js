@@ -134,6 +134,7 @@ class MyGameOrchestrator extends CGFobject{
     }
     rotateCamera() {
         this.isRotateActive = true;
+        this.getScene().setPickEnabled(false);
         let deltaAngle = Math.PI * this.sent / 3;
         this.currentCameraAngle += deltaAngle;
         //Correcting associated error
@@ -151,6 +152,7 @@ class MyGameOrchestrator extends CGFobject{
     }
     getValidMoves() {
         this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer,this.prologInterface.parseValidMoves.bind(this));
+        this.getScene().setPickEnabled(true);
     }
 
     playerPlaying() {
@@ -358,10 +360,6 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
                     this.gameCounter.startTurn();
-                    console.log(this.currentPlayer);
-                    console.log(this.isAiPlaying);
-                    console.log(this.undoAI);
-                    console.log(this.undoEatenPieceActive);
                     if (!this.isAiPlaying) {
                         if(!this.undoAI){
                             this.isAiPlaying = true;
@@ -445,10 +443,7 @@ class MyGameOrchestrator extends CGFobject{
             case 'cvc': 
             {
                 if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
-                    //this.rotateCamera();
-                    if (this.currentCameraAngle == 0) {
-                        this.gameState = this.gameStateEnum.GET_VALID_MOVES;
-                    }
+                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                 }
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();

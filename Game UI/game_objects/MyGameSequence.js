@@ -24,8 +24,7 @@ class MyGameSequence extends CGFobject{
     getMoves(){
         return this.moves;
     }
-    replay(){
-        //todo 
+    replay(){ 
         //remove eaten pieces moves 
         for(let i = 0; i <this.moves.length; i++ ){
             if(this.moves[i][1][1] == -0.7 ||this.moves[i][1][1] == 6.7)
@@ -36,7 +35,5 @@ class MyGameSequence extends CGFobject{
         this.orchestrator.gameboard.resetGame();
 
        // this.orchestrator.prologInterface.initGame(this.orchestrator.prologInterface.parseInitGame.bind(this.orchestrator)); 
-
-        alert('ended');
     }
 }
