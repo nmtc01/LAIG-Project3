@@ -303,6 +303,10 @@ class MySceneGraph {
             //Check for repeated ids
             if (this.views[viewId] != null)
                 return "ID must be unique for each view (conflict: ID = " + viewId + ")";
+            //Check if is default camera
+            var isDefault = false;
+            if (viewId == idDefaultView)
+                isDefault = true;
 
             //Get view near and far
             var near = this.reader.getFloat(children[i], 'near');
@@ -422,7 +426,8 @@ class MySceneGraph {
                         far,
                         angle,
                         from,
-                        to
+                        to,
+                        isDefault
                     }
                     break;
                 case 'ortho':
@@ -437,7 +442,8 @@ class MySceneGraph {
                         bottom,
                         from,
                         to,
-                        up
+                        up,
+                        isDefault
                     }
                     break;
             }
