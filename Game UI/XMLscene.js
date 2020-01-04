@@ -101,7 +101,6 @@ class XMLscene extends CGFscene {
         //array to store enabled cameras, got from from views
         this.primaryCameras = {};
         this.primaryCameraIDs = [];
-        //let aux = true;
         //loop to iterate throught cameras read on xml, this loop was originaly made on the file presented
         for (var key in this.graph.views) {
             if (this.graph.views.hasOwnProperty(key)) {
@@ -125,10 +124,10 @@ class XMLscene extends CGFscene {
                             break;
                         }
                 }
-                //set the first camera passed as the deafult one 
+                //Set default camera
                 if (view.isDefault) {
                     this.primaryCamera = this.primaryCameras[view.viewId];
-                    //aux = false; //so the program only do this condition once
+                    this.defaultCamera = this.primaryCameras[view.viewId];
                 }
 
             }

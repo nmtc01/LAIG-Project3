@@ -144,10 +144,10 @@ class MyGameOrchestrator extends CGFobject{
             this.rotateTime = 0;
             this.isRotateActive = false;
             //Rotate camera
-            this.scene.camera.orbit(vec3.fromValues(0, 1, 0), deltaAngle-rest);
+            this.scene.defaultCamera.orbit(vec3.fromValues(0, 1, 0), deltaAngle-rest);
         }
         //Rotate camera
-        else this.scene.camera.orbit(vec3.fromValues(0, 1, 0), deltaAngle);
+        else this.scene.defaultCamera.orbit(vec3.fromValues(0, 1, 0), deltaAngle);
     }
     getValidMoves() {
         this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer,this.prologInterface.parseValidMoves.bind(this));
