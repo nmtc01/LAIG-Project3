@@ -62,9 +62,7 @@ class MyGameOrchestrator extends CGFobject{
             GAME_ENDED: 9,
             PLAY_FILM: 10,
             GAME_STOP: 11
-        }
-
-        this.gameState = this.gameStateEnum.INIT; 
+        } 
 
         this.playerMoveStateEnum = {
             PIECE_SELECT: 0,
@@ -130,7 +128,9 @@ class MyGameOrchestrator extends CGFobject{
         this.gameLevel=level;
         this.gameCounter.reset();
         this.gameCounter.setTurnTime(turnTime);
+        this.gameState = this.gameStateEnum.INIT;
         this.prologInterface.initGame(this.prologInterface.parseInitGame.bind(this)); 
+        this.winner.unsetWinner();
     }
     rotateCamera() {
         this.isRotateActive = true;

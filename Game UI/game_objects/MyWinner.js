@@ -12,6 +12,9 @@ class MyWinner extends CGFobject {
     setWinner(player) {
         this.player = player;
     }
+    unsetWinner() {
+        this.player = 0;
+    }
 
     display() {
         if (this.player != 0) {
