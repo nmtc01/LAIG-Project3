@@ -23,6 +23,8 @@ class MyGameOrchestrator extends CGFobject{
         this.gameType = null;
         this.gameLevel = null;
 
+        this.filmPlaying = false;
+
         //current player on prolog was set as red as custom, so the ai will always be the blue one
         //if blue is playing on pvc ou cvc game mode it always be a ai move 
         this.currentPlayer=null;  //todo current playing 5-red 9-blue should i convert the numbers?
@@ -360,14 +362,22 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
                     this.getValidMoves();
                     this.gameCounter.startTurn();
+                    console.log(this.undoEatenPieceActive);
                     if (!this.isAiPlaying) {
                         if(!this.undoAI){
                             this.isAiPlaying = true;
                             this.gameState = this.gameStateEnum.PLAYER_PLAYING;
                         }
                         else{
-                            this.changePlayerPlaying();
-                            this.gameState = this.gameStateEnum.UNDO;
+                            if(!this.undoEatenPieceActive){
+                                
+                                this.changePlayerPlaying();
+                                this.gameState = this.gameStateEnum.UNDO;
+
+                            }else{
+                                 this.gameState = this.gameStateEnum.UNDO;
+                            }
+                               
                         }
                     }
                     else {
@@ -441,7 +451,7 @@ class MyGameOrchestrator extends CGFobject{
                     this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                 }
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
-                    this.getValidMoves();
+                    //this.getValidMoves();
                     this.gameCounter.startTurn();
                     this.gameState = this.gameStateEnum.AI_CHOOSING_MOVE;
                 }
@@ -468,9 +478,47 @@ class MyGameOrchestrator extends CGFobject{
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
                     //this.winner.setWinner(this.currentPlayer);
+                    if(!this.filmPlaying)
+                        this.playFilm();
                     //this.gameCounterState = this.gameStateEnum.PLAY_FILM; //play film
-                    this.playFilm();
-                    this.gameCounterState = this.gameStateEnum.PLAY_FILM; //play film
+                }
+                if(this.gameState == this.gameStateEnum.PLAY_FILM){
+                    this.filmPlaying = false;
+                    this.animator.processAnimation();
+                    if(this.animator.active){  
+                          this.animator.piece_to_move.setMoving(false);
+                          //this.animator.tileTo.setPieceOnTile(this.animator.piece_to_move);  
+                          this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo); 
+                    }else {
+                        //this.animator.piece_to_move.setMoving(false);
+                        //this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
+                        this.animator.replay();
+                    }
+
+                    /*
+                    if(this.animator.canAnimate){
+                        this.animator.processAnimation();
+                        if(!this.animator.active){
+                            if(this.isEatenMoving){ 
+                                this.animator.piece_to_move.setMoving(false);
+                                this.animator.tileTo.setPieceOnTile(this.animator.piece_to_move);      
+                                this.isEatenMoving = false;
+                                //stop animation
+                                this.animator.canAnimate = false;
+                                this.gameState = this.gameStateEnum.CHECK_GAME_STATE; 
+                                
+                            }else{
+                                this.animator.piece_to_move.setMoving(false);
+                                //move piece on gameboarb
+                                this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
+                                //stop animation
+                                this.animator.canAnimate = false;
+                                this.gameState = this.gameStateEnum.CHECK_GAME_STATE; 
+                            }
+                            this.checkEatenProps();
+                        }
+                    }*/
+                    
                 }
                 break;
             } 
@@ -478,8 +526,10 @@ class MyGameOrchestrator extends CGFobject{
         
     }
     playFilm(){
+        this.filmPlaying = true;
+        console.log('ola');
+        this.gameCounter.reset();
         this.gameSequence.replay(); 
-        //this.animator.replay();
     }
     orchestrate(){  
         this.manageGameplay(); 

@@ -48,6 +48,29 @@ class MyPrologInterface extends CGFobject{
 
         this.gameState = this.gameStateEnum.ROTATE_CAMERA;
     }
+
+    initFilmGame(callback){  
+        this.getPrologRequest('init',callback);
+    }
+    parseInitFilmGame(data){
+        let ret = textStringToArray(data.target.response);
+
+        this.currentBoard = ret[0];  //board
+        this.currentPlayer = Number(ret[1],10); //player playing
+
+        //set up board pieces 
+        for(let line = 0; line < this.currentBoard.length; line++){ 
+            for(let column = 0 ; column < this.currentBoard[line].length; column++ )
+            if(this.currentBoard[line][column] != 0 && this.currentBoard[line][column] != 1){
+                let piece_type = this.pieceTranslator(this.currentBoard[line][column]); 
+                let coords = [line+1, column+1]; //always increment line/column when adding things 
+                let tile = this.gameboard.getTileByCoords(coords);
+                tile.setPieceOnTile(new MyPiece(this.scene,piece_type,true,true,this));
+            }
+        } 
+        console.log('call');
+        this.gameState = this.gameStateEnum.PLAY_FILM;
+    }
  
     /**
      * list all valid moves on current board
