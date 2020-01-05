@@ -40,19 +40,22 @@ class MyAnimator extends CGFobject{
     replay(){
         //todo
         if(this.sequence.moves.length == 0){
-            this.orchestrator.gameState = 20; 
+            console.log('ended');
+            //todo this a lock state 
+            this.orchestrator.gameState = this.orchestrator.gameStateEnum.GAME_STOP; 
             return;
         }
-        console.log(this.sequence.moves);
         
         let move = this.sequence.moves.shift();
         let from = move[0]; 
         let to = move[1];
+
+        console.log(move);
         //get piece 
         let tileFrom = this.orchestrator.gameboard.getTileByCoords(from);
         let tileTo = this.orchestrator.gameboard.getTileByCoords(to);
         let piece = this.orchestrator.gameboard.getPieceOnATile(tileFrom);
-        console.log(piece);
+        //console.log(piece);
         this.start(piece,tileFrom,tileTo);
 
     }

@@ -68,7 +68,6 @@ class MyPrologInterface extends CGFobject{
                 tile.setPieceOnTile(new MyPiece(this.scene,piece_type,true,true,this));
             }
         } 
-        console.log('call');
         this.gameState = this.gameStateEnum.PLAY_FILM;
     }
  

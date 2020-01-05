@@ -64,6 +64,8 @@ class MyInterface extends CGFinterface {
             i++;
         }
         //todo if in time put here some event listener to build html 
+        this.gui.add(this.scene,'replay')
+            .name('Replay');
         this.gui.add(this.scene,'selectedGameType',this.scene.gameTypeName)
             .name('Game Type:')
             .onChange(val => this.scene.updateGameType(val));

@@ -258,6 +258,14 @@ class MyGameOrchestrator extends CGFobject{
             this.gameState = this.gameStateEnum.ANIMATE;
         }
     }
+    playFilm(){
+        //this.filmPlaying = true;
+        console.log('ola');
+        this.gameCounter.reset();
+        this.winner.unsetWinner();
+        this.gameSequence.replay();
+        this.filmAnim = false; 
+    }
     checkGameState() {
         //get player score after move 
         this.prologInterface.getScore(this.currentBoard,this.currentPlayer,this.prologInterface.parseScore.bind(this));
@@ -348,6 +356,20 @@ class MyGameOrchestrator extends CGFobject{
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
                     this.winner.setWinner(this.currentPlayer);
+                }
+                if(this.gameState == this.gameStateEnum.PLAY_FILM){
+                    this.animator.processAnimation();
+                    console.log(this.animator.active);
+                    if(!this.filmAnim){
+                        this.animator.replay();
+                        this.filmAnim = true; 
+                    }
+                    if(!this.animator.active){   
+                        console.log('move')  
+                        this.animator.piece_to_move.setMoving(false);
+                        this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo); 
+                        this.filmAnim = false; 
+                    }
                 }
                 break;  
             }
@@ -443,6 +465,22 @@ class MyGameOrchestrator extends CGFobject{
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
                     this.winner.setWinner(this.currentPlayer);
                 }
+                if(this.gameState == this.gameStateEnum.PLAY_FILM){
+                    this.animator.processAnimation();
+                    console.log(this.animator.active);
+                    if(!this.filmAnim){
+                        this.animator.replay();
+                        this.filmAnim = true; 
+                    }
+                    if(!this.animator.active){   
+                        //this.animator.piece_to_move.setMoving(false);
+                        //this.animator.tileTo.setPieceOnTile(this.animator.piece_to_move);
+                        console.log('move')  
+                        this.animator.piece_to_move.setMoving(false);
+                        this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo); 
+                        this.filmAnim = false; 
+                    }
+                }
                 break; 
             }
             case 'cvc': 
@@ -477,24 +515,24 @@ class MyGameOrchestrator extends CGFobject{
                     this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
-                    //this.winner.setWinner(this.currentPlayer);
-                    if(!this.filmPlaying)
-                        this.playFilm();
-                    //this.gameCounterState = this.gameStateEnum.PLAY_FILM; //play film
+                    this.winner.setWinner(this.currentPlayer);
                 }
                 if(this.gameState == this.gameStateEnum.PLAY_FILM){
-                    this.filmPlaying = false;
                     this.animator.processAnimation();
-                    if(this.animator.active){  
-                          this.animator.piece_to_move.setMoving(false);
-                          //this.animator.tileTo.setPieceOnTile(this.animator.piece_to_move);  
-                          this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo); 
-                    }else {
-                        //this.animator.piece_to_move.setMoving(false);
-                        //this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
+                    console.log(this.animator.active);
+                    if(!this.filmAnim){
                         this.animator.replay();
+                        this.filmAnim = true; 
                     }
-
+                    if(!this.animator.active){   
+                        //this.animator.piece_to_move.setMoving(false);
+                        //this.animator.tileTo.setPieceOnTile(this.animator.piece_to_move);
+                        console.log('move')  
+                        this.animator.piece_to_move.setMoving(false);
+                        this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo); 
+                        this.filmAnim = false; 
+                    }
+                }
                     /*
                     if(this.animator.canAnimate){
                         this.animator.processAnimation();
@@ -519,17 +557,10 @@ class MyGameOrchestrator extends CGFobject{
                         }
                     }*/
                     
-                }
                 break;
             } 
         }
         
-    }
-    playFilm(){
-        this.filmPlaying = true;
-        console.log('ola');
-        this.gameCounter.reset();
-        this.gameSequence.replay(); 
     }
     orchestrate(){  
         this.manageGameplay(); 
