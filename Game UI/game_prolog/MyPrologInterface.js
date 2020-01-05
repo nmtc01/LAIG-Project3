@@ -86,7 +86,7 @@ class MyPrologInterface extends CGFobject{
         console.log(this.currentBoard);
         for(let i = 0; i < this.currentValidMoves.length; i++){
             let tile = this.gameboard.getTileByCoords(this.currentValidMoves[i][0])
-            let piece = this.gameboard.getPieceOnATile(tile)
+            let piece = this.gameboard.getPieceOnATile(tile);
             piece.addValidMove(this.currentValidMoves[i][1]);
         }
     }
