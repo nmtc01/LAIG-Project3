@@ -42,6 +42,7 @@ class MyGameOrchestrator extends CGFobject{
         //Camera rotation
         this.currentCameraAngle = 0;
         this.isRotateActive = false;
+        this.dontRotate = false;
         //Avoid restart the game twice on the beginnig
         this.alreadyPressedStart = false;
 
@@ -125,7 +126,7 @@ class MyGameOrchestrator extends CGFobject{
         this.currentBoard[line-1][col-1] = pieceNum; 
     }
     startGame(type,level,turnTime){
-        if (!this.alreadyPressedStart && !this.isRotateActive) {
+        if ((!this.alreadyPressedStart && !this.isRotateActive) || this.gameState == this.gameStateEnum.GAME_ENDED) {
             this.gameboard.resetGame();
             this.gameType = type; 
             this.gameLevel=level;
@@ -135,29 +136,34 @@ class MyGameOrchestrator extends CGFobject{
             this.prologInterface.initGame(this.prologInterface.parseInitGame.bind(this)); 
             this.winner.unsetWinner();
             this.alreadyPressedStart = true;
+            if (this.gameType == 'pvp' && this.currentPlayer == 5)
+                this.dontRotate = true;
         }
     }
     rotateCamera() {
-        this.isRotateActive = true;
-        this.getScene().setPickEnabled(false);
-        let deltaAngle = Math.PI * this.sent / 3;
-        this.currentCameraAngle += deltaAngle;
-        //Correcting associated error
-        if (this.rotateTime > 2.9) {
-            let rest = this.currentCameraAngle - Math.PI;
-            //Reset currentCameraAngle, rotateTime and isRotateActive
-            this.currentCameraAngle = 0;
-            this.rotateTime = 0;
-            this.isRotateActive = false;
+        if (!this.dontRotate) {
+            this.isRotateActive = true;
+            this.getScene().setPickEnabled(false);
+            let deltaAngle = Math.PI * this.sent / 3;
+            this.currentCameraAngle += deltaAngle;
+            //Correcting associated error
+            if (this.rotateTime > 2.9) {
+                let rest = this.currentCameraAngle - Math.PI;
+                //Reset currentCameraAngle, rotateTime and isRotateActive
+                this.currentCameraAngle = 0;
+                this.rotateTime = 0;
+                this.isRotateActive = false;
+                //Rotate camera
+                this.scene.defaultCamera.orbit(vec3.fromValues(0, 1, 0), deltaAngle-rest);
+            }
             //Rotate camera
-            this.scene.defaultCamera.orbit(vec3.fromValues(0, 1, 0), deltaAngle-rest);
+            else this.scene.defaultCamera.orbit(vec3.fromValues(0, 1, 0), deltaAngle);
         }
-        //Rotate camera
-        else this.scene.defaultCamera.orbit(vec3.fromValues(0, 1, 0), deltaAngle);
     }
     getValidMoves() {
         this.prologInterface.getValidMoves(this.currentBoard,this.currentPlayer,this.prologInterface.parseValidMoves.bind(this));
         this.getScene().setPickEnabled(true);
+        this.dontRotate = false;
     }
 
     playerPlaying() {
