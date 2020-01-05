@@ -42,7 +42,6 @@ class MyGameOrchestrator extends CGFobject{
         //Camera rotation
         this.currentCameraAngle = 0;
         this.isRotateActive = false;
-        this.isFirst = true;
 
         //times 
         this.delta_t = 0;
@@ -353,11 +352,9 @@ class MyGameOrchestrator extends CGFobject{
             case 'pvc': 
             {
                 if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
-                    if (this.isFirst) 
-                        this.rotateCamera();
+                    this.rotateCamera();
                     if (this.currentCameraAngle == 0) {
                         this.gameState = this.gameStateEnum.GET_VALID_MOVES;
-                        this.isFirst = false; //only rotates one time for pvc
                     }
                 }
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
@@ -389,7 +386,6 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == this.gameStateEnum.PLAYER_PLAYING){ //in this case i need to make 2 undos one for the player another for the AI                 
                     if(this.undoEatenPieceActive){ //if undo is active go back with piece eaten 
                         this.undo();
-                        this.undoPieceEatenCamera = true;
                     }else{
                    this.gameCounter.processCounter(this.currentPlayer);
                     if (this.currentPlayerMove != null)
@@ -407,7 +403,6 @@ class MyGameOrchestrator extends CGFobject{
                 if(this.gameState == this.gameStateEnum.AI_PLAYING){
                     if(this.undoEatenPieceActive){ //if undo is active go back with piece eaten 
                         this.undo();
-                        this.undoPieceEatenCamera = true;
                     }else{
                         this.gameCounter.processCounter(this.currentPlayer);
                         if(this.currentPlayerMove.length != null){
@@ -432,10 +427,7 @@ class MyGameOrchestrator extends CGFobject{
                     this.animate();
                 }
                 if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
-                    if(this.undoPieceEatenCamera){
-                        this.gameState = this.gameStateEnum.GET_VALID_MOVES;
-                        this.undoPieceEatenCamera = false;
-                    }else this.gameState = this.gameStateEnum.ROTATE_CAMERA;
+                    this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                     this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
