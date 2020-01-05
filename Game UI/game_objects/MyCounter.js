@@ -38,17 +38,17 @@ class MyCounter extends CGFobject{
 
         //numbers mat 
         this.scoreBlueMat = new CGFappearance(this.scene);
-        this.scoreBlueMat.setEmission(0,0,0,0);
-        this.scoreBlueMat.setAmbient(1,1,1,1);
-        this.scoreBlueMat.setDiffuse(1,1,1,1);
-        this.scoreBlueMat.setSpecular(0,0,0,0);
+        this.scoreBlueMat.setEmission(0,0,0,1);
+        this.scoreBlueMat.setAmbient(0,0,0,1);
+        this.scoreBlueMat.setDiffuse(0.5,0.5,0.5,1);
+        this.scoreBlueMat.setSpecular(0,0,0,1);
         this.scoreBlueMat.setTexture(this.zeroTex);
 
         this.scoreRedMat = new CGFappearance(this.scene);
-        this.scoreRedMat.setEmission(0,0,0,0);
-        this.scoreRedMat.setAmbient(1,1,1,1);
-        this.scoreRedMat.setDiffuse(1,1,1,1);
-        this.scoreRedMat.setSpecular(0,0,0,0);
+        this.scoreRedMat.setEmission(0,0,0,1);
+        this.scoreRedMat.setAmbient(0,0,0,1);
+        this.scoreRedMat.setDiffuse(0.5,0.5,0.5,1);
+        this.scoreRedMat.setSpecular(0,0,0,1);
         this.scoreRedMat.setTexture(this.zeroTex);
 
         this.blueScore = 0; 
