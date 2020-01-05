@@ -45,7 +45,9 @@
         <texture id="RB" file="scenes/images/game/RedBlackPiece.png" /> 
 
         <texture id="WT" file="scenes/images/game/snow_tile.jpg" />  
-        <texture id="BT" file="scenes/images/game/ice_tile.jpg" />      
+        <texture id="BT" file="scenes/images/game/ice_tile.jpg" />  
+
+        <texture id="screen" file="scenes/images/game/counter_screen.png" />       
     </textures>
 
     <materials> 
@@ -110,6 +112,19 @@
         <primitive id="tile">
             <plane npartsU="30" npartsV="30" />
         </primitive> 
+
+        <primitive id="counter_box">
+            <rect_prism width="3" length="0.75" height="1.5" />
+        </primitive> 
+
+        <primitive id="counter_screen">
+           <plane npartsU="30" npartsV="30" />
+        </primitive> 
+
+         <primitive id="clock_needle">
+            <rect_prism width="0.05" length="0.05" height="0.5" />
+        </primitive> 
+
 
     </primitives >
  
@@ -315,6 +330,77 @@
             <visible flag="true" />
             <children>
                 <primitiveref id="tile" />
+            </children>
+        </component>
+  <component id="red_counter" template="true">
+            <transformation>
+                <translate x="-5" y="6" z="0"/>
+            </transformation>
+            <materials>
+                <material id="red" />
+            </materials>
+            <texture id="WT" length_s="1" length_t="1" />
+            <children>
+                <componentref id="counter_box" />
+                <componentref id="counter_visor_red" />
+            </children>
+        </component>
+
+         <component id="blue_counter" template="true">
+            <transformation>
+                <translate x="5" y="6" z="0"/>
+            </transformation>
+            <materials>
+                <material id="blue" />
+            </materials>
+            <texture id="WT" length_s="1" length_t="1" />
+            <children>
+                <componentref id="counter_box" />
+                <componentref id="counter_visor_blue" />
+            </children>
+        </component>
+
+         <component id="counter_box" template="false">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="counter_box" />
+            </children>
+        </component>
+
+        <component id="counter_visor_blue" template="false">
+            <transformation>
+                <translate x="-0.4" y="0" z="0"/>
+                <scale x="1" y="1.4" z="2.9" />
+                <rotate axis="x" angle="90"/>
+                <rotate axis="z" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="screen" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="counter_screen" />
+            </children>
+        </component>
+
+        <component id="counter_visor_red" template="false">
+            <transformation>
+                <translate x="0.4" y="0" z="0"/>
+                <scale x="1" y="1.4" z="2.9" />
+                <rotate axis="x" angle="90"/>
+                <rotate axis="z" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="screen" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="counter_screen" />
             </children>
         </component>
 
