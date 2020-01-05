@@ -133,6 +133,7 @@ class MyGameOrchestrator extends CGFobject{
             this.sent = 0;
             this.rotateTime = 0;
             this.last_t = 0;
+            this.isRotateActive = false;
             if (this.gameType == 'pvp' && this.currentPlayer == 5 && this.gameState != this.gameStateEnum.GAME_ENDED)
                 this.dontRotate = true;
             else if (this.gameType == 'pvp' && this.currentPlayer == 9 && this.gameState != this.gameStateEnum.PLAYER_PLAYING) {
