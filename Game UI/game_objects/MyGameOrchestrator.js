@@ -42,6 +42,8 @@ class MyGameOrchestrator extends CGFobject{
         //Camera rotation
         this.currentCameraAngle = 0;
         this.isRotateActive = false;
+        //Avoid restart the game twice on the beginnig
+        this.alreadyPressedStart = false;
 
         //times 
         this.delta_t = 0;
@@ -123,14 +125,17 @@ class MyGameOrchestrator extends CGFobject{
         this.currentBoard[line-1][col-1] = pieceNum; 
     }
     startGame(type,level,turnTime){
-        this.gameboard.resetGame();
-        this.gameType = type; 
-        this.gameLevel=level;
-        this.gameCounter.reset();
-        this.gameCounter.setTurnTime(turnTime);
-        this.gameState = this.gameStateEnum.INIT;
-        this.prologInterface.initGame(this.prologInterface.parseInitGame.bind(this)); 
-        this.winner.unsetWinner();
+        if (!this.alreadyPressedStart && !this.isRotateActive) {
+            this.gameboard.resetGame();
+            this.gameType = type; 
+            this.gameLevel=level;
+            this.gameCounter.reset();
+            this.gameCounter.setTurnTime(turnTime);
+            this.gameState = this.gameStateEnum.INIT;
+            this.prologInterface.initGame(this.prologInterface.parseInitGame.bind(this)); 
+            this.winner.unsetWinner();
+            this.alreadyPressedStart = true;
+        }
     }
     rotateCamera() {
         this.isRotateActive = true;
@@ -344,6 +349,7 @@ class MyGameOrchestrator extends CGFobject{
                         this.changePlayerPlaying();
                         this.undoPieceEatenCamera = false;
                     }else  this.gameState = this.gameStateEnum.ROTATE_CAMERA;
+                    this.alreadyPressedStart = false;
                     this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
@@ -430,6 +436,7 @@ class MyGameOrchestrator extends CGFobject{
                 }
                 if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
                     this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                    this.alreadyPressedStart = false;
                     this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
@@ -466,6 +473,7 @@ class MyGameOrchestrator extends CGFobject{
                 }
                 if(this.gameState == this.gameStateEnum.CHECK_GAME_STATE){
                     this.gameState = this.gameStateEnum.ROTATE_CAMERA;
+                    this.alreadyPressedStart = false;
                     this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
