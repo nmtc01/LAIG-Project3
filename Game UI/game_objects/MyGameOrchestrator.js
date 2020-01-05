@@ -246,6 +246,10 @@ class MyGameOrchestrator extends CGFobject{
             this.undoEatenPieceActive = false; 
             this.currentPlayerMove = [lastMove[1],lastMove[0]]; //exchange positions and move again
             this.undoEatenPiece(); 
+            if (lastMove[1][1] == 6.7 && this.currentPlayer == 5 && this.gameType == 'pvc') {
+                this.changePlayerPlaying();
+                this.isAiPlaying = false;
+            }
             this.gameState = this.gameStateEnum.ANIMATE;
         }else{
             //update current board 
