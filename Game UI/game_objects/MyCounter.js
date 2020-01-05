@@ -73,7 +73,9 @@ class MyCounter extends CGFobject{
             this.redTime =0; 
             this.angleBlue = 0; 
             this.angleRed = 0; 
-            this.updateScores();
+            this.scoreRedMat.setTexture(this.zeroTex);
+            this.scoreBlueMat.setTexture(this.zeroTex);
+        
     }
     startTurn(){
             this.sent = 0 ; 

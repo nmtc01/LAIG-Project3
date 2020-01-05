@@ -26,14 +26,19 @@ class MyGameSequence extends CGFobject{
     }
     replay(){ 
         //remove eaten pieces moves 
+        
         for(let i = 0; i <this.moves.length; i++ ){
-            if(this.moves[i][1][1] == -0.7 ||this.moves[i][1][1] == 6.7)
+            if(this.moves[i][1][1] == -0.7 ||this.moves[i][1][1] == 6.7){
+                let save = this.moves[i];
                 this.moves.splice(i,1);
+                this.moves.splice(i-1,0,save);
+            }
         }
+        
         //reset board 
-        this.orchestrator.gameState = this.orchestrator.gameStateEnum.GAME_ENDED;
+        //this.orchestrator.gameState = this.orchestrator.gameStateEnum.GAME_ENDED;
         this.orchestrator.gameboard.resetGame();
 
-       // this.orchestrator.prologInterface.initGame(this.orchestrator.prologInterface.parseInitGame.bind(this.orchestrator)); 
+       this.orchestrator.prologInterface.initFilmGame(this.orchestrator.prologInterface.parseInitFilmGame.bind(this.orchestrator)); 
     }
 }

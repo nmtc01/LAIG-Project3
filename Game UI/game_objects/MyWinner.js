@@ -28,9 +28,9 @@ class MyWinner extends CGFobject {
         
             this.scene.pushMatrix(); 
             this.scene.setActiveShader(this.scene.winnerShader); 
-            this.rectangle.display();       
-            this.scene.popMatrix();
+            this.rectangle.display();        
             this.scene.setActiveShader(this.scene.defaultShader);
+            this.scene.popMatrix();
         }
     }
 }

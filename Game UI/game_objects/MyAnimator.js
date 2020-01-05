@@ -21,7 +21,7 @@ class MyAnimator extends CGFobject{
 
         this.height = 1.5;
 
-        this.animation_time = 2; //animation will take 2 seconds 
+        this.animation_time = 1; //animation will take 2 seconds 
         this.piece_to_move; 
         this.tileFrom;
         this.tileTo;
@@ -39,7 +39,25 @@ class MyAnimator extends CGFobject{
      */
     replay(){
         //todo
-        console.log(this.sequence);
+        if(this.sequence.moves.length == 0){
+            console.log('ended');
+            //todo this a lock state 
+            this.orchestrator.gameState = this.orchestrator.gameStateEnum.GAME_STOP; 
+            return;
+        }
+        
+        let move = this.sequence.moves.shift();
+        let from = move[0]; 
+        let to = move[1];
+
+        console.log(move);
+        //get piece 
+        let tileFrom = this.orchestrator.gameboard.getTileByCoords(from);
+        let tileTo = this.orchestrator.gameboard.getTileByCoords(to);
+        let piece = this.orchestrator.gameboard.getPieceOnATile(tileFrom);
+        //console.log(piece);
+        this.start(piece,tileFrom,tileTo);
+
     }
     /**
      * start animation
@@ -71,13 +89,12 @@ class MyAnimator extends CGFobject{
         this.delta_t = t - this.last_t;
         this.last_t = t;
         this.sent = this.delta_t/1000 + this.sent;
-        //console.log(this.sent);
     }
     processAnimation(){
         //calculate interpolation 
         let val = this.sent;
         let interpolation =  val/this.animation_time;
-        if(this.sent >= 2){
+        if(this.sent >= this.animation_time){
             this.sent = 0;
             this.active = false; //end animation
         }

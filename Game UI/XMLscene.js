@@ -169,6 +169,11 @@ class XMLscene extends CGFscene {
             this.gameOrchestrator.gameState = this.gameOrchestrator.gameStateEnum.UNDO; 
         }else console.warn('Can only undo if player is playing or moves have been made');
     }
+    replay(){
+        if(this.gameOrchestrator.getGameState() == 9){
+            this.gameOrchestrator.playFilm();
+        }else console.warn('Can only replay if the game has eneded');
+    }
     start(){ 
         this.gameRunning = true; 
         this.gameOrchestrator.startGame(this.selectedGameType,this.selectedGameLevel,this.turnTime);
