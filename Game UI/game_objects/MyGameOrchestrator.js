@@ -306,7 +306,8 @@ class MyGameOrchestrator extends CGFobject{
             case 'pvp': 
             {
                 if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
-                    this.rotateCamera();
+                    if (this.undoEatenPiece)
+                        this.rotateCamera();
                     if (this.currentCameraAngle == 0) {
                         this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                     }
