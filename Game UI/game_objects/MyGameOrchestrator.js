@@ -207,15 +207,13 @@ class MyGameOrchestrator extends CGFobject{
                     this.isEatenMoving = false;
                     //stop animation
                     this.animator.canAnimate = false;
-                    this.gameState = this.gameStateEnum.CHECK_GAME_STATE; 
                     
                 }else{
                     this.animator.piece_to_move.setMoving(false);
                     //move piece on gameboarb
                     this.gameboard.movePiece(this.animator.piece_to_move,this.animator.tileFrom,this.animator.tileTo);
                     //stop animation
-                    this.animator.canAnimate = false;
-                    this.gameState = this.gameStateEnum.CHECK_GAME_STATE; 
+                    this.animator.canAnimate = false; 
                 }
                 this.checkEatenProps();
             }
