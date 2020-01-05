@@ -42,6 +42,7 @@ class MyGameOrchestrator extends CGFobject{
         //Camera rotation
         this.currentCameraAngle = 0;
         this.isRotateActive = false;
+        this.isFirst = true;
 
         //times 
         this.delta_t = 0;
@@ -306,8 +307,7 @@ class MyGameOrchestrator extends CGFobject{
             case 'pvp': 
             {
                 if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
-                    if (this.undoEatenPiece)
-                        this.rotateCamera();
+                    this.rotateCamera();
                     if (this.currentCameraAngle == 0) {
                         this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                     }
@@ -353,9 +353,11 @@ class MyGameOrchestrator extends CGFobject{
             case 'pvc': 
             {
                 if (this.gameState == this.gameStateEnum.ROTATE_CAMERA) {
-                    this.rotateCamera();
+                    if (this.isFirst) 
+                        this.rotateCamera();
                     if (this.currentCameraAngle == 0) {
                         this.gameState = this.gameStateEnum.GET_VALID_MOVES;
+                        this.isFirst = false; //only rotates one time for pvc
                     }
                 }
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
@@ -433,7 +435,7 @@ class MyGameOrchestrator extends CGFobject{
                     if(this.undoPieceEatenCamera){
                         this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                         this.undoPieceEatenCamera = false;
-                    }else  this.gameState = this.gameStateEnum.ROTATE_CAMERA;
+                    }else this.gameState = this.gameStateEnum.ROTATE_CAMERA;
                     this.checkGameState();
                 }
                 if (this.gameState == this.gameStateEnum.GAME_ENDED) {
