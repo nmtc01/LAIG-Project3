@@ -282,7 +282,7 @@ class MyGameOrchestrator extends CGFobject{
         }
     }
     playFilm(){
-        //this.filmPlaying = true;
+        this.gameState = 20;
         this.gameCounter.reset();
         this.winner.unsetWinner();
         this.gameSequence.replay();
@@ -513,7 +513,6 @@ class MyGameOrchestrator extends CGFobject{
                     this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                 }
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
-                    this.getValidMoves();
                     this.gameCounter.startTurn();
                     this.gameState = this.gameStateEnum.AI_CHOOSING_MOVE;
                 }
