@@ -504,7 +504,7 @@ class MyGameOrchestrator extends CGFobject{
                     this.gameState = this.gameStateEnum.GET_VALID_MOVES;
                 }
                 if(this.gameState == this.gameStateEnum.GET_VALID_MOVES){
-                    //this.getValidMoves();
+                    this.getValidMoves();
                     this.gameCounter.startTurn();
                     this.gameState = this.gameStateEnum.AI_CHOOSING_MOVE;
                 }
