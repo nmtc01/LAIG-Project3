@@ -129,6 +129,17 @@ class MyGameOrchestrator extends CGFobject{
     }
     startGame(type,level,turnTime){
         if ((!this.alreadyPressedStart && !this.isRotateActive) || this.gameState == this.gameStateEnum.GAME_ENDED) {
+            //Camera times and rotation
+            this.sent = 0;
+            this.rotateTime = 0;
+            this.last_t = 0;
+            if (this.gameType == 'pvp' && this.currentPlayer == 5 && this.gameState != this.gameStateEnum.GAME_ENDED)
+                this.dontRotate = true;
+            else if (this.gameType == 'pvp' && this.currentPlayer == 9 && this.gameState != this.gameStateEnum.PLAYER_PLAYING) {
+                this.scene.defaultCamera.orbit(vec3.fromValues(0, 1, 0), -this.currentCameraAngle);
+                this.dontRotate = true;
+                this.currentCameraAngle = 0;
+            }
             this.gameboard.resetGame();
             this.gameType = type; 
             this.gameLevel=level;
@@ -138,8 +149,6 @@ class MyGameOrchestrator extends CGFobject{
             this.prologInterface.initGame(this.prologInterface.parseInitGame.bind(this)); 
             this.winner.unsetWinner();
             this.alreadyPressedStart = true;
-            if (this.gameType == 'pvp' && this.currentPlayer == 5)
-                this.dontRotate = true;
         }
     }
     rotateCamera() {
@@ -273,7 +282,6 @@ class MyGameOrchestrator extends CGFobject{
     }
     playFilm(){
         //this.filmPlaying = true;
-        console.log('ola');
         this.gameCounter.reset();
         this.winner.unsetWinner();
         this.gameSequence.replay();
